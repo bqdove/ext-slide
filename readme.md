@@ -1,2 +1,2 @@
-# Extension Slide
+# Extension Slider
 A extension for Notadd !
