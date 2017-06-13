@@ -9,8 +9,8 @@
 namespace Notadd\Slide;
 
 use Illuminate\Events\Dispatcher;
-use Notadd\Baidu\Listeners\CsrfTokenRegister;
-use Notadd\Baidu\Listeners\RouteRegister;
+use Notadd\Slide\Listeners\CsrfTokenRegister;
+use Notadd\Slide\Listeners\RouteRegister;
 use Notadd\Content\Models\Article;
 use Notadd\Content\Models\Page;
 use Notadd\Foundation\Extension\Abstracts\Extension as AbstractExtension;
