@@ -23,12 +23,24 @@ class RouteRegister extends AbstractRouteRegister
     {
         $this->router->group(['middleware' => ['cross', 'web'], 'prefix' => 'api/slide'], function () {
             $this->router->get('index', SlideController::class . '@index');
-        });
 
-        $this->router->group(['middleware' => ['cross', 'web'], 'prefix' => 'api/slide/category'],function() {
-            $this->router->get('edit', CategoryController::class.'@getEdit');
-            $this->router->post('edit', CategoryController::class.'@postEdit');
-            $this->router->post('delete', CategoryController::class.'@postDelete');
-        })
+            $this->router->group(['middleware' => ['cross', 'web'], 'prefix' => 'category'],function() {
+                $this->router->get('edit', CategoryController::class.'@getEdit');
+                $this->router->post('edit', CategoryController::class.'@postEdit');
+                $this->router->post('delete', CategoryController::class.'@postDelete');
+            });
+
+            $this->router->group(['middleware' => ['cross', 'web'], 'prefix' => 'group'],function() {
+                $this->router->get('edit', GroupController::class.'@getEdit');
+                $this->router->post('edit', GroupController::class.'@postEdit');
+                $this->router->post('delete', GroupController::class.'@postDelete');
+            });
+
+            $this->router->group(['middleware' => ['cross', 'web'], 'prefix' => 'picture'],function() {
+                $this->router->get('edit', PictureController::class.'@getEdit');
+                $this->router->post('edit', PictureController::class.'@postEdit');
+                $this->router->post('delete', PictureController::class.'@postDelete');
+            });
+        });
     }
 }
