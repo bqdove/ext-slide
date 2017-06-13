@@ -1,20 +1,19 @@
 <?php
 /**
- * This file is part of Notadd.
- *
- * @author TwilRoad <269044570@qq.com>
- * @copyright (c) 2017, iBenchu.org
- * @datetime 2017-02-23 19:44
+ * Created by PhpStorm.
+ * User: bc021
+ * Date: 17-6-13
+ * Time: 下午2:53
  */
 namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;
-use Notadd\Slide\Models\Category;
+use Notadd\Slide\Models\Picture;
 
 /**
  * Class CategoryController.
  */
-class CategoryController extends Controller
+class PictureController extends Controller
 {
     public function getEdit()
     {
