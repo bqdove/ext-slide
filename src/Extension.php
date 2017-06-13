@@ -1,16 +1,18 @@
 <?php
 /**
- * This file is part of Notadd.
- *
- * @author AllenGu <674397601@qq.com>
- * @copyright (c) 2017, iBenchu.org
- * @datetime 2017-05-22 16:19
+ * Created by PhpStorm.
+ * User: bc021
+ * Date: 17-6-12
+ * Time: 下午6:09
  */
-namespace Notadd\Multipay;
+
+namespace Notadd\Slide;
 
 use Illuminate\Events\Dispatcher;
-use Notadd\Multipay\Listeners\CsrfTokenRegister;
-use Notadd\Multipay\Listeners\RouteRegister;
+use Notadd\Baidu\Listeners\CsrfTokenRegister;
+use Notadd\Baidu\Listeners\RouteRegister;
+use Notadd\Content\Models\Article;
+use Notadd\Content\Models\Page;
 use Notadd\Foundation\Extension\Abstracts\Extension as AbstractExtension;
 
 /**
@@ -25,13 +27,15 @@ class Extension extends AbstractExtension
     {
         $this->app->make(Dispatcher::class)->subscribe(CsrfTokenRegister::class);
         $this->app->make(Dispatcher::class)->subscribe(RouteRegister::class);
-        $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/translations'), 'multipay');
-        $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'multipay');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/translations'), 'slide');
         $this->publishes([
-            realpath(__DIR__ . '/../resources/mixes/administration/dist/assets/extensions/multipay') => public_path('assets/extensions/multipay'),
+            realpath(__DIR__ . '/../resources/mixes/administration/dist/assets/extensions/slide') => public_path('assets/extensions/baidu-push'),
         ], 'public');
-    }
+        $this->loadMigrationsFrom(realpath(__DIR__ . '/../databases/migrations'));
 
+        class_exists(Article::class) && Article::observe(ArticleObserver::class);
+        class_exists(Page::class) && Page::observe(PageObserver::class);
+    }
 
     /**
      * Description of extension
@@ -40,7 +44,7 @@ class Extension extends AbstractExtension
      */
     public static function description()
     {
-        return '多种支付方式的配置和管理。';
+        return 'Notadd 幻灯片插件。';
     }
 
     /**
@@ -62,7 +66,7 @@ class Extension extends AbstractExtension
      */
     public static function name()
     {
-        return '多支付插件';
+        return '幻灯片插件';
     }
 
     /**
@@ -73,7 +77,7 @@ class Extension extends AbstractExtension
      */
     public static function script()
     {
-        return asset('assets/extensions/multipay/js/extension.min.js');
+        return asset('assets/extensions/slide/js/extension.min.js');
     }
 
     /**
@@ -83,9 +87,7 @@ class Extension extends AbstractExtension
      */
     public static function stylesheet()
     {
-        return [
-            asset('assets/extensions/multipay/css/extension.min.css'),
-        ];
+        return [];
     }
 
     /**
@@ -109,15 +111,4 @@ class Extension extends AbstractExtension
     {
         return '0.1.0';
     }
-
-    public function register(){
-        return $this->registerPay();
-    }
-
-    public function registerPay(){
-            $this->app->singleton('Pay', function($app){
-            return new Multipay($app);
-        });
-    }
-
 }
