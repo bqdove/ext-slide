@@ -7,8 +7,10 @@
  */
 namespace Notadd\Slide\Listeners;
 
-use Notadd\Slide\Controllers\CategoryController;
 use Notadd\Slide\Controllers\SlideController;
+use Notadd\Slide\Controllers\CategoryController;
+use Notadd\Slide\Controllers\GroupController;
+use Notadd\Slide\Controllers\PictureController;
 use Notadd\Foundation\Routing\Abstracts\RouteRegister as AbstractRouteRegister;
 
 /**
@@ -21,7 +23,7 @@ class RouteRegister extends AbstractRouteRegister
      */
     public function handle()
     {
-            $this->router->group(['middleware' => ['auth.api','cross', 'web'], 'prefix' => 'api/slide'], function () {
+            $this->router->group(['middleware' => ['cross', 'web'], 'prefix' => 'api/slide'], function () {
             $this->router->get('index', SlideController::class . '@index');
 
             $this->router->group(['prefix' => 'category'],function() {

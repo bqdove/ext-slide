@@ -11,8 +11,6 @@ namespace Notadd\Slide;
 use Illuminate\Events\Dispatcher;
 use Notadd\Slide\Listeners\CsrfTokenRegister;
 use Notadd\Slide\Listeners\RouteRegister;
-use Notadd\Content\Models\Article;
-use Notadd\Content\Models\Page;
 use Notadd\Foundation\Extension\Abstracts\Extension as AbstractExtension;
 
 /**
@@ -32,9 +30,6 @@ class Extension extends AbstractExtension
             realpath(__DIR__ . '/../resources/mixes/administration/dist/assets/extensions/slide') => public_path('assets/extensions/baidu-push'),
         ], 'public');
         $this->loadMigrationsFrom(realpath(__DIR__ . '/../databases/migrations'));
-
-        class_exists(Article::class) && Article::observe(ArticleObserver::class);
-        class_exists(Page::class) && Page::observe(PageObserver::class);
     }
 
     /**
