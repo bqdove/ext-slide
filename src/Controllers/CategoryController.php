@@ -9,25 +9,24 @@
 namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;
-use Notadd\Slide\Models\Category;
+use Notadd\Slide\Handlers\CateEditHandler;
+use Notadd\Slide\Handlers\GetCategoryHandler;
 
 /**
  * Class CategoryController.
  */
+
 class CategoryController extends Controller
 {
-    public function getEdit()
-    {
-
+    public function get(GetCategoryHandler $getHander){
+        return $getHander->toResponse()->generateHttpResponse();
     }
 
-    public function postEdit()
-    {
-
+    public function edit(CateEditHandler $cateEditHander){
+        return $cateEditHander->toResponse()->generateHttpResponse();
     }
 
-    public function postDelete()
-    {
-
+    public function save(CateEditHandler $cateEditHander){
+        return $cateEditHander->toResponse()->generateHttpResponse();
     }
 }
