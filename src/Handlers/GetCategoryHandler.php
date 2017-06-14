@@ -11,11 +11,13 @@ namespace Notadd\Slide\Handlers;
 use Illuminate\Container\Container;
 use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Foundation\Setting\Contracts\SettingsRepository;
+use Notadd\Slide\Models\Category;
+
 
 /**
  * Class GetHandler.
  */
-class GetHandler extends Handler
+class GetCategoryHandler extends Handler
 {
     /**
      * @var \Notadd\Foundation\Setting\Contracts\SettingsRepository
@@ -39,11 +41,15 @@ class GetHandler extends Handler
      *
      * @throws \Exception
      */
-    protected function execute()
+    protected function execute($id = null)
     {
+        $cateId = $this->request->get('category_id','');
+
+        $category = Category::where('alias', $cateId)->first();
+
         $this->success()->withData([
-            'enabled' => $this->settings->get('baidu.enabled', false),
-            'token'   => $this->settings->get('baidu.token', ''),
-        ])->withMessage('获取百度推送配置成功！');
+            'cate_id' => object_get($category, 'id'),
+            'cate_name' => object_get($category, 'name')
+        ])->withMessage('获取数据成功！');
     }
 }
