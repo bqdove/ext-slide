@@ -20,11 +20,16 @@ class CreateSlideCategoriesTable extends Migration
      */
     public function up()
     {
-        $this->schema->create('slide_categories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 60);
-            $table->timestamps();
-        });
+        if(!$this->schema->hasTable('slide_categories'))
+            $this->schema->create('slide_categories', function (Blueprint $table) {
+                $table->increments('id')->comment('分类ID');//分类Id
+                $table->integer('user_id')->comment('创建分类的用户Id');//创建分类的用户Id
+                $table->string('name', 64)->comment('分类名字');//分类名字
+                $table->string('alias')->comment('分类别名');//分类别名
+                $table->string('summery',64)->nullable()->comment('分类简介');//分类简介
+                $table->softDeletes();
+                $table->timestamps();
+            });
     }
 
     /**
