@@ -8,17 +8,14 @@
  */
 namespace Notadd\Slide\Handlers;
 
-use Illuminate\Container\Container;
-use Notadd\Foundation\Routing\Abstracts\Handler;
-use Notadd\Foundation\Setting\Contracts\SettingsRepository;
-use Notadd\Foundation\Yaml\Exceptions\InvalidFileException;
+use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
 use Notadd\Slide\Models\Category;
-
+use Notadd\Slide\Models\Group;
 
 /**
  * Class GetHandler.
  */
-class GetCategoryHandler extends Handler
+class GetGroupHandler extends Handler
 {
     /**
      * @var \Notadd\Foundation\Setting\Contracts\SettingsRepository

@@ -16,18 +16,16 @@ use Notadd\Slide\Models\Group;
  */
 class GroupController extends Controller
 {
-    public function getEdit()
-    {
-
+    public function get(GetGroupHandler $getHandler){
+        return $getHandler->toResponse()->generateHttpResponse();
     }
 
-    public function postEdit()
-    {
-
+    public function set(SetGroupHandler $setHandler){
+        return $setHandler->toResponse()->generateHttpResponse();
     }
 
-    public function postDelete()
+    public function delete(DeleteGroupHandler $deleteHandler)
     {
-
+        return $deleteHandler->toResponse()->generateHttpResponse();
     }
 }

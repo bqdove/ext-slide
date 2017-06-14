@@ -7,14 +7,14 @@
  */
 namespace Notadd\Slide\Handlers;
 
-use Illuminate\Container\Container;
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
 use Notadd\Slide\Models\Category;
+use Notadd\Slide\Models\Group;
 
 /**
  * Class ConfigurationHandler.
  */
-class SetCategoryHandler extends AbstractSetHandler
+class SetGroupHandler extends AbstractSetHandler
 {
     /**
      * Execute Handler.
