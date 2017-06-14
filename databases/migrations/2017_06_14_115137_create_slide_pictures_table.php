@@ -2,7 +2,7 @@
 /**
  * This file is part of Notadd.
  *
- * @datetime 2017-06-12 19:18:55
+ * @datetime 2017-06-14 11:51:37
  */
 
 use Illuminate\Database\Schema\Blueprint;
@@ -20,7 +20,6 @@ class CreateSlidePicturesTable extends Migration
      */
     public function up()
     {
-
         if(!$this->schema->hasTable('slide_pictures'))
             $this->schema->create('slide_pictures', function (Blueprint $table) {
                 $table->increments('id')->comment('图片ID');//图片ID

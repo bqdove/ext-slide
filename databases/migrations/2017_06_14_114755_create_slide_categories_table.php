@@ -2,7 +2,7 @@
 /**
  * This file is part of Notadd.
  *
- * @datetime 2017-06-12 19:18:22
+ * @datetime 2017-06-14 11:47:55
  */
 
 use Illuminate\Database\Schema\Blueprint;
