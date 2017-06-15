@@ -24,31 +24,52 @@ class SetCategoryHandler extends AbstractSetHandler
      */
     public function execute()
     {
+        $category = new Category();
+
         if (!$this->request->input('cate_name'))
         {
             $this->withCode('402')->withMessage('分类名称不能为空');
         }
 //        如果分类Id没有填写，需要产生一个不重复的分类id别名。
 //        如果分类Id用户自定义了，需要验证是否与数据库里的数据重复。
-        if (!$this->request->input('cate_id'))
+        if ($alias = $this->request->input('cate_id'))
         {
+            if($this->verify($alias)){
+                $this->withCode('403')->withMessage('分类id在数据库中已存在,请重新定义');
+            }
 
+            $category->alias = $alias;
         }else{
+            do{
+                $random = mt_rand(0, 1999);
+            }while($this->verify($random));
 
+            $category->alias = $random;
         }
-        $category = new Category();
 
         $category->name = $this->request->input('cate_name');
 
+        $category->user_id = 1;//默认上传用户Id为1,管理员用户
 
-//        $category = Category::where('alias', $cateId)->first();
-//
-//        $category->name = $this->request->input('cate_name');
-//
-//        $category->alias = $this->request->input('cate_id');
-//
-//        $this->success()->withMessage('更新分类'.object_get($category, 'name').'数据成功！');
+        if ($category->save()){
+            $this->success()->withMessage('分类信息保存成功');
+        }else{
+            $this->withCode('401')->withMessage('保存分类信息失败，请稍后重试');
+        }
+    }
 
-        return true;
+    /** 分类别名验重
+     * @para   $alias
+     * @return bool
+     */
+    private function verify($alias)
+    {
+        $category = Category::where('alias', $alias)->first();
+        if ($category)
+        {
+            return true;
+        }else{
+            return false;
+        }
     }
 }
