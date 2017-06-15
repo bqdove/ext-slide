@@ -47,6 +47,8 @@ class SetGroupHandler extends AbstractSetHandler
 
         $group->name = $this->request->input('group_name');
 
+        $group->show = $this->request->input('group_show');
+
         $group->user_id = 1;//默认上传用户Id为1,管理员用户
 
         if ($group->save()){

@@ -9,6 +9,7 @@
 namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;
+use Notadd\Slide\Handlers\ShowGroupHandler;
 use Notadd\Slide\Models\Group;
 
 /**
@@ -27,5 +28,10 @@ class GroupController extends Controller
     public function delete(DeleteGroupHandler $deleteHandler)
     {
         return $deleteHandler->toResponse()->generateHttpResponse();
+    }
+
+    public function show(ShowGroupHandler $showHandler)
+    {
+        return $showHandler->toResponse()->generateHttpResponse();
     }
 }
