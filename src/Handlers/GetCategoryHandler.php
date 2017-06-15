@@ -2,7 +2,6 @@
 /**
  * This file is part of Notadd.
  *
- * @author TwilRoad <269044570@qq.com>
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-04-10 19:41
  */
@@ -21,23 +20,6 @@ use Notadd\Slide\Models\Category;
 class GetCategoryHandler extends Handler
 {
     /**
-     * @var \Notadd\Foundation\Setting\Contracts\SettingsRepository
-     */
-    protected $settings;
-
-    /**
-     * GetHandler constructor.
-     *
-     * @param \Illuminate\Container\Container                         $container
-     * @param \Notadd\Foundation\Setting\Contracts\SettingsRepository $settings
-     */
-    public function __construct(Container $container, SettingsRepository $settings)
-    {
-        parent::__construct($container);
-        $this->settings = $settings;
-    }
-
-    /**
      * Execute Handler.
      *
      * @throws \Exception
@@ -50,7 +32,7 @@ class GetCategoryHandler extends Handler
             $category = Category::where('alias', $cateId)->first();
 
             $this->success()->withData([
-                'cate_id' => object_get($category, 'id'),
+                'cate_id' => object_get($category, 'alias'),
                 'cate_name' => object_get($category, 'name')
             ])->withMessage('获取数据成功！');
         }else{

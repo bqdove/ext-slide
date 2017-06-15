@@ -18,23 +18,6 @@ use Notadd\Slide\Models\Group;
 class GetGroupHandler extends Handler
 {
     /**
-     * @var \Notadd\Foundation\Setting\Contracts\SettingsRepository
-     */
-    protected $settings;
-
-    /**
-     * GetHandler constructor.
-     *
-     * @param \Illuminate\Container\Container                         $container
-     * @param \Notadd\Foundation\Setting\Contracts\SettingsRepository $settings
-     */
-    public function __construct(Container $container, SettingsRepository $settings)
-    {
-        parent::__construct($container);
-        $this->settings = $settings;
-    }
-
-    /**
      * Execute Handler.
      *
      * @throws \Exception

@@ -8,11 +8,8 @@
  */
 namespace Notadd\Slide\Handlers;
 
-use Illuminate\Container\Container;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
-use Notadd\Foundation\Setting\Contracts\SettingsRepository;
 use Notadd\Slide\Models\Category;
 
 /**
@@ -27,17 +24,18 @@ class DeleteCategoryHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $mIds       = $this->request->get('ids','');
-        $mFiles     = [];
+        $cateId = $this->request->get('category_id');
 
-        if(!empty($mIds) && strpos($mIds,',')>=0)
-            $mIds  = explode(',',$mIds);
+        $category = Category::where('alias', $cateId)->first();
 
-
-        DB::beginTransaction();
+        if (!$category)
+        {
+            return false;
+        }
+        Category::beginTransaction();
         try{
-            $mFiles = DB::table('file_images')->whereIn('id',$mIds)->get();
-            DB::table('file_images')->whereIn('id',$mIds)->delete();
+
+            Category->where('alias',$cateId)->delete();
         }catch (\PDOException $PDOException){
             DB::rollback();
             $this->messages->push($this->translator->trans('ImagesManager::delete.fail'));
