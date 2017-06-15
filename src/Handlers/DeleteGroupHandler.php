@@ -23,39 +23,40 @@ class DeleteGroupHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $mIds       = $this->request->get('ids','');
-        $mFiles     = [];
+        $groupId = $this->request->input('group_id');
 
-        if(!empty($mIds) && strpos($mIds,',')>=0)
-            $mIds  = explode(',',$mIds);
+        $group = Group::where('alias', $groupId)->first();
 
-
-        DB::beginTransaction();
-        try{
-            $mFiles = DB::table('file_images')->whereIn('id',$mIds)->get();
-            DB::table('file_images')->whereIn('id',$mIds)->delete();
-        }catch (\PDOException $PDOException){
-            DB::rollback();
-            $this->messages->push($this->translator->trans('ImagesManager::delete.fail'));
-            return false;
-        }
-        try{
-            if($mFiles)
-                foreach ($mFiles->toArray() as $v){//如果有，则删除文件
-                    if(Storage::disk('public')->exists($v->path)){
-                        Storage::disk('public')->delete($v->path);
-                    }
-
-                }
-        }catch (\Exception $exception){
-            DB::rollback();
-            $this->messages->push($this->translator->trans('ImagesManager::delete.fail'));
-            return false;
+        if (!$group)
+        {
+            return $this->withCode('404')->withMessage('请重新确认图集Id是否正确');
         }
 
-        DB::commit();
-        $this->messages->push($this->translator->trans('ImagesManager::delete.success'));
-        return true;
+        $pictures = $group->pictures()->get();
 
+        //如果此分类下图集为空，那么直接删除分类
+        if (!$pictures)
+        {
+            $result = $group->delete();
+            if ($result)
+            {
+                return $this->success()->withMessage('删除图集成功');
+            }
+        }
+
+
+        //如果图集不为空，那么循环删除该图集的所有图片
+        foreach($pictures as $picture)
+        {
+            $picture->delete();
+        }
+        //图集图片循环删除完毕后尝试删除当前图集信息
+
+        $result = $group->delete();
+
+        if ($result)
+        {
+            $this->success()->withMessage('删除图集成功');
+        }
     }
 }
