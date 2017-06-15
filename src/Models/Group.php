@@ -16,11 +16,11 @@ class Group extends Model
 
     public function pictures()
     {
-        return $this->hasMany('Picture');
+        return $this->hasMany('Notadd\Slide\Models\Picture');
     }
 
     public function category()
     {
-        return $this->belongsTo('Category');
+        return $this->belongsTo('Notadd\Slide\Models\Category');
     }
 }

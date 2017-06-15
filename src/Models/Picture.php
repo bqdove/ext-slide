@@ -17,6 +17,6 @@ class Picture extends Model
 
     public function group()
     {
-        return $this->belongsTo('Group');
+        return $this->belongsTo('Notadd\Slide\Models\Group');
     }
 }
