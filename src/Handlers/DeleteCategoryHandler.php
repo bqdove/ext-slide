@@ -24,7 +24,7 @@ class DeleteCategoryHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $cateId = $this->request->get('category_id');
+        $cateId = $this->request->input('category_id');
 
         $category = Category::where('alias', $cateId)->first();
 
