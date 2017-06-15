@@ -12,6 +12,8 @@ use Notadd\Foundation\Routing\Abstracts\Controller;
 use Notadd\Slide\Handlers\CateEditHandler;
 use Notadd\Slide\Handlers\GetCategoryHandler;
 use Notadd\Slide\Handlers\SetCategoryHandler;
+use Notadd\Slide\Handlers\DeleteCategoryHandler;
+
 
 /**
  * Class CategoryController.
