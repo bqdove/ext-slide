@@ -8,8 +8,7 @@
  */
 namespace Notadd\Slide\Handlers;
 
-use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
-use Notadd\Slide\Models\Category;
+use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Group;
 
 /**
@@ -24,19 +23,20 @@ class GetGroupHandler extends Handler
      */
     protected function execute()
     {
-        $cateId = $this->request->get('category_id',null);
+        $groupId = $this->request->get('group_id',null);
 
-        if ($cateId){
-            $category = Category::where('alias', $cateId)->first();
+        if ($groupId){
+            $group = Group::where('alias', $groupId)->first();
 
             $this->success()->withData([
-                'cate_id' => object_get($category, 'id'),
-                'cate_name' => object_get($category, 'name')
-            ])->withMessage('获取数据成功！');
+                'group_id' => object_get($group, 'id'),
+                'group_name' => object_get($group, 'name'),
+                'show'  => object_get($group, 'show')
+            ])->withMessage('获取图集数据成功！');
         }else{
-            $categories = Category::all();
+            $groups = Group::all();
 
-            $this->success()->withData($categories)->withMessage('获取数据成功！');
+            $this->success()->withData($groups)->withMessage('获取图集数据成功！');
         }
 
     }

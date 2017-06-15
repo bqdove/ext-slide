@@ -8,7 +8,6 @@
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
-use Notadd\Slide\Models\Category;
 use Notadd\Slide\Models\Group;
 
 /**
@@ -23,16 +22,52 @@ class SetGroupHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $cateId = $this->request->get('category_id','');
+        $group = new Group();
 
-        $category = Category::where('alias', $cateId)->first();
+        if (!$this->request->input('group_name'))
+        {
+            $this->withCode('402')->withMessage('图集名称不能为空');
+        }
+//        如果分类Id没有填写，需要产生一个不重复的分类id别名。
+//        如果分类Id用户自定义了，需要验证是否与数据库里的数据重复。
+        if ($alias = $this->request->input('group_id'))
+        {
+            if($this->verify($alias)){
+                $this->withCode('403')->withMessage('分类id在数据库中已存在,请重新定义');
+            }
 
-        $category->name = $this->request->input('cate_name');
+            $group->alias = $alias;
+        }else{
+            do{
+                $random = mt_rand(0, 1999);
+            }while($this->verify($random));
 
-        $category->alias = $this->request->input('cate_id');
+            $group->alias = $random;
+        }
 
-        $this->success()->withMessage('更新分类'.object_get($category, 'name').'数据成功！');
+        $group->name = $this->request->input('group_name');
 
-        return true;
+        $group->user_id = 1;//默认上传用户Id为1,管理员用户
+
+        if ($group->save()){
+            $this->success()->withMessage('图集信息保存成功');
+        }else{
+            $this->withCode('401')->withMessage('保存图集信息失败，请稍后重试');
+        }
+    }
+
+    /** 图集别名验重
+     * @para   $alias
+     * @return bool
+     */
+    private function verify($alias)
+    {
+        $group = Group::where('alias', $alias)->first();
+        if ($group)
+        {
+            return true;
+        }else{
+            return false;
+        }
     }
 }
