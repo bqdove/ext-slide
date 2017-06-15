@@ -7,9 +7,7 @@
  */
 namespace Notadd\Slide\Handlers;
 
-use Illuminate\Container\Container;
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
-use Notadd\Slide\Controllers\CategoryController;
 use Notadd\Slide\Models\Category;
 
 /**

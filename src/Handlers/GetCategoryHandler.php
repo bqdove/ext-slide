@@ -7,10 +7,7 @@
  */
 namespace Notadd\Slide\Handlers;
 
-use Illuminate\Container\Container;
 use Notadd\Foundation\Routing\Abstracts\Handler;
-use Notadd\Foundation\Setting\Contracts\SettingsRepository;
-use Notadd\Foundation\Yaml\Exceptions\InvalidFileException;
 use Notadd\Slide\Models\Category;
 
 
