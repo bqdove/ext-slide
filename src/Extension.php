@@ -39,7 +39,7 @@ class Extension extends AbstractExtension
      */
     public static function description()
     {
-        return 'Notadd 幻灯片插件。';
+        return '幻灯片插件。';
     }
 
     /**

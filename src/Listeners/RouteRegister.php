@@ -25,21 +25,17 @@ class RouteRegister extends AbstractRouteRegister
     {
             $this->router->group(['middleware' => ['cross', 'web'], 'prefix' => 'api/slide'], function () {
 
-            $this->router->get('index', SlideController::class . '@index');
-
             $this->router->group(['prefix' => 'category'],function() {
-                $this->router->get('edit', CategoryController::class.'@edit');
-                $this->router->post('save', CategoryController::class.'@save');
-                $this->router->post('delete', CategoryController::class.'@delete');
-                $this->router->get('get', CategoryController::class.'@get');
                 $this->router->get('set', CategoryController::class.'@set');
+                $this->router->get('get', CategoryController::class.'@get');
+                $this->router->get('delete', CategoryController::class.'@delete');
 
             });
 
             $this->router->group(['prefix' => 'group'],function() {
-                $this->router->get('edit', GroupController::class.'@getEdit');
-                $this->router->post('edit', GroupController::class.'@postEdit');
-                $this->router->post('delete', GroupController::class.'@postDelete');
+                $this->router->get('set', GroupController::class.'@set');
+                $this->router->get('get', GroupController::class.'@get');
+                $this->router->get('delete', GroupController::class.'@delete');
             });
 
             $this->router->group(['prefix' => 'picture'],function() {
