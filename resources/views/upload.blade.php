@@ -5,9 +5,9 @@
 <body>
 <h1>文件上传</h1>
 
-<form action="{{url('/execute')}}" method="post" enctype="multipart/form-data">
+<form action="{{url('/api/slide/picture/upload')}}" method="post" enctype="multipart/form-data">
     {{csrf_field()}}
-    <input type="file" name="cert" >
+    <input type="file" name="file" >
     <input type="submit" name="dosubmit" value="上传">
 </form>
 </body>
