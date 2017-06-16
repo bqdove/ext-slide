@@ -72,13 +72,13 @@ class UploadHandler extends Handler
 
         $dictionary = 'upload/'.$frontPath;
 
-        $file = Str::substr($hash, 12, 20) . '.' . $avatar->getClientOriginalExtension();
+        $file = Str::substr($hash, 0, 32) . '.' . $avatar->getClientOriginalExtension();
 
         if (!$this->files->exists($dictionary . DIRECTORY_SEPARATOR . $file)) {
             $avatar->move($dictionary, $file);
         }
 
-        $this->data['path'] = 'upload/'. $frontPath . '/'.$file;
+        $this->data['path'] = 'public/upload/'. $frontPath . '/'.$file;
 
         $this->data['file_name'] = $realName;
 
