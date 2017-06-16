@@ -7,11 +7,12 @@
  */
 namespace Notadd\Slide\Controllers;
 
+use Notadd\Foundation\Routing\Abstracts\Controller;
 use Notadd\Slide\Handlers\DeleteHandler;
 use Notadd\Slide\Handlers\GetHandler;
 use Notadd\Slide\Handlers\UploadHandler;
 
-class PictureController
+class PictureController extends Controller
 {
     public function upload(UploadHandler $handler)
     {
