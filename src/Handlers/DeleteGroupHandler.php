@@ -11,6 +11,8 @@ namespace Notadd\Slide\Handlers;
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
 use Notadd\Slide\Models\Category;
 use Notadd\Slide\Models\Group;
+use Illuminate\Support\Facades\Storage;
+
 /**
  * Class ConfigurationHandler.
  */
@@ -23,9 +25,11 @@ class DeleteGroupHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $groupId = $this->request->input('group_id');
+        $groupId = $this->request->get('group_id');
 
         $group = Group::where('alias', $groupId)->first();
+
+        $category = Category::find($group->category_id);
 
         if (!$group)
         {
@@ -44,6 +48,7 @@ class DeleteGroupHandler extends AbstractSetHandler
             }
         }
 
+        $groupPath = $category->path . '/' .$group->path;
 
         //如果图集不为空，那么循环删除该图集的所有图片
         foreach($pictures as $picture)
@@ -52,11 +57,13 @@ class DeleteGroupHandler extends AbstractSetHandler
         }
         //图集图片循环删除完毕后尝试删除当前图集信息
 
-        $result = $group->delete();
+        $deleteDbData = $group->delete();
 
-        if ($result)
+        $deleteFile = Storage::deleteDirectory($groupPath);
+
+        if ($deleteDbData && $deleteFile)
         {
-            $this->success()->withMessage('删除图集成功');
+            return $this->success()->withMessage('删除图集成功');
         }
     }
 }
