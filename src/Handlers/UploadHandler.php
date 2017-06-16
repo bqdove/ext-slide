@@ -42,17 +42,28 @@ class UploadHandler extends Handler
             'file.required' => '必须上传一个文件！',
         ]);
         $avatar = $this->request->file('file');
+
+        $realName = $avatar->getClientOriginalName();
+
+        $error = $avatar->getError();
+
         $hash = hash_file('md5', $avatar->getPathname(), false);
         $dictionary = $this->pathSplit($hash, '12', Collection::make([
             '../storage/uploads',
         ]))->implode(DIRECTORY_SEPARATOR);
+
         $file = Str::substr($hash, 12, 20) . '.' . $avatar->getClientOriginalExtension();
+
         if (!$this->files->exists($dictionary . DIRECTORY_SEPARATOR . $file)) {
             $avatar->move($dictionary, $file);
         }
+
         $this->data['path'] = $this->pathSplit($hash, '12,20', Collection::make([
                 '../storage/uploads',
             ]))->implode('/') . '.' . $avatar->getClientOriginalExtension();
+        $this->data['file_name'] = $realName;
+
+        $this->data['error'] = $error;
 
         return true;
     }
