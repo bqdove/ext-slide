@@ -11,7 +11,7 @@ namespace Notadd\Slide\Handlers;
 use Illuminate\Support\Facades\Storage;
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
 use Notadd\Slide\Models\Category;
-use Illuminate\Support\Facades\DB;
+
 
 /**
  * Class ConfigurationHandler.
@@ -25,7 +25,7 @@ class DeleteCategoryHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $cateId = $this->request->input('category_id');
+        $cateId = $this->request->get('category_id');
 
         $category = Category::where('alias', $cateId)->first();
 
@@ -39,7 +39,8 @@ class DeleteCategoryHandler extends AbstractSetHandler
         //如果此分类下图集为空，那么直接删除分类
         if (!$groups)
         {
-            $result = $category->delete();
+            $result = $category->delete(
+);
             if ($result)
             {
                 return $this->success()->withMessage('删除分类成功');
@@ -66,11 +67,17 @@ class DeleteCategoryHandler extends AbstractSetHandler
             $group->delete();
 
         }
+        $catePath = $category->path;
+
         //如果当前分类的搜有图集及其所含图片删除完毕后，尝试删除当前想要删除的分类
+
         $result = $category->delete();
-        if ($result)
+
+        $deleteResult = Storage::deleteDirectory($catePath);
+
+        if ($result && $deleteResult)
         {
-            $this->success()->withMessage('删除分类成功');
+            return $this->success()->withMessage('删除分类成功');
         }
     }
 }
