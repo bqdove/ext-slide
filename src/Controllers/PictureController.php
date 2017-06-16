@@ -8,9 +8,11 @@
 namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;
-use Notadd\Slide\Handlers\DeleteHandler;
-use Notadd\Slide\Handlers\GetHandler;
+use Notadd\Slide\Handlers\DeletePictureHandler;
+use Notadd\Slide\Handlers\GetPictureHandler;
+use Notadd\Slide\Handlers\SetPictureHandler;
 use Notadd\Slide\Handlers\UploadHandler;
+
 
 class PictureController extends Controller
 {
@@ -25,13 +27,18 @@ class PictureController extends Controller
         return view('slide::upload');
     }
 
-    public function lists(GetHandler $handler)
+    public function set(SetPictureHandler $handler)
     {
         return $handler->toResponse()->generateHttpResponse();
     }
 
-    public function delete(deleteHandler $deleteHander){
-        return $deleteHander->toResponse()->generateHttpResponse();
+    public function lists(GetPictureHandler $handler)
+    {
+        return $handler->toResponse()->generateHttpResponse();
+    }
+
+    public function delete(DeletePictureHandler $handler){
+        return $handler->toResponse()->generateHttpResponse();
     }
 
     private function mk_dir($dir, $mode = 0755)
