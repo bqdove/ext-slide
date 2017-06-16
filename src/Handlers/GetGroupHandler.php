@@ -36,7 +36,7 @@ class GetGroupHandler extends Handler
         }else{
             $groups = Group::all();
 
-            $this->success()->withData($groups)->withMessage('获取图集数据成功！');
+            $this->success()->withData($groups)->withMessage('获取所有图集数据成功！');
         }
 
     }
