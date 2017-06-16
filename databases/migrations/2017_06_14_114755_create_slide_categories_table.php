@@ -25,8 +25,9 @@ class CreateSlideCategoriesTable extends Migration
                 $table->increments('id')->comment('分类ID');//分类Id
                 $table->integer('user_id')->comment('创建分类的用户Id');//创建分类的用户Id
                 $table->string('name', 64)->comment('分类名字');//分类名字
-                $table->string('alias')->comment('分类别名');//分类别名
+                $table->string('alias', 64)->comment('分类别名');//分类别名
                 $table->string('summery',64)->nullable()->comment('分类简介');//分类简介
+                $table->string('path', 64)->comment('分类目录');
                 $table->softDeletes();
                 $table->timestamps();
             });
