@@ -10,7 +10,11 @@ namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;
 use Notadd\Slide\Handlers\ShowGroupHandler;
-use Notadd\Slide\Models\Group;
+use Notadd\Slide\Handlers\GetGroupHandler;
+use Notadd\Slide\Handlers\SetGroupHandler;
+use Notadd\Slide\Handlers\DeleteGroupHandler;
+
+
 
 /**
  * Class CategoryController.
