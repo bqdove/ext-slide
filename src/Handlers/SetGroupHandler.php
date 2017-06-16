@@ -25,17 +25,17 @@ class SetGroupHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        //传入group_id,更新图集信息
+        //更新图集信息,传入group_id,
         if ($_groupId = $this->request->query('group_id'))
         {
-            $_group = Category::where('alias', $_groupId)->first();
+            $_group = Group::where('alias', $_groupId)->first();
 
-            if (!$this->request->get('group_name'))
+            if (!$this->request->input('group_name'))
             {
                 return $this->withCode('402')->withMessage('图集名称不能为空');
             }
 
-            if ($_alias = $this->request->get('group_id'))
+            if ($_alias = $this->request->input('group_id'))
             {
                 if($this->verify($_alias)){
                     return $this->withCode('403')->withMessage('分类id在数据库中已存在,请重新定义');
@@ -49,14 +49,18 @@ class SetGroupHandler extends AbstractSetHandler
 
                 $_group->alias = $random;
             }
+
+            $_group->show = $this->request->input('group_show');
+
             $updateResult = $_group->save();
+
             if ($updateResult)
             {
                 return $this->success()->withMessage('更新图集信息成功');
             }
         }
 
-        //不传入group_id,需要传入分类id,然后新建图集信息
+        //新建图集信息,不传入group_id,需要传入分类id
         $cateId = $this->request->query('category_id');
 
         $category = Category::where('alias', $cateId)->first();
@@ -67,8 +71,10 @@ class SetGroupHandler extends AbstractSetHandler
         {
             return $this->withCode('402')->withMessage('图集名称不能为空');
         }
-//        如果分类Id没有填写，需要产生一个不重复的分类id别名。
-//        如果分类Id用户自定义了，需要验证是否与数据库里的数据重复。
+
+        //如果分类Id没有填写，需要产生一个不重复的分类id别名。
+        //如果分类Id用户自定义了，需要验证是否与数据库里的数据重复。
+
         if ($alias = $this->request->get('group_id'))
         {
             if($this->verify($alias)){
@@ -91,6 +97,8 @@ class SetGroupHandler extends AbstractSetHandler
         $group->user_id = 1;//默认上传用户Id为1,管理员用户
 
         $group->category_id = $category->id;
+
+        $group->path = $group->alias;
 
         $groupPath = $category->path. '/' . $group->alias;
 
