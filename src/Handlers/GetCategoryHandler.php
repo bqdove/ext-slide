@@ -29,8 +29,8 @@ class GetCategoryHandler extends Handler
             $category = Category::where('alias', $cateId)->first();
 
             $this->success()->withData([
-                'cate_id' => object_get($category, 'alias'),
-                'cate_name' => object_get($category, 'name')
+                'category_id' => object_get($category, 'alias'),
+                'category_name' => object_get($category, 'name')
             ])->withMessage('获取数据成功！');
         }else{
             $categories = Category::all();
