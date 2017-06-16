@@ -89,7 +89,9 @@ class SetCategoryHandler extends AbstractSetHandler
 
         $createResult = Storage::makeDirectory($category->alias);
 
-        $createResult = Storage::move(app_path('/storage/app/' .$category->alias), app_path('/public/upload/'.$category->alias));
+        $this->container->make('files')->move(base_path('/storage/app/' .$category->alias), base_path('/public/upload/'.$category->alias));
+
+//        $createResult = Storage::move(app_path('/storage/app/' .$category->alias), base_path('/public/upload/'.$category->alias));
 
         if ($category->save() && $createResult){
             return $this->success()->withMessage('分类信息保存成功');
