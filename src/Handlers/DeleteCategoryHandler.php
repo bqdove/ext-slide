@@ -67,7 +67,7 @@ class DeleteCategoryHandler extends AbstractSetHandler
             $group->delete();
 
         }
-        $catePath = $category->path;
+        $catePath = $category->path;//注意获取顺序。必须在删除分类信息前获取此字段，否则无法获得。
 
         //如果当前分类的搜有图集及其所含图片删除完毕后，尝试删除当前想要删除的分类
 
