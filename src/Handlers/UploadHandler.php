@@ -13,6 +13,10 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Notadd\Foundation\Routing\Abstracts\Handler;
+use Notadd\Slide\Models\Picture;
+use Notadd\Slide\Models\Group;
+use Notadd\Slide\Models\Category;
+
 
 class UploadHandler extends Handler
 {
@@ -35,6 +39,23 @@ class UploadHandler extends Handler
 
     public function execute()
     {
+        //获得图集的文件地址
+        $groupId = $this->request->query('group_id');
+
+        $group = Group::where('alias', $groupId)->first();
+
+        if ($group)
+        {
+            $groupPath = $group->path;
+            $categoryId = $group->category_id;
+        }
+
+        $category = Category::find($categoryId);
+
+        $catePath = $category->path;
+
+        $frontPath = $catePath .'/'.$groupPath;
+
         $this->validate($this->request, [
             'file' => 'required|image',
         ], [
@@ -48,9 +69,8 @@ class UploadHandler extends Handler
         $error = $avatar->getError();
 
         $hash = hash_file('md5', $avatar->getPathname(), false);
-        $dictionary = $this->pathSplit($hash, '12', Collection::make([
-            '../storage/uploads',
-        ]))->implode(DIRECTORY_SEPARATOR);
+
+        $dictionary = 'upload/'.$frontPath;
 
         $file = Str::substr($hash, 12, 20) . '.' . $avatar->getClientOriginalExtension();
 
@@ -58,9 +78,8 @@ class UploadHandler extends Handler
             $avatar->move($dictionary, $file);
         }
 
-        $this->data['path'] = $this->pathSplit($hash, '12,20', Collection::make([
-                '../storage/uploads',
-            ]))->implode('/') . '.' . $avatar->getClientOriginalExtension();
+        $this->data['path'] = 'upload/'. $frontPath . '/'.$file;
+
         $this->data['file_name'] = $realName;
 
         $this->data['error'] = $error;
