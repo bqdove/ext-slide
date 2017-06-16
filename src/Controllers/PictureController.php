@@ -20,6 +20,11 @@ class PictureController extends Controller
         return $handler->toResponse()->generateHttpResponse();
     }
 
+    public function test()
+    {
+        return view('slide::upload');
+    }
+
     public function lists(GetHandler $handler)
     {
         return $handler->toResponse()->generateHttpResponse();
