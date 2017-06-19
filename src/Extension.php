@@ -28,7 +28,7 @@ class Extension extends AbstractExtension
         $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/translations'), 'slide');
         $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'slide');
         $this->publishes([
-            realpath(__DIR__ . '/../resources/mixes/administration/dist/assets/extensions/slide') => public_path('assets/extensions/baidu-push'),
+            realpath(__DIR__ . '/../resources/mixes/administration/dist/assets/extensions/notadd/slide') => public_path('assets/extensions/notadd/slide'),
         ], 'public');
         $this->loadMigrationsFrom(realpath(__DIR__ . '/../databases/migrations'));
     }
@@ -73,7 +73,7 @@ class Extension extends AbstractExtension
      */
     public static function script()
     {
-        return asset('assets/extensions/slide/js/extension.min.js');
+        return asset('assets/extensions/notadd/slide/js/extension.min.js');
     }
 
     /**
