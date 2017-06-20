@@ -9,7 +9,7 @@
 namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;
-use Notadd\Slide\Handlers\CateEditHandler;
+use Notadd\Slide\Handlers\UpdateCategoryHandler;
 use Notadd\Slide\Handlers\GetCategoryHandler;
 use Notadd\Slide\Handlers\SetCategoryHandler;
 use Notadd\Slide\Handlers\DeleteCategoryHandler;
@@ -32,5 +32,10 @@ class CategoryController extends Controller
     public function delete(DeleteCategoryHandler $deleteCategoryHandler)
     {
         return $deleteCategoryHandler->toResponse()->generateHttpResponse();
+    }
+
+    public function update(UpdateCategoryHandler $updateCategoryHandler)
+    {
+        return $updateCategoryHandler->toResponse()->generateHttpResponse();
     }
 }

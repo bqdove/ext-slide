@@ -13,6 +13,7 @@ use Notadd\Slide\Handlers\ShowGroupHandler;
 use Notadd\Slide\Handlers\GetGroupHandler;
 use Notadd\Slide\Handlers\SetGroupHandler;
 use Notadd\Slide\Handlers\DeleteGroupHandler;
+use Notadd\Slide\Handlers\UpdateGroupHandler;
 
 
 
@@ -37,5 +38,10 @@ class GroupController extends Controller
     public function show(ShowGroupHandler $showHandler)
     {
         return $showHandler->toResponse()->generateHttpResponse();
+    }
+
+    public function update(UpdateGroupHandler $updateGroupHandler)
+    {
+        return $updateGroupHandler->toResponse()->generateHttpResponse();
     }
 }
