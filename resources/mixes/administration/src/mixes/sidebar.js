@@ -1,6 +1,6 @@
 export default function (injection) {
     injection.useSidebarExtension({
-        path: '/pay',
-        title: '支付',
+        path: '/slide',
+        title: '幻灯片',
     });
 }

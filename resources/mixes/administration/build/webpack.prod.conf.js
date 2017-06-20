@@ -14,29 +14,29 @@ var webpackConfig = merge(baseWebpackConfig, {
     module: {
         rules: utils.styleLoaders({
             sourceMap: config.build.productionSourceMap,
-            extract: true
-        })
+            extract: true,
+        }),
     },
     output: {
         path: config.build.assetsRoot,
         filename: utils.assetsPath('js/extension.min.js'),
-        library: 'notadd/multipay',
-        libraryTarget: "umd"
+        library: 'notadd/slide',
+        libraryTarget: 'umd',
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': env
+            'process.env': env,
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
-                warnings: false
-            }
+                warnings: false,
+            },
         }),
         new ExtractTextPlugin({
-            filename: utils.assetsPath('css/extension.min.css')
+            filename: utils.assetsPath('css/extension.min.css'),
         }),
-        new OptimizeCSSPlugin()
-    ]
+        new OptimizeCSSPlugin(),
+    ],
 });
 
 if (config.build.productionGzip) {
@@ -52,8 +52,8 @@ if (config.build.productionGzip) {
                 ')$'
             ),
             threshold: 10240,
-            minRatio: 0.8
-        })
+            minRatio: 0.8,
+        }),
     );
 }
 

@@ -5,7 +5,7 @@ export default function (injection) {
         {
             beforeEnter: injection.middleware.requireAuth,
             component: Pay,
-            path: 'pay',
+            path: 'slide',
         },
     ]);
 }
