@@ -32,7 +32,7 @@ class GetPictureHandler extends Handler
 
             return $this->success()->withData($pictures)->withMessage('获取图集详情数据成功！');
         }else{
-            return $this->withCode('402')->withMessage('获取图片详情失败，请稍后重试');
+            return $this->withCode('402')->withError('获取图片详情失败，请稍后重试');
         }
 
     }

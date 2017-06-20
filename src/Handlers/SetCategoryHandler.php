@@ -31,13 +31,13 @@ class SetCategoryHandler extends AbstractSetHandler
 
             if (!$this->request->input('category_name'))
             {
-                return $this->withCode('402')->withMessage('分类名称不能为空');
+                return $this->withCode('402')->withError('分类名称不能为空');
             }
 
             if ($_alias = $this->request->input('category_id'))
             {
                 if($this->verify($_alias)){
-                    return $this->withCode('403')->withMessage('分类id在数据库中已存在,请重新定义');
+                    return $this->withCode('403')->withError('分类id在数据库中已存在,请重新定义');
                 }
 
                 $_category->alias = $_alias;
@@ -62,14 +62,14 @@ class SetCategoryHandler extends AbstractSetHandler
 
         if (!$this->request->get('category_name'))
         {
-            return $this->withCode('402')->withMessage('分类名称不能为空');
+            return $this->withCode('402')->withError('分类名称不能为空');
         }
         //如果分类Id没有填写，需要产生一个不重复的分类id别名。
         //如果分类Id用户自定义了，需要验证是否与数据库里的数据重复。
         if ($alias = $this->request->get('category_id'))
         {
             if($this->verify($alias)){
-                return $this->withCode('403')->withMessage('分类id在数据库中已存在,请重新定义');
+                return $this->withCode('403')->withError('分类id在数据库中已存在,请重新定义');
             }
 
             $category->alias = $alias;
@@ -96,7 +96,7 @@ class SetCategoryHandler extends AbstractSetHandler
         if ($category->save() && $createResult){
             return $this->success()->withMessage('分类信息保存成功');
         }else{
-            return $this->withCode('401')->withMessage('保存分类信息失败，请稍后重试');
+            return $this->withCode('401')->withError('保存分类信息失败，请稍后重试');
         }
     }
 

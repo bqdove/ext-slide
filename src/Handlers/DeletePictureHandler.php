@@ -39,7 +39,7 @@ class DeletePictureHandler extends AbstractSetHandler
 
         if (Picture::where('path', $path)->first() || $this->container->make('files')->exists(base_path($path)))
         {
-            return $this->withCode('402')->withMessage('删除失败，请稍候再试');
+            return $this->withCode('402')->withError('删除失败，请稍候再试');
         }
 
         return $this->success()->withMessage('删除成功');

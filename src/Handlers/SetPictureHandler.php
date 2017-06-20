@@ -39,7 +39,7 @@ class SetPictureHandler extends AbstractSetHandler
 
         if (!$this->container->make('files')->exists(base_path($path)))
         {
-            return $this->withCode('402')->withMessage('该图片已经不存在，请重新上传');
+            return $this->withCode('402')->withError('该图片已经不存在，请重新上传');
         }
 
         if ($picture = Picture::where('path', $path)->first())
@@ -64,7 +64,7 @@ class SetPictureHandler extends AbstractSetHandler
 
         if (!$title || !$link)
         {
-            return $this->withCode('401')->withMessage('图片，跳转链接为必填选项');
+            return $this->withCode('401')->withError('图片，跳转链接为必填选项');
         }
 
         $picture = new Picture();

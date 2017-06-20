@@ -33,7 +33,7 @@ class DeleteGroupHandler extends AbstractSetHandler
 
         if (!$group)
         {
-            return $this->withCode('404')->withMessage('请重新确认图集Id是否正确');
+            return $this->withCode('404')->withError('请重新确认图集Id是否正确');
         }
 
         $pictures = $group->pictures()->get();
