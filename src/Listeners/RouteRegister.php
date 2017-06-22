@@ -28,17 +28,17 @@ class RouteRegister extends AbstractRouteRegister
                 $this->router->group(['prefix' => 'category'],function() {
                     $this->router->post('set', CategoryController::class.'@set');
                     $this->router->get('get', CategoryController::class.'@get');
-                    $this->router->delete('delete', CategoryController::class.'@delete');
+                    $this->router->get('list',CategoryController::class.'@all');
+                    $this->router->post('delete', CategoryController::class.'@delete');
                     $this->router->post('update', CategoryController::class.'@update');
-
                 });
 
                 $this->router->group(['prefix' => 'group'],function() {
                     $this->router->post('set', GroupController::class.'@set');
                     $this->router->get('get', GroupController::class.'@get');
+                    $this->router->get('list', GroupController::class.'@all');
                     $this->router->delete('delete', GroupController::class.'@delete');
                     $this->router->post('update', GroupController::class.'@update');
-
                 });
 
                 $this->router->group(['prefix' => 'picture'],function() {
