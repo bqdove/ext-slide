@@ -31,13 +31,14 @@ class GetPictureHandler extends Handler
 
         $picturePath = $this->request->input('path');
 
-        $picture = Picture::where('path', $picturePath)->first()->toArray();
+        $picture = Picture::where('path', $picturePath)->first();
 
-        if ($picture){
+        if ($picture instanceof Picture)
+        {
+            $picture = Picture::where('path', $picturePath)->first()->toArray();
             return $this->success()->withData($picture)->withMessage('获取图片详情数据成功！');
         }else{
             return $this->withCode('402')->withError('获取图片详情失败，请稍后重试');
         }
-
     }
 }
