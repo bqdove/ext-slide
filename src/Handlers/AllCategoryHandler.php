@@ -23,7 +23,7 @@ class AllCategoryHandler extends Handler
      */
     protected function execute()
     {
-        $categories = Category::all();
+        $categories = Category::paginate(30)->toArray();
 
         $this->success()->withData($categories)->withMessage('获取数据成功！');
     }
