@@ -8,6 +8,7 @@
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
+use Notadd\Slide\Controllers\CategoryController;
 use Notadd\Slide\Models\Category;
 
 
@@ -33,9 +34,16 @@ class GetCategoryHandler extends Handler
 
         $category = Category::where('alias', $cateId)->first();
 
-        $this->success()->withData([
-            'category_id' => object_get($category, 'alias'),
-            'category_name' => object_get($category, 'name')
-        ])->withMessage('获取数据成功！');
+        if ($category instanceof Category)
+        {
+            $this->success()->withData([
+                'category_id' => object_get($category, 'alias'),
+                'category_name' => object_get($category, 'name')
+            ])->withMessage('获取数据成功！');
+        }elseif(is_null($category)){
+            $this->withCode(402)->withError('数据为空');
+        }else{
+            $this->withCode('404')->withError('获取数据失败');
+        }
     }
 }
