@@ -27,7 +27,7 @@ class GetCategoryHandler extends Handler
             'category_id' => 'required'
         ], [
             'category_id.required' => '请传入分类ID'
-        ])
+        ]);
 
         $cateId = $this->request->input('category_id');
 
