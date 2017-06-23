@@ -25,9 +25,13 @@ class DeleteGroupHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $groupId = $this->request->get('group_id');
+        $this->validate($this->request, [
+            'group_id' => 'required',
+        ], [
+            'group_id.required' => '图集ID为必传参数',
+        ]);
 
-        $group = Group::where('alias', $groupId)->first();
+        $group = Group::where('alias', $this->request->input('group_id'))->first();
 
         $category = Category::find($group->category_id);
 
@@ -38,17 +42,20 @@ class DeleteGroupHandler extends AbstractSetHandler
 
         $pictures = $group->pictures()->get();
 
-        //如果此分类下图集为空，那么直接删除分类
-        if (!$pictures)
+        $groupPath = $category->path . '/' .$group->path;
+
+        //如果图集为空，那么直接删除图集
+        if (count($pictures) == 0)
         {
             $result = $group->delete();
-            if ($result)
+
+            $deletefiles = $this->container->make('files')->deleteDirectory(base_path('/public/upload/'.$groupPath));
+
+            if ($result&&$deletefiles)
             {
                 return $this->success()->withMessage('删除图集成功');
             }
         }
-
-        $groupPath = $category->path . '/' .$group->path;
 
         //如果图集不为空，那么循环删除该图集的所有图片
         foreach($pictures as $picture)
@@ -59,11 +66,13 @@ class DeleteGroupHandler extends AbstractSetHandler
 
         $deleteDbData = $group->delete();
 
-        $deleteFile = Storage::deleteDirectory($groupPath);
+        $deleteFile = $this->container->make('files')->deleteDirectory(base_path('/public/upload/'.$groupPath));
 
         if ($deleteDbData && $deleteFile)
         {
             return $this->success()->withMessage('删除图集成功');
+        }else{
+            return $this->withCode->withError('删除图集失败');
         }
     }
 }
