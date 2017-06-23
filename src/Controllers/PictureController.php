@@ -12,7 +12,7 @@ use Notadd\Slide\Handlers\DeletePictureHandler;
 use Notadd\Slide\Handlers\GetPictureHandler;
 use Notadd\Slide\Handlers\SetPictureHandler;
 use Notadd\Slide\Handlers\UploadHandler;
-
+use Notadd\Slide\Handlers\AllPictureHandler;
 
 class PictureController extends Controller
 {
@@ -32,7 +32,12 @@ class PictureController extends Controller
         return $handler->toResponse()->generateHttpResponse();
     }
 
-    public function lists(GetPictureHandler $handler)
+    public function all(AllPictureHandler $handler)
+    {
+        return $handler->toResponse()->generateHttpResponse();
+    }
+
+    public function get(GetPictureHandler $handler)
     {
         return $handler->toResponse()->generateHttpResponse();
     }
