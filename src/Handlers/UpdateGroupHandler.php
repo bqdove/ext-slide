@@ -22,15 +22,20 @@ class UpdateGroupHandler extends AbstractSetHandler
      */
     public function execute()
     {
+        $this->validate($this->request, [
+            'id' => 'required',
+            'group_name' => 'required',
+            'group_show' => 'required'
+        ],[
+            'id' => '图集id不能为空',
+            'group_name.required' => '图集名称不能为空',
+            'group_show.required' => '图集可见性不能为空'
+        ]);
+
         //更新图集信息,传入group_id,
-        if ($groupId = $this->request->query('group_id'))
+        if ($groupId = $this->request->input('id'))
         {
             $group = Group::where('alias', $groupId)->first();
-
-            if (!$this->request->input('group_name'))
-            {
-                return $this->withCode('402')->withError('图集名称不能为空');
-            }
 
             if ($alias = $this->request->input('group_id'))
             {

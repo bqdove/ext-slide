@@ -92,7 +92,7 @@ class UploadHandler extends Handler
 
         $picture->user_id = 1;
 
-        $picture->group_id = $group->alias;
+        $picture->group_id = $group->id;
 
         $picture->save();
 

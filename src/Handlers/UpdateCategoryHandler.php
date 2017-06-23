@@ -19,12 +19,28 @@ class UpdateCategoryHandler extends AbstractSetHandler
 {
     /**
      * Execute Handler.
-     *
-     * @return bool
      */
     public function execute()
     {
         //更新一个分类
+        $this->validate($this->request, [
+            'category_name' => 'required',
+            'category_id' => 'unique:slide_categories,alias'
+        ], [
+            'category_name.required' => '分类名为必填字段',
+            'category_id.unique' => '分类别名不能重复'
+        ]);
+
+        $category = Group::query()->find($this->request->input('category_id'));
+
+        if ($category instanceof Group && $category->update($this->request->only([
+                'category_name', 'alias'
+            ]))) {
+            $this->success()->withMessage('分类信息更新成功');
+        } else {
+            $this->withCode(402)->withError('更新失败');
+        }
+
 
         if ($categoryId = $this->request->query('category_id'))
         {
