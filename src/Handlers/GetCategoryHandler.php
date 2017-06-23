@@ -25,6 +25,11 @@ class GetCategoryHandler extends Handler
     {
         $cateId = $this->request->get('category_id',null);
 
+        if (!$cateId)
+        {
+            return $this->withCode('500')->withError('请传入分类id');
+        }
+
         if ($cateId){
             $category = Category::where('alias', $cateId)->first();
 
@@ -32,11 +37,6 @@ class GetCategoryHandler extends Handler
                 'category_id' => object_get($category, 'alias'),
                 'category_name' => object_get($category, 'name')
             ])->withMessage('获取数据成功！');
-        }else{
-            $categories = Category::all();
-
-            $this->success()->withData($categories)->withMessage('获取数据成功！');
         }
-
     }
 }
