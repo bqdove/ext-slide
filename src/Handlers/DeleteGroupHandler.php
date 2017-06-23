@@ -35,11 +35,6 @@ class DeleteGroupHandler extends AbstractSetHandler
 
         $category = Category::find($group->category_id);
 
-        if (!$group)
-        {
-            return $this->withCode('404')->withError('请重新确认图集Id是否正确');
-        }
-
         $pictures = $group->pictures()->get();
 
         $groupPath = $category->path . '/' .$group->path;
