@@ -13,6 +13,7 @@ use Notadd\Slide\Handlers\UpdateCategoryHandler;
 use Notadd\Slide\Handlers\GetCategoryHandler;
 use Notadd\Slide\Handlers\SetCategoryHandler;
 use Notadd\Slide\Handlers\DeleteCategoryHandler;
+use Notadd\Slide\Handlers\AllCategoryHandler;
 
 
 /**
@@ -37,5 +38,10 @@ class CategoryController extends Controller
     public function update(UpdateCategoryHandler $updateCategoryHandler)
     {
         return $updateCategoryHandler->toResponse()->generateHttpResponse();
+    }
+
+    public function all(AllCategoryHandler $allCategoryHandler)
+    {
+        return $allCategoryHandler->toResponse()->generateHttpResponse();
     }
 }
