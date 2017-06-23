@@ -22,6 +22,11 @@ class ShowGroupHandler extends AbstractSetHandler
         ]);
 
         $group = Group::where('alias', $this->request->input('group_id'))->first();
+        
+        if (!$group)
+        {
+            return $this->withCode(404)->withError('此图集不存在，请重试');
+        }
 
         if ($group->show)
         {

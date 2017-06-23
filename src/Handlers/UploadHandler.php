@@ -94,6 +94,8 @@ class UploadHandler extends Handler
 
         $picture->group_id = $group->id;
 
+        $picture->image_name = $this->data['file_name'];
+
         $picture->save();
 
         return true;

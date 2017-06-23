@@ -39,9 +39,9 @@ class GetCategoryHandler extends Handler
             $this->success()->withData([
                 'category_id' => object_get($category, 'alias'),
                 'category_name' => object_get($category, 'name')
-            ])->withMessage('获取数据成功！');
+            ])->withMessage('获取分类信息成功！');
         }elseif(is_null($category)){
-            $this->withCode(402)->withError('数据为空');
+            $this->withCode(402)->withError('分类不存在');
         }else{
             $this->withCode('404')->withError('获取数据失败');
         }

@@ -31,10 +31,18 @@ class GetGroupHandler extends Handler
 
         $group = Group::where('alias', $this->request->query('group_id'))->first();
 
-        $this->success()->withData([
-            'group_id' => object_get($group, 'id'),
-            'group_name' => object_get($group, 'name'),
-            'show'  => object_get($group, 'show')
-        ])->withMessage('获取图集数据成功！');
+        if ($group instanceof Group)
+        {
+            $this->success()->withData([
+                'group_id' => object_get($group, 'id'),
+                'group_name' => object_get($group, 'name'),
+                'show'  => object_get($group, 'show')
+            ])->withMessage('获取图集数据成功！');
+        }elseif(is_null($group)){
+            $this->withCode(402)->withError('图集不存在');
+        }else{
+            $this->withCode('404')->withError('获取图集失败');
+        }
+
     }
 }
