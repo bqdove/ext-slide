@@ -8,7 +8,7 @@
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
-use Notadd\Slide\Models\Category;
+use Notadd\Slide\Models\Group;
 
 
 /**
@@ -23,7 +23,7 @@ class AllGroupHandler extends Handler
      */
     protected function execute()
     {
-        $categories = Category::all();
+        $categories = Group::all();
 
         $this->success()->withData($categories)->withMessage('获取数据成功！');
     }
