@@ -25,43 +25,8 @@ class SetGroupHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        //更新图集信息,传入group_id,
-        if ($_groupId = $this->request->query('group_id'))
-        {
-            $_group = Group::where('alias', $_groupId)->first();
-
-            if (!$this->request->input('group_name'))
-            {
-                return $this->withCode('402')->withError('图集名称不能为空');
-            }
-
-            if ($_alias = $this->request->input('group_id'))
-            {
-                if($this->verify($_alias)){
-                    return $this->withCode('403')->withError('图集id在数据库中已存在,请重新定义');
-                }
-
-                $_group->alias = $_alias;
-            }else{
-                do{
-                    $random = mt_rand(0, 4999);
-                }while($this->verify($random));
-
-                $_group->alias = $random;
-            }
-
-            $_group->show = $this->request->input('group_show');
-
-            $updateResult = $_group->save();
-
-            if ($updateResult)
-            {
-                return $this->success()->withMessage('更新图集信息成功');
-            }
-        }
-
         //新建图集信息,不传入group_id,需要传入分类id
-        $cateId = $this->request->query('category_id');
+        $cateId = $this->request->get('category_id');
 
         $category = Category::where('alias', $cateId)->first();
 
@@ -106,13 +71,14 @@ class SetGroupHandler extends AbstractSetHandler
 
         $this->container->make('files')->move(base_path('/storage/app/' .$groupPath), base_path('/public/upload/'.$groupPath));
 
+
         //因为移动时只移动了组文件夹，所以要在移动后删除分类文件夹
         if($this->container->make('files')->exists(base_path('/storage/app/' .$category->path)))
         {
             $this->container->make('files')->deleteDirectory(base_path('/storage/app/' .$category->path));
         }
 
-        if ($group->save() && $createResult){
+        if ($group->save()){
             return $this->success()->withMessage('图集信息保存成功');
         }else{
             return $this->withCode('401')->withError('保存图集信息失败，请稍后重试');
