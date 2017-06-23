@@ -40,7 +40,7 @@ class UploadHandler extends Handler
     public function execute()
     {
         //获得图集的文件地址
-        $groupId = $this->request->query('group_id');
+        $groupId = $this->request->input('group_id');
 
         $group = Group::where('alias', $groupId)->first();
 
@@ -70,7 +70,9 @@ class UploadHandler extends Handler
 
         $hash = hash_file('md5', $avatar->getPathname(), false);
 
-        $dictionary = 'upload/'.$frontPath;
+        $groupPath = $category->path.'/'.$group->path;
+
+        $dictionary = base_path('public/upload/'. $groupPath);
 
         $file = Str::substr($hash, 0, 32) . '.' . $avatar->getClientOriginalExtension();
 
@@ -78,11 +80,21 @@ class UploadHandler extends Handler
             $avatar->move($dictionary, $file);
         }
 
-        $this->data['path'] = 'public/upload/'. $frontPath . '/'.$file;
+        $this->data['path'] = $dictionary . '/' . $hash . '.' .$avatar->getClientOriginalExtension();;
 
         $this->data['file_name'] = $realName;
 
         $this->data['error'] = $error;
+
+        $picture = new Picture();
+
+        $picture->path = $this->data['path'];
+
+        $picture->user_id = 1;
+
+        $picture->group_id = $group->alias;
+
+        $picture->save();
 
         return true;
     }
