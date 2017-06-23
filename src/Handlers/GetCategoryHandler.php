@@ -23,20 +23,19 @@ class GetCategoryHandler extends Handler
      */
     protected function execute()
     {
-        $cateId = $this->request->get('category_id',null);
+        $this->validate($this->request, [
+            'category_id' => 'required'
+        ], [
+            'category_id.required' => '请传入分类ID'
+        ])
 
-        if (!$cateId)
-        {
-            return $this->withCode('500')->withError('请传入分类id');
-        }
+        $cateId = $this->request->input('category_id');
 
-        if ($cateId){
-            $category = Category::where('alias', $cateId)->first();
+        $category = Category::where('alias', $cateId)->first();
 
-            $this->success()->withData([
-                'category_id' => object_get($category, 'alias'),
-                'category_name' => object_get($category, 'name')
-            ])->withMessage('获取数据成功！');
-        }
+        $this->success()->withData([
+            'category_id' => object_get($category, 'alias'),
+            'category_name' => object_get($category, 'name')
+        ])->withMessage('获取数据成功！');
     }
 }
