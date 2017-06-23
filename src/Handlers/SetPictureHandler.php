@@ -20,71 +20,45 @@ class SetPictureHandler extends AbstractSetHandler
 {
     public function execute()
     {
-        $groupId = $this->request->query('group_id');
 
-        $path = $this->request->query('path');
+        $this->validate($this->request,[
+            'title' => 'required',
+            'link' => 'required',
+        ],[
+            'title.required' => '图片标题为必填字段',
+            'link.required' => '图片跳转链接为必填字段',
+        ]);
 
-        $name = $this->request->query('name');
+        $link = $this->request->input('link');
+        $title = $this->request->input('title');
+        $path = $this->request->input('path');
 
-        $title = $this->request->get('picture_title');
-
-        $link = $this->request->get('link');
-
-        $background = $this->request->get('background');
+        $background = $this->request->input('background');
 
         if (!$background)
         {
             $background = '';
         }
 
-        if (!$this->container->make('files')->exists(base_path($path)))
+        if (!$this->container->make('files')->exists($path))
         {
             return $this->withCode('402')->withError('该图片已经不存在，请重新上传');
         }
 
         if ($picture = Picture::where('path', $path)->first())
         {
-            $picture->path = $path;
-
-            $picture->name = $name;
+            $picture->link = $link;
 
             $picture->title = $title;
 
-            $picture->user_id = 1;
-
             $picture->background = $background;
 
-            $picture->group_id = $groupId;
+            $result = $picture->save();
 
-            if($picture->save())
+            if($result)
             {
-                return $this->success()->withMessage('更新图片信息成功');
+                return $this->success()->withMessage('设置图片信息成功');
             }
         }
-
-        if (!$title || !$link)
-        {
-            return $this->withCode('401')->withError('图片，跳转链接为必填选项');
-        }
-
-        $picture = new Picture();
-
-        $picture->path = $path;
-
-        $picture->name = $name;
-
-        $picture->title = $title;
-
-        $picture->user_id = 1;
-
-        $picture->background = $background;
-
-        $picture->group_id = $groupId;
-
-        if($picture->save())
-        {
-            return $this->success()->withMessage('新建图片信息成功');
-        }
-
     }
 }
