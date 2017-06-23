@@ -15,9 +15,13 @@ class ShowGroupHandler extends AbstractSetHandler
 {
     public function execute()
     {
-        $groupId = $this->request->input('group_id');
+        $this->validate($this->request, [
+            'group_id' => 'required'
+        ],[
+            'group_id.required' => '图集id为必传参数'
+        ]);
 
-        $group = Group::where('alias', $groupId)->get();
+        $group = Group::where('alias', $this->request->input('group_id'))->first();
 
         if ($group->show)
         {
