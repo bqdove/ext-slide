@@ -41,7 +41,7 @@ class ShowGroupHandler extends AbstractSetHandler
 
         if ($result)
         {
-            $this->success()->withData([
+            $this->withCode(200)->withData([
                 'show'  => object_get($group, 'show')
             ])->withMessage('获取显示状态数据成功！');
         }else{

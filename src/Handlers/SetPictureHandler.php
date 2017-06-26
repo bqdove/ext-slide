@@ -57,7 +57,7 @@ class SetPictureHandler extends AbstractSetHandler
 
             if($result)
             {
-                return $this->success()->withMessage('设置图片信息成功');
+                return $this->withCode(200)->withMessage('设置图片信息成功');
             }else{
                 return $this->withCode(500)->withError('设置图片信息失败');
             }

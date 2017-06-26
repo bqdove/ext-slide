@@ -61,7 +61,7 @@ class SetCategoryHandler extends AbstractSetHandler
 //        $createResult = Storage::move(app_path('/storage/app/' .$category->alias), base_path('/public/upload/'.$category->alias));
 
         if ($category->save() && $createResult){
-            return $this->success()->withMessage('分类信息保存成功');
+            return $this->withCode(200)->withMessage('分类信息保存成功');
         }else{
             return $this->withCode('401')->withError('保存分类信息失败，请稍后重试');
         }

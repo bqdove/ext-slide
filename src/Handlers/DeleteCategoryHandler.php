@@ -53,7 +53,7 @@ class DeleteCategoryHandler extends AbstractSetHandler
 
             if ($result && $deleteResult)
             {
-                return $this->success()->withMessage('删除分类成功');
+                return $this->withCode(200)->withMessage('删除分类成功');
             }
         }
 
@@ -98,7 +98,7 @@ class DeleteCategoryHandler extends AbstractSetHandler
 
         if ($result && $deleteResult)
         {
-            return $this->success()->withMessage('删除分类成功');
+            return $this->withCode(200)->withMessage('删除分类成功');
         }
     }
 }

@@ -36,7 +36,7 @@ class GetPictureHandler extends Handler
         if ($picture instanceof Picture)
         {
             $picture = $picture->toArray();
-            return $this->success()->withData($picture)->withMessage('获取图片详情数据成功！');
+            return $this->withCode(200)->withData($picture)->withMessage('获取图片详情数据成功！');
         }else{
             return $this->withCode('402')->withError('获取图片详情失败，请稍后重试');
         }

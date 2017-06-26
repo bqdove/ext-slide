@@ -33,7 +33,7 @@ class GetGroupHandler extends Handler
 
         if ($group instanceof Group)
         {
-            $this->success()->withData([
+            $this->withCode(200)->withData([
                 'group_id' => object_get($group, 'id'),
                 'group_name' => object_get($group, 'name'),
                 'show'  => object_get($group, 'show')

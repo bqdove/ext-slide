@@ -36,7 +36,7 @@ class UpdateCategoryHandler extends AbstractSetHandler
 //        if ($category instanceof Category && $category->update($this->request->only([
 //                'category_name', 'alias'
 //            ]))) {
-//            $this->success()->withMessage('分类信息更新成功');
+//            $this->withCode(200)->withMessage('分类信息更新成功');
 //        } else {
 //            $this->withCode(402)->withError('更新失败');
 //        }
@@ -62,7 +62,7 @@ class UpdateCategoryHandler extends AbstractSetHandler
 
         if ($updateResult)
         {
-            return $this->success()->withMessage('更新分类信息成功');
+            return $this->withCode(200)->withMessage('更新分类信息成功');
         }
 
     }

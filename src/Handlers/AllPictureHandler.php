@@ -32,7 +32,7 @@ class ALlPictureHandler extends Handler
         $pictures = Picture::where('group_id', $this->request->input('group_id'))->get()->toArray();
         if (count($pictures) > 0)
         {
-            $this->success()->withData($pictures)->withMessage('获取数据成功！');
+            $this->withCode(200)->withData($pictures)->withMessage('获取数据成功！');
         }else{
             $this->withCode(402)->withError('此图集为空');
         }

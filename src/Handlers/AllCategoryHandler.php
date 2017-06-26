@@ -25,6 +25,6 @@ class AllCategoryHandler extends Handler
     {
         $categories = Category::paginate(30)->toArray();
 
-        $this->success()->withData($categories)->withMessage('获取数据成功！');
+        $this->withCode(200)->withData($categories)->withMessage('获取数据成功！');
     }
 }

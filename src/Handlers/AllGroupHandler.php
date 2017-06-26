@@ -36,6 +36,6 @@ class AllGroupHandler extends Handler
 
         $groups = Group::where('category_id', $category->id)->paginate(30)->toArray();
 
-        $this->success()->withData($groups)->withMessage('获取图集列表成功！');
+        $this->withCode(200)->withData($groups)->withMessage('获取图集列表成功！');
     }
 }

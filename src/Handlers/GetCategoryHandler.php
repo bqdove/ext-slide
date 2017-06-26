@@ -36,7 +36,7 @@ class GetCategoryHandler extends Handler
 
         if ($category instanceof Category)
         {
-            $this->success()->withData([
+            $this->withCode(200)->withData([
                 'category_id' => object_get($category, 'alias'),
                 'category_name' => object_get($category, 'name')
             ])->withMessage('获取分类信息成功！');

@@ -58,7 +58,7 @@ class UpdateGroupHandler extends AbstractSetHandler
 
             if ($updateResult)
             {
-                return $this->success()->withMessage('更新图集信息成功');
+                return $this->withCode(200)->withMessage('更新图集信息成功');
             }
         }
 

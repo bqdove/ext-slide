@@ -48,7 +48,7 @@ class DeleteGroupHandler extends AbstractSetHandler
 
             if ($result&&$deletefiles)
             {
-                return $this->success()->withMessage('删除图集成功');
+                return $this->withCode(200)->withMessage('删除图集成功');
             }
         }
 
@@ -65,7 +65,7 @@ class DeleteGroupHandler extends AbstractSetHandler
 
         if ($deleteDbData && $deleteFile)
         {
-            return $this->success()->withMessage('删除图集成功');
+            return $this->withCode(200)->withMessage('删除图集成功');
         }else{
             return $this->withCode->withError('删除图集失败');
         }
