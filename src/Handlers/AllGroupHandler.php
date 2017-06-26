@@ -11,7 +11,6 @@ use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Group;
 use Notadd\Slide\Models\Category;
 
-
 /**
  * Class GetHandler.
  */
@@ -26,7 +25,7 @@ class AllGroupHandler extends Handler
     {
         $this->validate($this->request, [
             'category_id' => 'required'
-        ],[
+        ], [
             'category_id.required' => '分类Id为必传参数'
         ]);
 

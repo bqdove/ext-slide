@@ -5,6 +5,7 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-06-14 19:45
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
@@ -43,25 +44,23 @@ class UpdateCategoryHandler extends AbstractSetHandler
 
         $category = Category::where('alias', $this->request->input('id'))->first();
 
-        if ($alias = $this->request->input('category_id'))
-        {
-            if($this->verify($alias)){
+        if ($alias = $this->request->input('category_id')) {
+            if ($this->verify($alias)) {
                 return $this->withCode('403')->withError('分类id在数据库中已存在,请重新定义');
             }
 
             $category->alias = $alias;
-        }else{
-            do{
+        } else {
+            do {
                 $random = mt_rand(0, 4999);
-            }while($this->verify($random));
+            } while ($this->verify($random));
 
             $category->alias = $random;
         }
 
         $updateResult = $category->save();
 
-        if ($updateResult)
-        {
+        if ($updateResult) {
             return $this->withCode(200)->withMessage('更新分类信息成功');
         }
 
@@ -74,10 +73,9 @@ class UpdateCategoryHandler extends AbstractSetHandler
     private function verify($alias)
     {
         $category = Category::where('alias', $alias)->first();
-        if ($category)
-        {
+        if ($category) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

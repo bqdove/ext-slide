@@ -5,6 +5,7 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-06-14 19:45
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
@@ -67,16 +68,16 @@ class SetGroupHandler extends AbstractSetHandler
 
         $group->path = $group->alias;
 
-        $groupPath = $category->path. '/' . $group->alias;
+        $groupPath = $category->path . '/' . $group->alias;
 
         $createResult = Storage::makeDirectory($groupPath);
 
-        $this->container->make('files')->move(base_path('/storage/app/' .$groupPath), base_path('/public/upload/'.$groupPath));
+        $this->container->make('files')->move(base_path('/storage/app/' . $groupPath), base_path('/public/upload/' . $groupPath));
 
 
         //因为移动时只移动了组文件夹，所以要在移动后删除分类文件夹
-        if ($this->container->make('files')->exists(base_path('/storage/app/' .$category->path))) {
-            $this->container->make('files')->deleteDirectory(base_path('/storage/app/' .$category->path));
+        if ($this->container->make('files')->exists(base_path('/storage/app/' . $category->path))) {
+            $this->container->make('files')->deleteDirectory(base_path('/storage/app/' . $category->path));
         }
 
         if ($group->save()) {
@@ -93,8 +94,7 @@ class SetGroupHandler extends AbstractSetHandler
     private function verify($alias)
     {
         $group = Group::where('alias', $alias)->first();
-        if ($group instanceof Group)
-        {
+        if ($group instanceof Group) {
             return true;
         } else {
             return false;

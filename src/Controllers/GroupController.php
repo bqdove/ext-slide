@@ -6,6 +6,7 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-06-13 14:59
  */
+
 namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;

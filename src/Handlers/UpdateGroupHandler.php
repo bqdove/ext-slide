@@ -5,6 +5,7 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-06-14 19:45
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
@@ -26,28 +27,26 @@ class UpdateGroupHandler extends AbstractSetHandler
             'id' => 'required',
             'group_name' => 'required',
             'group_show' => 'required'
-        ],[
+        ], [
             'id' => '图集id不能为空',
             'group_name.required' => '图集名称不能为空',
             'group_show.required' => '图集可见性不能为空'
         ]);
 
         //更新图集信息,传入group_id,
-        if ($groupId = $this->request->input('id'))
-        {
+        if ($groupId = $this->request->input('id')) {
             $group = Group::where('alias', $groupId)->first();
 
-            if ($alias = $this->request->input('group_id'))
-            {
-                if($this->verify($alias)){
+            if ($alias = $this->request->input('group_id')) {
+                if ($this->verify($alias)) {
                     return $this->withCode('403')->withError('图集id在数据库中已存在,请重新定义');
                 }
 
                 $group->alias = $alias;
-            }else{
-                do{
+            } else {
+                do {
                     $random = mt_rand(0, 4999);
-                }while($this->verify($random));
+                } while ($this->verify($random));
 
                 $group->alias = $random;
             }
@@ -56,8 +55,7 @@ class UpdateGroupHandler extends AbstractSetHandler
 
             $updateResult = $group->save();
 
-            if ($updateResult)
-            {
+            if ($updateResult) {
                 return $this->withCode(200)->withMessage('更新图集信息成功');
             }
         }
@@ -71,10 +69,9 @@ class UpdateGroupHandler extends AbstractSetHandler
     private function verify($alias)
     {
         $group = Group::where('alias', $alias)->first();
-        if ($group)
-        {
+        if ($group) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

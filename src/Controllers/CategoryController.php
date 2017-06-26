@@ -6,6 +6,7 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-06-23 19:44
  */
+
 namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;
@@ -18,7 +19,6 @@ use Notadd\Slide\Handlers\AllCategoryHandler;
 /**
  * Class CategoryController.
  */
-
 class CategoryController extends Controller
 {
     public function get(GetCategoryHandler $getHandler)

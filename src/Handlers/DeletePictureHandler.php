@@ -6,6 +6,7 @@
  * @copyright (c) 2017, iLeyun.org
  * @datetime 2017-06-14 19:45
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
@@ -23,28 +24,25 @@ class DeletePictureHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $this->validate($this->request,[
-           'path' => 'required'
-        ],[
-           'path.required' => '图片路径为必传参数'
+        $this->validate($this->request, [
+            'path' => 'required'
+        ], [
+            'path.required' => '图片路径为必传参数'
         ]);
 
         $path = $this->request->input('path');
 
         $picture = Picture::where('path', $path)->first();
 
-        if ($picture instanceof Picture)
-        {
+        if ($picture instanceof Picture) {
             $picture->delete();
         }
 
-        if ($this->container->make('files')->exists($path))
-        {
+        if ($this->container->make('files')->exists($path)) {
             $this->container->make('files')->delete($path);
         }
 
-        if (Picture::where('path', $path)->first() || $this->container->make('files')->exists($path))
-        {
+        if (Picture::where('path', $path)->first() || $this->container->make('files')->exists($path)) {
             return $this->withCode('402')->withError('删除失败，请稍候再试');
         }
 

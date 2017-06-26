@@ -6,6 +6,7 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-04-10 19:41
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
@@ -25,7 +26,7 @@ class GetPictureHandler extends Handler
     {
         $this->validate($this->request, [
             'path' => 'required'
-        ],[
+        ], [
             'path.required' => '图片路径为必填字段'
         ]);
 
@@ -33,11 +34,10 @@ class GetPictureHandler extends Handler
 
         $picture = Picture::where('path', $picturePath)->first();
 
-        if ($picture instanceof Picture)
-        {
+        if ($picture instanceof Picture) {
             $picture = $picture->toArray();
             return $this->withCode(200)->withData($picture)->withMessage('获取图片详情数据成功！');
-        }else{
+        } else {
             return $this->withCode('402')->withError('获取图片详情失败，请稍后重试');
         }
     }

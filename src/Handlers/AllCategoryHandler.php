@@ -10,7 +10,6 @@ namespace Notadd\Slide\Handlers;
 use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Category;
 
-
 /**
  * Class GetHandler.
  */
