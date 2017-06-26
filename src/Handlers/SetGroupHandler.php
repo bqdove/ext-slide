@@ -26,16 +26,20 @@ class SetGroupHandler extends AbstractSetHandler
     public function execute()
     {
         //新建图集信息,不传入group_id,需要传入分类id
+
+        $this->validate($this->request, [
+            'category_id' => 'required',
+            'group_name' => 'required'
+        ], [
+            'category_id.required' => '分类ＩＤ为必填参数',
+            'group_name.required' => '图集名称不能为空'
+        ]);
+
         $cateId = $this->request->get('category_id');
 
         $category = Category::where('alias', $cateId)->first();
 
         $group = new Group();
-
-        if (!$this->request->get('group_name'))
-        {
-            return $this->withCode('402')->withError('图集名称不能为空');
-        }
 
         //如果分类Id没有填写，需要产生一个不重复的分类id别名。
         //如果分类Id用户自定义了，需要验证是否与数据库里的数据重复。
