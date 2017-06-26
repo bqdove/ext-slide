@@ -2,9 +2,9 @@
 /**
  * This file is part of Notadd.
  *
- * @author TwilRoad <269044570@qq.com>
+ * @author Allen <674397601@qq.com>
  * @copyright (c) 2017, iBenchu.org
- * @datetime 2017-02-23 19:44
+ * @datetime 2017-06-23 19:44
  */
 namespace Notadd\Slide\Controllers;
 
@@ -15,18 +15,19 @@ use Notadd\Slide\Handlers\SetCategoryHandler;
 use Notadd\Slide\Handlers\DeleteCategoryHandler;
 use Notadd\Slide\Handlers\AllCategoryHandler;
 
-
 /**
  * Class CategoryController.
  */
 
 class CategoryController extends Controller
 {
-    public function get(GetCategoryHandler $getHandler){
+    public function get(GetCategoryHandler $getHandler)
+    {
         return $getHandler->toResponse()->generateHttpResponse();
     }
 
-    public function set(SetCategoryHandler $setHandler){
+    public function set(SetCategoryHandler $setHandler)
+    {
         return $setHandler->toResponse()->generateHttpResponse();
     }
 

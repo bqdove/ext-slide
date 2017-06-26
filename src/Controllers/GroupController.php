@@ -16,14 +16,13 @@ use Notadd\Slide\Handlers\DeleteGroupHandler;
 use Notadd\Slide\Handlers\UpdateGroupHandler;
 use Notadd\Slide\Handlers\AllGroupHandler;
 
-
-
 /**
  * Class CategoryController.
  */
 class GroupController extends Controller
 {
-    public function get(GetGroupHandler $getHandler){
+    public function get(GetGroupHandler $getHandler)
+    {
         return $getHandler->toResponse()->generateHttpResponse();
     }
 
@@ -32,7 +31,8 @@ class GroupController extends Controller
         return $allGroupHandler->toResponse()->generateHttpResponse();
     }
 
-    public function set(SetGroupHandler $setHandler){
+    public function set(SetGroupHandler $setHandler)
+    {
         return $setHandler->toResponse()->generateHttpResponse();
     }
 

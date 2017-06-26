@@ -12,7 +12,6 @@ use Notadd\Slide\Models\Group;
 use Notadd\Slide\Models\Category;
 use Illuminate\Support\Facades\Storage;
 
-
 /**
  * Class ConfigurationHandler.
  */
@@ -44,17 +43,16 @@ class SetGroupHandler extends AbstractSetHandler
         //如果分类Id没有填写，需要产生一个不重复的分类id别名。
         //如果分类Id用户自定义了，需要验证是否与数据库里的数据重复。
 
-        if ($alias = $this->request->get('group_id'))
-        {
-            if($this->verify($alias)){
-                return $this->withCode('403')->withError('分类id在数据库中已存在,请重新定义');
+        if ($alias = $this->request->get('group_id')) {
+            if ($this->verify($alias)) {
+                return $this->withCode(403)->withError('分类id在数据库中已存在,请重新定义');
             }
 
             $group->alias = $alias;
-        }else{
-            do{
+        } else {
+            do {
                 $random = mt_rand(0, 4999);
-            }while($this->verify($random));
+            } while ($this->verify($random));
 
             $group->alias = $random;
         }
@@ -77,15 +75,14 @@ class SetGroupHandler extends AbstractSetHandler
 
 
         //因为移动时只移动了组文件夹，所以要在移动后删除分类文件夹
-        if($this->container->make('files')->exists(base_path('/storage/app/' .$category->path)))
-        {
+        if ($this->container->make('files')->exists(base_path('/storage/app/' .$category->path))) {
             $this->container->make('files')->deleteDirectory(base_path('/storage/app/' .$category->path));
         }
 
-        if ($group->save()){
+        if ($group->save()) {
             return $this->withCode(200)->withMessage('图集信息保存成功');
-        }else{
-            return $this->withCode('401')->withError('保存图集信息失败，请稍后重试');
+        } else {
+            return $this->withCode(401)->withError('保存图集信息失败，请稍后重试');
         }
     }
 
@@ -96,10 +93,10 @@ class SetGroupHandler extends AbstractSetHandler
     private function verify($alias)
     {
         $group = Group::where('alias', $alias)->first();
-        if ($group)
+        if ($group instanceof Group)
         {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
