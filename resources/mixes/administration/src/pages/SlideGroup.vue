@@ -140,7 +140,7 @@
 </script>
 <template>
     <div class="setting-wrap">
-        <div class="slide-wrap">
+        <div class="slide-group">
             <tabs value="name1">
                 <tab-pane label="轮播图插件" name="name1">
                     <card :bordered="false">
