@@ -9,6 +9,17 @@
         },
         data() {
             return {
+                addCategoryModal: false,
+                categoryAdd: {
+                    id: '',
+                    name: '',
+                },
+                categoryEdit: {
+                    id: '',
+                    name: '',
+                },
+                editCategoryModal: false,
+                loading: false,
                 self: this,
                 slideColumns: [
                     {
@@ -32,7 +43,7 @@
                             return `<dropdown>
                                     <i-button type="ghost">设置<icon type="arrow-down-b"></icon></i-button>
                                     <dropdown-menu slot="list">
-                                    <dropdown-item>编辑分类信息</dropdown-item>
+                                    <dropdown-item @click.native="editCategory">编辑分类信息</dropdown-item>
                                     <dropdown-item name="goodSku">查看组图</dropdown-item>
                                     </dropdown-menu></dropdown>
                                     <i-button @click.native="remove(${index})" class="delete-ad"
@@ -63,8 +74,42 @@
             };
         },
         methods: {
+            addCategory() {
+                this.addCategoryModal = true;
+            },
+            editCategory() {
+                this.editCategoryModal = true;
+            },
             remove(index) {
                 this.slideData.splice(index, 1);
+            },
+            submitAddCategory() {
+                const self = this;
+                self.loading = true;
+                self.$refs.categoryAdd.validate(valid => {
+                    if (valid) {
+                        window.console.log(valid);
+                    } else {
+                        self.loading = false;
+                        self.$notice.error({
+                            title: '请正确填写设置信息！',
+                        });
+                    }
+                });
+            },
+            submitEditCategory() {
+                const self = this;
+                self.loading = true;
+                self.$refs.categoryEdit.validate(valid => {
+                    if (valid) {
+                        window.console.log(valid);
+                    } else {
+                        self.loading = false;
+                        self.$notice.error({
+                            title: '请正确填写设置信息！',
+                        });
+                    }
+                });
             },
         },
     };
@@ -80,7 +125,7 @@
                             <p>删除分类前，请先删除分类下的所有组图</p>
                         </div>
                         <div class="slide-list">
-                            <i-button type="ghost">+新增分类</i-button>
+                            <i-button type="ghost" @click.native="addCategory">+新增分类</i-button>
                             <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
                             <i-table class="slide-table"
                                      :columns="slideColumns"
@@ -90,6 +135,72 @@
                                      highlight-row>
                             </i-table>
                         </div>
+                        <modal
+                                v-model="editCategoryModal"
+                                title="编辑分类信息" class="upload-picture-modal">
+                            <div class="slide-category-modal">
+                                <i-form ref="categoryEdit" :model="categoryEdit" :rules="ruleValidate" :label-width="100">
+                                    <row>
+                                        <i-col span="16">
+                                            <form-item label="分类名称">
+                                                <i-input v-model="categoryEdit.name"></i-input>
+                                            </form-item>
+                                        </i-col>
+                                    </row>
+                                    <row>
+                                        <i-col span="16">
+                                            <form-item label="分类ID">
+                                                <i-input v-model="categoryEdit.id"></i-input>
+                                            </form-item>
+                                        </i-col>
+                                    </row>
+                                    <row>
+                                        <i-col span="16">
+                                            <form-item>
+                                                <i-button :loading="loading" type="primary"
+                                                          @click.native="submitEditCategory">
+                                                    <span v-if="!loading">确认提交</span>
+                                                    <span v-else>正在提交…</span>
+                                                </i-button>
+                                            </form-item>
+                                        </i-col>
+                                    </row>
+                                </i-form>
+                            </div>
+                        </modal>
+                        <modal
+                                v-model="addCategoryModal"
+                                title="新增分类" class="upload-picture-modal">
+                            <div class="slide-category-modal">
+                                <i-form ref="categoryAdd" :model="categoryAdd" :rules="ruleValidate" :label-width="100">
+                                    <row>
+                                        <i-col span="16">
+                                            <form-item label="分类名称">
+                                                <i-input v-model="categoryAdd.name"></i-input>
+                                            </form-item>
+                                        </i-col>
+                                    </row>
+                                    <row>
+                                        <i-col span="16">
+                                            <form-item label="分类ID">
+                                                <i-input v-model="categoryAdd.id"></i-input>
+                                            </form-item>
+                                        </i-col>
+                                    </row>
+                                    <row>
+                                        <i-col span="16">
+                                            <form-item>
+                                                <i-button :loading="loading" type="primary"
+                                                          @click.native="submitAddCategory">
+                                                    <span v-if="!loading">确认提交</span>
+                                                    <span v-else>正在提交…</span>
+                                                </i-button>
+                                            </form-item>
+                                        </i-col>
+                                    </row>
+                                </i-form>
+                            </div>
+                        </modal>
                     </card>
                 </tab-pane>
             </tabs>
