@@ -11,10 +11,13 @@
             return {
                 action: `${window.api}/mall/admin/upload`,
                 form: {
+                    color: '',
+                    link: '',
                     picture1: '',
                     picture2: '',
                     picture3: '',
                     picture4: '',
+                    title: '',
                 },
             };
         },
@@ -217,17 +220,47 @@
                             </form-item>
                         </i-col>
                     </row>
-                    <!--<row>
+                    <h5>
+                        图片详情设置
+                        <span>提示：每编辑完成一组详情后需要点击保存</span>
+                    </h5>
+                    <row>
+                        <i-col span="14">
+                            <form-item label="图片标题">
+                                <i-input v-model="form.title"></i-input>
+                                <p class="tip">图片标题文字将作为图片Alt形式显示</p>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="14">
+                            <form-item label="图片跳转链接">
+                                <i-input v-model="form.link"></i-input>
+                                <p class="tip">输入图片要跳转的URL地址，正确格式应以http://开头，点击后将以"_blank"形式另打开页面</p>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="14">
+                            <form-item label="图片背景颜色">
+                                <i-input v-model="form.color"></i-input>
+                                <p class="tip">为确保现实效果美观，可设置轮播图整体背景填充色用于弥补图片在不同分辨率下显示区域
+                                    超出图片时的问题，可根据图片的基础底色作为参照进行颜色设置</p>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
                         <i-col span="14">
                             <form-item>
                                 <i-button :loading="loading" type="primary"
-                                          @click.native="submitSetGroup">
+                                          @click.native="submit">
                                     <span v-if="!loading">确认提交</span>
                                     <span v-else>正在提交…</span>
                                 </i-button>
+                                <i-button type="ghost">更新板块内容</i-button>
                             </form-item>
                         </i-col>
-                    </row>-->
+                    </row>
                 </i-form>
             </card>
         </div>
