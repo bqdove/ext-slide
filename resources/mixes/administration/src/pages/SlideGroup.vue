@@ -9,20 +9,21 @@
         },
         data() {
             return {
-                addCategoryModal: false,
-                categoryAdd: {
+                addGroupModal: false,
+                deleteGroupModal: false,
+                groupAdd: {
+                    enabled: '',
                     id: '',
                     name: '',
                 },
-                categoryDelete: {
-                    id: '5346',
+                groupDelete: {
+                    id: '',
                 },
-                categoryEdit: {
+                groupSet: {
+                    enabled: '',
                     id: '',
                     name: '',
                 },
-                deleteCategoryModal: false,
-                editCategoryModal: false,
                 loading: false,
                 self: this,
                 slideColumns: [
@@ -59,8 +60,8 @@
                             return `<dropdown>
                                     <i-button type="ghost">设置<icon type="arrow-down-b"></icon></i-button>
                                     <dropdown-menu slot="list">
-                                    <dropdown-item @click.native="editCategory">组图基础设置</dropdown-item>
-                                    <dropdown-item name="goodSku" @click.native="lookGroup">编辑图片内容</dropdown-item>
+                                    <dropdown-item @click.native="groupSetting">组图基础设置</dropdown-item>
+                                    <dropdown-item name="goodSku" @click.native="editPicture">编辑图片内容</dropdown-item>
                                     </dropdown-menu></dropdown>
                                     <i-button @click.native="remove" class="delete-ad"
                                      type="ghost">删除</i-button>`;
@@ -91,32 +92,33 @@
                         status: true,
                     },
                 ],
+                slideGroupModal: false,
             };
         },
         methods: {
-            addCategory() {
-                this.addCategoryModal = true;
+            addGroup() {
+                this.addGroupModal = true;
             },
-            editCategory() {
-                this.editCategoryModal = true;
+            editPicture() {
+                const self = this;
+                self.$router.push({
+                    path: 'group/edit',
+                });
             },
             goBack() {
                 const self = this;
                 self.$router.go(-1);
             },
-            lookGroup() {
-                const self = this;
-                self.$router.push({
-                    path: 'slide/group',
-                });
+            groupSetting() {
+                this.slideGroupModal = true;
             },
             remove() {
-                this.deleteCategoryModal = true;
+                this.deleteGroupModal = true;
             },
-            submitAddCategory() {
+            submitAddGroup() {
                 const self = this;
                 self.loading = true;
-                self.$refs.categoryAdd.validate(valid => {
+                self.$refs.groupAdd.validate(valid => {
                     if (valid) {
                         window.console.log(valid);
                     } else {
@@ -127,10 +129,10 @@
                     }
                 });
             },
-            submitDeleteCategory() {
+            submitDeleteGroup() {
                 const self = this;
                 self.loading = true;
-                self.$refs.categoryDelete.validate(valid => {
+                self.$refs.groupDelete.validate(valid => {
                     if (valid) {
                         window.console.log(valid);
                     } else {
@@ -141,10 +143,10 @@
                     }
                 });
             },
-            submitEditCategory() {
+            submitSetGroup() {
                 const self = this;
                 self.loading = true;
-                self.$refs.categoryEdit.validate(valid => {
+                self.$refs.groupSet.validate(valid => {
                     if (valid) {
                         window.console.log(valid);
                     } else {
@@ -169,7 +171,7 @@
             </div>
             <card :bordered="false">
                 <div class="slide-list">
-                    <i-button type="ghost" @click.native="addCategory">+新增组图</i-button>
+                    <i-button type="ghost" @click.native="addGroup">+新增组图</i-button>
                     <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
                     <i-table class="slide-table"
                              :columns="slideColumns"
@@ -180,26 +182,83 @@
                     </i-table>
                 </div>
                 <modal
-                        v-model="editCategoryModal"
-                        title="编辑分类信息" class="upload-picture-modal">
-                    <div class="slide-category-modal">
-                        <i-form ref="categoryEdit" :model="categoryEdit" :rules="ruleValidate" :label-width="100">
+                        v-model="slideGroupModal"
+                        title="组图基础设置" class="upload-picture-modal">
+                    <div>
+                        <i-form ref="groupSet" :model="groupSet" :rules="ruleValidate" :label-width="100">
                             <row>
-                                <i-col span="16">
-                                    <form-item label="分类名称">
-                                        <i-input v-model="categoryEdit.name"></i-input>
+                                <i-col span="14">
+                                    <form-item label="组图名称">
+                                        <i-input v-model="groupSet.name"></i-input>
+                                        <p class="tip">商城前台不显示，名称仅用于后台标记分类</p>
                                     </form-item>
                                 </i-col>
                             </row>
                             <row>
-                                <i-col span="16">
-                                    <form-item label="分类ID">
-                                        <i-input v-model="categoryEdit.id"></i-input>
+                                <i-col span="14">
+                                    <form-item label="组图ID">
+                                        <i-input v-model="groupSet.id"></i-input>
+                                        <p class="tip">可留空，系统会自动分配一个ID</p>
                                     </form-item>
                                 </i-col>
                             </row>
                             <row>
-                                <i-col span="16">
+                                <i-col span="14">
+                                    <form-item label="是否显示">
+                                        <radio-group v-model="groupSet.enabled">
+                                            <radio label="是"></radio>
+                                            <radio label="否"></radio>
+                                        </radio-group>
+                                    </form-item>
+                                </i-col>
+                            </row>
+                            <row>
+                                <i-col span="14">
+                                    <form-item>
+                                        <i-button :loading="loading" type="primary"
+                                                  @click.native="submitSetGroup">
+                                            <span v-if="!loading">确认提交</span>
+                                            <span v-else>正在提交…</span>
+                                        </i-button>
+                                    </form-item>
+                                </i-col>
+                            </row>
+                        </i-form>
+                    </div>
+                </modal>
+                <modal
+                        v-model="addGroupModal"
+                        title="新增组图" class="upload-picture-modal">
+                    <div>
+                        <i-form ref="groupAdd" :model="groupAdd" :rules="ruleValidate" :label-width="100">
+                            <row>
+                                <i-col span="14">
+                                    <form-item label="组图名称">
+                                        <i-input v-model="groupAdd.name"></i-input>
+                                        <p class="tip">商城前台不显示，名称仅用于后台标记分类</p>
+                                    </form-item>
+                                </i-col>
+                            </row>
+                            <row>
+                                <i-col span="14">
+                                    <form-item label="组图ID">
+                                        <i-input v-model="groupAdd.id"></i-input>
+                                        <p class="tip">可留空，系统会自动分配一个ID</p>
+                                    </form-item>
+                                </i-col>
+                            </row>
+                            <row>
+                                <i-col span="14">
+                                    <form-item label="是否显示">
+                                        <radio-group v-model="groupAdd.enabled">
+                                            <radio label="是"></radio>
+                                            <radio label="否"></radio>
+                                        </radio-group>
+                                    </form-item>
+                                </i-col>
+                            </row>
+                            <row>
+                                <i-col span="14">
                                     <form-item>
                                         <i-button :loading="loading" type="primary"
                                                   @click.native="submitEditCategory">
@@ -216,26 +275,26 @@
                         v-model="addCategoryModal"
                         title="新增分类" class="upload-picture-modal">
                     <div class="slide-category-modal">
-                        <i-form ref="categoryAdd" :model="categoryAdd" :rules="ruleValidate" :label-width="100">
+                        <i-form ref="groupAdd" :model="groupAdd" :rules="ruleValidate" :label-width="100">
                             <row>
-                                <i-col span="16">
-                                    <form-item label="分类名称">
-                                        <i-input v-model="categoryAdd.name"></i-input>
+                                <i-col span="14">
+                                    <form-item label="组图名称">
+                                        <i-input v-model="groupAdd.name"></i-input>
                                     </form-item>
                                 </i-col>
                             </row>
                             <row>
-                                <i-col span="16">
-                                    <form-item label="分类ID">
-                                        <i-input v-model="categoryAdd.id"></i-input>
+                                <i-col span="14">
+                                    <form-item label="组图ID">
+                                        <i-input v-model="groupAdd.id"></i-input>
                                     </form-item>
                                 </i-col>
                             </row>
                             <row>
-                                <i-col span="16">
+                                <i-col span="14">
                                     <form-item>
                                         <i-button :loading="loading" type="primary"
-                                                  @click.native="submitAddCategory">
+                                                  @click.native="submitAddGroup">
                                             <span v-if="!loading">确认提交</span>
                                             <span v-else>正在提交…</span>
                                         </i-button>
@@ -246,20 +305,20 @@
                     </div>
                 </modal>
                 <modal
-                        v-model="deleteCategoryModal"
+                        v-model="deleteGroupModal"
                         title="删除" class="upload-picture-modal">
                     <div class="slide-category-delete-modal">
-                        <i-form ref="categoryDelete" :model="categoryDelete" :rules="ruleValidate">
+                        <i-form ref="groupDelete" :model="groupDelete" :rules="ruleValidate">
                             <row>
                                 <i-col>
-                                    <p>删除后不可恢复，请输入分类ID：{{ categoryDelete.id }} 以确认删除</p>
-                                    <i-input v-model="categoryDelete.id" style="width: 124px"></i-input>
+                                    <p>删除后不可恢复，请输入组图ID：{{ groupDelete.id }} 以确认删除</p>
+                                    <i-input v-model="groupDelete.id" style="width: 124px"></i-input>
                                 </i-col>
                             </row>
                             <row>
                                 <i-col>
                                     <i-button :loading="loading" type="primary"
-                                              @click.native="submitDeleteCategory">
+                                              @click.native="submitDeleteGroup">
                                         <span v-if="!loading">确认提交</span>
                                         <span v-else>正在提交…</span>
                                     </i-button>

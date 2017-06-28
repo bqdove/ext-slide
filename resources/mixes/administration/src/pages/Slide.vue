@@ -165,21 +165,21 @@
                             <div class="slide-category-modal">
                                 <i-form ref="categoryEdit" :model="categoryEdit" :rules="ruleValidate" :label-width="100">
                                     <row>
-                                        <i-col span="16">
+                                        <i-col span="14">
                                             <form-item label="分类名称">
                                                 <i-input v-model="categoryEdit.name"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
                                     <row>
-                                        <i-col span="16">
+                                        <i-col span="14">
                                             <form-item label="分类ID">
                                                 <i-input v-model="categoryEdit.id"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
                                     <row>
-                                        <i-col span="16">
+                                        <i-col span="14">
                                             <form-item>
                                                 <i-button :loading="loading" type="primary"
                                                           @click.native="submitEditCategory">
@@ -198,21 +198,21 @@
                             <div class="slide-category-modal">
                                 <i-form ref="categoryAdd" :model="categoryAdd" :rules="ruleValidate" :label-width="100">
                                     <row>
-                                        <i-col span="16">
+                                        <i-col span="14">
                                             <form-item label="分类名称">
                                                 <i-input v-model="categoryAdd.name"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
                                     <row>
-                                        <i-col span="16">
+                                        <i-col span="14">
                                             <form-item label="分类ID">
                                                 <i-input v-model="categoryAdd.id"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
                                     <row>
-                                        <i-col span="16">
+                                        <i-col span="14">
                                             <form-item>
                                                 <i-button :loading="loading" type="primary"
                                                           @click.native="submitAddCategory">
