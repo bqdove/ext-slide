@@ -6,6 +6,7 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-04-10 19:41
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
@@ -23,20 +24,24 @@ class GetGroupHandler extends Handler
      */
     protected function execute()
     {
-        $groupId = $this->request->get('group_id',null);
+        $this->validate($this->request, [
+            'group_id' => 'required',
+        ], [
+            'group_id.required' => '图集ID为必传参数',
+        ]);
 
-        if ($groupId){
-            $group = Group::where('alias', $groupId)->first();
+        $group = Group::where('alias', $this->request->query('group_id'))->first();
 
-            $this->success()->withData([
+        if ($group instanceof Group) {
+            $this->withCode(200)->withData([
                 'group_id' => object_get($group, 'id'),
                 'group_name' => object_get($group, 'name'),
-                'show'  => object_get($group, 'show')
+                'show' => object_get($group, 'show')
             ])->withMessage('获取图集数据成功！');
-        }else{
-            $groups = Group::all();
-
-            $this->success()->withData($groups)->withMessage('获取所有图集数据成功！');
+        } elseif (is_null($group)) {
+            $this->withCode(402)->withError('图集不存在');
+        } else {
+            $this->withCode('404')->withError('获取图集失败');
         }
 
     }

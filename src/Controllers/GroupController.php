@@ -6,6 +6,7 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-06-13 14:59
  */
+
 namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;
@@ -13,19 +14,26 @@ use Notadd\Slide\Handlers\ShowGroupHandler;
 use Notadd\Slide\Handlers\GetGroupHandler;
 use Notadd\Slide\Handlers\SetGroupHandler;
 use Notadd\Slide\Handlers\DeleteGroupHandler;
-
-
+use Notadd\Slide\Handlers\UpdateGroupHandler;
+use Notadd\Slide\Handlers\AllGroupHandler;
 
 /**
  * Class CategoryController.
  */
 class GroupController extends Controller
 {
-    public function get(GetGroupHandler $getHandler){
+    public function get(GetGroupHandler $getHandler)
+    {
         return $getHandler->toResponse()->generateHttpResponse();
     }
 
-    public function set(SetGroupHandler $setHandler){
+    public function all(AllGroupHandler $allGroupHandler)
+    {
+        return $allGroupHandler->toResponse()->generateHttpResponse();
+    }
+
+    public function set(SetGroupHandler $setHandler)
+    {
         return $setHandler->toResponse()->generateHttpResponse();
     }
 
@@ -37,5 +45,10 @@ class GroupController extends Controller
     public function show(ShowGroupHandler $showHandler)
     {
         return $showHandler->toResponse()->generateHttpResponse();
+    }
+
+    public function update(UpdateGroupHandler $updateGroupHandler)
+    {
+        return $updateGroupHandler->toResponse()->generateHttpResponse();
     }
 }

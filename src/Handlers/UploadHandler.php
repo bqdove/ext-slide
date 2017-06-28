@@ -24,10 +24,11 @@ class UploadHandler extends Handler
      * @var \Illuminate\Filesystem\Filesystem
      */
     protected $files;
+
     /**
      * UploadHandler constructor.
      *
-     * @param \Illuminate\Container\Container   $container
+     * @param \Illuminate\Container\Container $container
      * @param \Illuminate\Filesystem\Filesystem $filesystem
      */
     public function __construct(Container $container, Filesystem $filesystem)
@@ -40,12 +41,11 @@ class UploadHandler extends Handler
     public function execute()
     {
         //获得图集的文件地址
-        $groupId = $this->request->query('group_id');
+        $groupId = $this->request->input('group_id');
 
         $group = Group::where('alias', $groupId)->first();
 
-        if ($group)
-        {
+        if ($group) {
             $groupPath = $group->path;
             $categoryId = $group->category_id;
         }
@@ -54,12 +54,12 @@ class UploadHandler extends Handler
 
         $catePath = $category->path;
 
-        $frontPath = $catePath .'/'.$groupPath;
+        $frontPath = $catePath . '/' . $groupPath;
 
         $this->validate($this->request, [
             'file' => 'required|image',
         ], [
-            'file.image'    => '上传文件格式必须为图片格式！',
+            'file.image' => '上传文件格式必须为图片格式！',
             'file.required' => '必须上传一个文件！',
         ]);
         $avatar = $this->request->file('file');
@@ -70,7 +70,9 @@ class UploadHandler extends Handler
 
         $hash = hash_file('md5', $avatar->getPathname(), false);
 
-        $dictionary = 'upload/'.$frontPath;
+        $groupPath = $category->path . '/' . $group->path;
+
+        $dictionary = base_path('public/upload/' . $groupPath);
 
         $file = Str::substr($hash, 0, 32) . '.' . $avatar->getClientOriginalExtension();
 
@@ -78,20 +80,33 @@ class UploadHandler extends Handler
             $avatar->move($dictionary, $file);
         }
 
-        $this->data['path'] = 'public/upload/'. $frontPath . '/'.$file;
+        $this->data['path'] = $dictionary . '/' . $hash . '.' . $avatar->getClientOriginalExtension();;
 
         $this->data['file_name'] = $realName;
 
         $this->data['error'] = $error;
 
+        $picture = new Picture();
+
+        $picture->path = $this->data['path'];
+
+        $picture->user_id = 1;
+
+        $picture->group_id = $group->id;
+
+        $picture->image_name = $this->data['file_name'];
+
+        $picture->save();
+
         return true;
     }
+
     /**
      * String split handler.
      *
      * @param string $path
      * @param string $dots
-     * @param null   $data
+     * @param null $data
      *
      * @return \Illuminate\Support\Collection|null
      */

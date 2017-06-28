@@ -6,6 +6,7 @@
  * @copyright (c) 2017, iLeyun.org
  * @datetime 2017-06-14 19:45
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
@@ -25,45 +26,45 @@ class DeleteGroupHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $groupId = $this->request->get('group_id');
+        $this->validate($this->request, [
+            'group_id' => 'required',
+        ], [
+            'group_id.required' => '图集ID为必传参数',
+        ]);
 
-        $group = Group::where('alias', $groupId)->first();
+        $group = Group::where('alias', $this->request->input('group_id'))->first();
 
         $category = Category::find($group->category_id);
 
-        if (!$group)
-        {
-            return $this->withCode('404')->withMessage('请重新确认图集Id是否正确');
-        }
-
         $pictures = $group->pictures()->get();
 
-        //如果此分类下图集为空，那么直接删除分类
-        if (!$pictures)
-        {
+        $groupPath = $category->path . '/' . $group->path;
+
+        //如果图集为空，那么直接删除图集
+        if (count($pictures) == 0) {
             $result = $group->delete();
-            if ($result)
-            {
-                return $this->success()->withMessage('删除图集成功');
+
+            $deletefiles = $this->container->make('files')->deleteDirectory(base_path('/public/upload/' . $groupPath));
+
+            if ($result && $deletefiles) {
+                return $this->withCode(200)->withMessage('删除图集成功');
             }
         }
 
-        $groupPath = $category->path . '/' .$group->path;
-
         //如果图集不为空，那么循环删除该图集的所有图片
-        foreach($pictures as $picture)
-        {
+        foreach ($pictures as $picture) {
             $picture->delete();
         }
         //图集图片循环删除完毕后尝试删除当前图集信息
 
         $deleteDbData = $group->delete();
 
-        $deleteFile = Storage::deleteDirectory($groupPath);
+        $deleteFile = $this->container->make('files')->deleteDirectory(base_path('/public/upload/' . $groupPath));
 
-        if ($deleteDbData && $deleteFile)
-        {
-            return $this->success()->withMessage('删除图集成功');
+        if ($deleteDbData && $deleteFile) {
+            return $this->withCode(200)->withMessage('删除图集成功');
+        } else {
+            return $this->withCode->withError('删除图集失败');
         }
     }
 }

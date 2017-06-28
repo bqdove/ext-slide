@@ -26,24 +26,31 @@ class RouteRegister extends AbstractRouteRegister
             $this->router->group(['middleware' => ['cross', 'web'], 'prefix' => 'api/slide'], function () {
 
                 $this->router->group(['prefix' => 'category'],function() {
-                    $this->router->get('set', CategoryController::class.'@set');
+                    $this->router->post('set', CategoryController::class.'@set');
                     $this->router->get('get', CategoryController::class.'@get');
-                    $this->router->get('delete', CategoryController::class.'@delete');
-
+                    $this->router->get('list',CategoryController::class.'@all');
+                    $this->router->post('delete', CategoryController::class.'@delete');
+                    $this->router->post('update', CategoryController::class.'@update');
                 });
 
                 $this->router->group(['prefix' => 'group'],function() {
-                    $this->router->get('set', GroupController::class.'@set');
+                    $this->router->post('set', GroupController::class.'@set');
                     $this->router->get('get', GroupController::class.'@get');
-                    $this->router->get('delete', GroupController::class.'@delete');
+                    $this->router->get('list', GroupController::class.'@all');
+                    $this->router->post('delete', GroupController::class.'@delete');
+                    $this->router->post('update', GroupController::class.'@update');
+                    $this->router->post('show', GroupController::class.'@show');
+
                 });
 
                 $this->router->group(['prefix' => 'picture'],function() {
                     $this->router->get('test',PictureController::class.'@test');
-                    $this->router->post('upload',PictureController::class.'@upload');
-                    $this->router->get('set', PictureController::class.'@set');
+                    $this->router->post('set', PictureController::class.'@set');
                     $this->router->get('get', PictureController::class.'@get');
-                    $this->router->get('delete', PictureController::class.'@postDelete');
+                    $this->router->get('list', PictureController::class.'@all');
+                    $this->router->post('delete', PictureController::class.'@delete');
+                    $this->router->post('update', PictureController::class.'@update');
+                    $this->router->post('upload',PictureController::class.'@upload');
                 });
         });
     }

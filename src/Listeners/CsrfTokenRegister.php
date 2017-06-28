@@ -34,6 +34,6 @@ class CsrfTokenRegister extends EventSubscriber
      */
     public function handle(CsrfTokenRegisterEvent $event)
     {
-
+        $event->registerExcept('api/slide*');
     }
 }

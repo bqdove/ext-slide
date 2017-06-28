@@ -6,12 +6,11 @@
  * @copyright (c) 2017, iLeyun.org
  * @datetime 2017-06-14 19:45
  */
+
 namespace Notadd\Slide\Handlers;
 
-use Illuminate\Support\Facades\Storage;
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
 use Notadd\Slide\Models\Category;
-
 
 /**
  * Class ConfigurationHandler.
@@ -25,44 +24,58 @@ class DeleteCategoryHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        $cateId = $this->request->get('category_id');
+        $this->validate($this->request, [
+            'category_id' => 'required'
+        ], [
+            'category_id.required' => '分类id为必填参数'
+        ]);
+
+        $cateId = $this->request->input('category_id');
 
         $category = Category::where('alias', $cateId)->first();
 
-        if (!$category)
-        {
-            return $this->withCode('404')->withMessage('请重新确认分类Id是否正确');
+        if (!$category) {
+            return $this->withCode('404')->withError('请重新确认分类Id是否正确');
         }
 
         $groups = $category->groups()->with('pictures')->get();
 
         //如果此分类下图集为空，那么直接删除分类
-        if (!$groups)
-        {
-            $result = $category->delete(
-);
-            if ($result)
-            {
-                return $this->success()->withMessage('删除分类成功');
+        if (count($groups) == 0) {
+            $categoryPath = $category->path;
+
+            $deleteResult = $this->container->make('files')->deleteDirectory(base_path('/public/upload/' . $categoryPath));
+
+            $result = $category->delete();
+
+            if ($result && $deleteResult) {
+                return $this->withCode(200)->withMessage('删除分类成功');
             }
         }
 
-        foreach($groups as $group)
-        {
+        foreach ($groups as $group) {
             $pictures = $group->pictures()->get();
 
+            $groupPath = $category->path . '/' . $group->path;
+
             //如果该图集下图片数为零，那么删除该图集
-            if (!count($pictures))
-            {
+            if (count($pictures) == 0) {
+                $this->container->make('files')->deleteDirectory(base_path('/public/upload/' . $groupPath));
+
                 $group->delete();
             }
 
             //如果图集不为空，那么循环删除该图集的所有图片
-            foreach($pictures as $picture)
-            {
+            foreach ($pictures as $picture) {
+                if ($this->container->make('files')->exists($picture->path)) {
+                    $this->container->make('files')->delete($picture->path);
+                }
+
                 $picture->delete();
             }
             //图集图片循环删除完毕后尝试删除当前图集信息
+
+            $this->container->make('files')->deleteDirectory(base_path('/public/upload/' . $groupPath));
 
             $group->delete();
 
@@ -73,11 +86,10 @@ class DeleteCategoryHandler extends AbstractSetHandler
 
         $result = $category->delete();
 
-        $deleteResult = Storage::deleteDirectory($catePath);
+        $deleteResult = $this->container->make('files')->deleteDirectory(base_path('/public/upload/' . $catePath));
 
-        if ($result && $deleteResult)
-        {
-            return $this->success()->withMessage('删除分类成功');
+        if ($result && $deleteResult) {
+            return $this->withCode(200)->withMessage('删除分类成功');
         }
     }
 }

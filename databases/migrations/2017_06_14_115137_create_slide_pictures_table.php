@@ -24,11 +24,12 @@ class CreateSlidePicturesTable extends Migration
             $this->schema->create('slide_pictures', function (Blueprint $table) {
                 $table->increments('id')->comment('图片ID');//图片ID
                 $table->integer('user_id')->comment('图片上传用户id');//图片上传用户id
-                $table->string('name')->comment('图片名称');//图片路径
+                $table->string('image_name')->comment('图片名称');//图片路径
                 $table->string('path')->comment('图片路径，图片名MD5');//图片加密路径
                 $table->string('title',64)->nullable()->comment('图片标题');
                 $table->string('background', 10)->comment('填充颜色');
                 $table->unsignedInteger('group_id')->comment('图片所属组Id');
+                $table->string('link')->comment('图片跳转链接地址');
                 $table->softDeletes();
                 $table->timestamps();
             });
