@@ -162,6 +162,30 @@
                     path: 'slide/group',
                 });
             },
+            refreshData() {
+                const self = this;
+                self.$loading.start();
+                self.$notice.open({
+                    title: '正在刷新数据...',
+                });
+                self.$http.post(`${window.slideApi}/slide/category/list`).then(response => {
+                    const dataList = response.data.data;
+                    self.list = dataList.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    self.page.total = dataList.total;
+                    self.page.total = dataList.total;
+                    self.page.current_page = dataList.current_page;
+                    self.page.per_page = dataList.per_page;
+                    self.page.last_page = dataList.last_page;
+                    self.page.to = dataList.to;
+                    self.$loading.finish();
+                    self.$notice.open({
+                        title: '刷新数据完成！',
+                    });
+                });
+            },
             remove() {
                 this.deleteCategoryModal = true;
             },
@@ -172,7 +196,7 @@
                 self.$refs.categoryAdd.validate(valid => {
                     if (valid) {
                         self.$http.post(`${window.slideApi}/slide/category/set`, self.categoryAdd).then(response => {
-                            if (response.data.data) {
+                            if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '新增分类信息成功！',
                                 });
@@ -246,7 +270,8 @@
                         </div>
                         <div class="slide-list">
                             <i-button type="ghost" @click.native="addCategory">+新增分类</i-button>
-                            <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
+                            <i-button type="text" icon="android-sync" class="refresh"
+                            @click.native="refreshData">刷新</i-button>
                             <i-table class="slide-table"
                                      :columns="columns"
                                      :data="list"
