@@ -1,11 +1,11 @@
 <script>
     import injection from '../helpers/injection';
 
-    window.api = 'http://pay.ibenchu.xyz:8080/api';
+    window.slideApi = 'https://allen.ibenchu.pw/api';
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/slide/category/list`).then(response => {
+            injection.http.post(`${window.slideApi}/slide/category/list`).then(response => {
                 const data = response.data.data;
                 next(vm => {
                     vm.list = data.data.map(item => {
@@ -28,8 +28,8 @@
             return {
                 addCategoryModal: false,
                 categoryAdd: {
-                    id: '',
-                    name: '',
+                    category_id: '',
+                    category_name: '',
                 },
                 categoryDelete: {
                     id: '5346',
@@ -139,6 +139,14 @@
                     },
                 ],
                 loading: false,
+                page: {
+                    current_page: 1,
+                    from: 1,
+                    last_page: 0,
+                    per_page: 0,
+                    to: 0,
+                    total: 0,
+                },
                 self: this,
             };
         },
@@ -161,9 +169,33 @@
             submitAddCategory() {
                 const self = this;
                 self.loading = true;
+                injection.loading.start();
                 self.$refs.categoryAdd.validate(valid => {
                     if (valid) {
-                        window.console.log(valid);
+                        self.$http.post(`${window.slideApi}/slide/category/set`, self.categoryAdd).then(response => {
+                            if (response.data.data) {
+                                self.$notice.open({
+                                    title: '新增文件夹信息成功！',
+                                });
+                                this.addCategoryModal = false;
+                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                    const data = res.data.data;
+                                    self.list = data.data.map(item => {
+                                        item.loading = false;
+                                        return item;
+                                    });
+                                    self.page.total = data.total;
+                                    self.page.current_page = data.current_page;
+                                    self.page.per_page = data.per_page;
+                                    self.page.last_page = data.last_page;
+                                    self.page.to = data.to;
+                                    injection.loading.finish();
+                                    injection.sidebar.active('setting');
+                                });
+                            }
+                        }).catch(() => {}).finally(() => {
+                            self.loading = false;
+                        });
                     } else {
                         self.loading = false;
                         self.$notice.error({
@@ -265,14 +297,14 @@
                                     <row>
                                         <i-col span="14">
                                             <form-item label="分类名称">
-                                                <i-input v-model="categoryAdd.name"></i-input>
+                                                <i-input v-model="categoryAdd.category_name"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
                                     <row>
                                         <i-col span="14">
                                             <form-item label="分类ID">
-                                                <i-input v-model="categoryAdd.id"></i-input>
+                                                <i-input v-model="categoryAdd.category_id"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
