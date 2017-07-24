@@ -1,10 +1,26 @@
 <script>
     import injection from '../helpers/injection';
 
+    window.api = 'http://pay.ibenchu.xyz:8080/api';
     export default {
         beforeRouteEnter(to, from, next) {
-            next(() => {
-                injection.sidebar.active('setting');
+            injection.loading.start();
+            injection.http.post(`${window.api}/slide/category/list`).then(response => {
+                const data = response.data.data;
+                next(vm => {
+                    vm.list = data.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    vm.page.total = data.total;
+                    vm.page.current_page = data.current_page;
+                    vm.page.per_page = data.per_page;
+                    vm.page.last_page = data.last_page;
+                    vm.page.to = data.to;
+                    vm.parent = to.query.parent;
+                    injection.loading.finish();
+                    injection.sidebar.active('setting');
+                });
             });
         },
         data() {
@@ -22,11 +38,7 @@
                     id: '',
                     name: '',
                 },
-                deleteCategoryModal: false,
-                editCategoryModal: false,
-                loading: false,
-                self: this,
-                slideColumns: [
+                columns: [
                     {
                         align: 'center',
                         type: 'selection',
@@ -106,7 +118,9 @@
                         width: 200,
                     },
                 ],
-                slideData: [
+                deleteCategoryModal: false,
+                editCategoryModal: false,
+                list: [
                     {
                         categoryId: '3464',
                         categoryName: '首页轮播图-家用电器',
@@ -124,6 +138,8 @@
                         categoryName: '首页轮播图-家用电器',
                     },
                 ],
+                loading: false,
+                self: this,
             };
         },
         methods: {
@@ -201,9 +217,9 @@
                             <i-button type="ghost" @click.native="addCategory">+新增分类</i-button>
                             <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
                             <i-table class="slide-table"
-                                     :columns="slideColumns"
+                                     :columns="columns"
                                      :context="self"
-                                     :data="slideData"
+                                     :data="list"
                                      ref="slideList"
                                      highlight-row>
                             </i-table>
