@@ -153,6 +153,29 @@
             addCategory() {
                 this.addCategoryModal = true;
             },
+            changePage(page) {
+                const self = this;
+                self.$loading.start();
+                self.$notice.open({
+                    title: '正在搜索数据...',
+                });
+                self.$http.post(`${window.slideApi}/slide/category/list?page=${page}`).then(res => {
+                    const data = res.data.data;
+                    self.list = data.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    self.page.total = data.total;
+                    self.page.current_page = data.current_page;
+                    self.page.per_page = data.per_page;
+                    self.page.last_page = data.last_page;
+                    self.page.to = data.to;
+                    injection.loading.finish();
+                    self.$notice.open({
+                        title: '搜索数据完成！',
+                    });
+                });
+            },
             editCategory() {
                 this.editCategoryModal = true;
             },
@@ -278,6 +301,14 @@
                                      ref="slideList"
                                      highlight-row>
                             </i-table>
+                            <div class="page">
+                                <page :current="page.current_page"
+                                      @on-change="changePage"
+                                      :page-size="page.per_page"
+                                      :total="page.total"
+                                      v-if="page.total > page.per_page"
+                                      show-elevator></page>
+                            </div>
                         </div>
                         <modal
                                 v-model="editCategoryModal"
