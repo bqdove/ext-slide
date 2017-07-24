@@ -117,7 +117,43 @@
                                 h('i-button', {
                                     on: {
                                         click() {
-                                            self.remove(data.index);
+                                            self.list[data.index].loading = true;
+                                            self.$http.post(`${window.slideApi}/slide/category/delete`, {
+                                                category_id: self.list[data.index].id,
+                                            }).then(() => {
+                                                self.$notice.open({
+                                                    title: '删除分类信息成功！',
+                                                });
+                                                self.$loading.start();
+                                                self.$notice.open({
+                                                    title: '正在刷新数据...',
+                                                });
+                                                self.$http.post(`${window.slideApi}/slide/category/list`).then(response => {
+                                                    const dataList = response.data.data;
+                                                    self.list = dataList.data.map(item => {
+                                                        item.loading = false;
+                                                        return item;
+                                                    });
+                                                    self.page.total = dataList.total;
+                                                    self.page.total = dataList.total;
+                                                    self.page.current_page = dataList.current_page;
+                                                    self.page.per_page = dataList.per_page;
+                                                    self.page.last_page = dataList.last_page;
+                                                    self.page.to = dataList.to;
+                                                    self.$loading.finish();
+                                                    self.$notice.open({
+                                                        title: '刷新数据完成！',
+                                                    });
+                                                }).catch(() => {
+                                                    self.$loading.fail();
+                                                });
+                                            }).catch(() => {
+                                                self.$notice.error({
+                                                    title: '删除分类信息错误！',
+                                                });
+                                            }).finally(() => {
+                                                self.list[data.index].loading = false;
+                                            });
                                         },
                                     },
                                     props: {
