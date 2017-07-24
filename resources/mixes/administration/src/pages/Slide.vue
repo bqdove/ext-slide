@@ -8,6 +8,7 @@
             });
         },
         data() {
+            const self = this;
             return {
                 addCategoryModal: false,
                 categoryAdd: {
@@ -43,18 +44,66 @@
                     {
                         align: 'center',
                         key: 'action',
-                        render() {
-                            return `<dropdown>
-                                    <i-button type="ghost">设置<icon type="arrow-down-b"></icon></i-button>
-                                    <dropdown-menu slot="list">
-                                    <dropdown-item @click.native="editCategory">编辑分类信息</dropdown-item>
-                                    <dropdown-item name="goodSku" @click.native="lookGroup">查看组图</dropdown-item>
-                                    </dropdown-menu></dropdown>
-                                    <i-button @click.native="remove" class="delete-ad"
-                                     type="ghost">删除</i-button>`;
+                        render(h, data) {
+                            return h('div', [
+                                h('dropdown', {
+                                    scopedSlots: {
+                                        list() {
+                                            return h('dropdown-menu', [
+                                                h('dropdown-item', {
+                                                    on: {
+                                                        click() {
+                                                            self.editCategory();
+                                                        },
+                                                    },
+                                                }, '编辑分类信息'),
+                                                h('dropdown-item', {
+                                                    on: {
+                                                        click() {
+                                                            self.lookGroup();
+                                                        },
+                                                    },
+                                                    props: {
+                                                        name: 'goodSku',
+                                                    },
+                                                }, '查看组图'),
+                                                h('dropdown-item', '加入商品库'),
+                                            ]);
+                                        },
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'ghost',
+                                        },
+                                    }, [
+                                        '设置',
+                                        h('icon', {
+                                            props: {
+                                                type: 'arrow-down-b',
+                                            },
+                                        }),
+                                    ]),
+                                ]),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.index);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '删除'),
+                            ]);
                         },
                         title: '操作',
-                        width: 180,
+                        width: 200,
                     },
                 ],
                 slideData: [
