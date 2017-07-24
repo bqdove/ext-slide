@@ -1,13 +1,30 @@
 <script>
     import injection from '../helpers/injection';
 
+    window.api = 'http://pay.ibenchu.xyz:8080/api';
     export default {
         beforeRouteEnter(to, from, next) {
-            next(() => {
-                injection.sidebar.active('setting');
+            injection.loading.start();
+            injection.http.post(`${window.api}/slide/category/list`).then(response => {
+                const data = response.data.data;
+                next(vm => {
+                    vm.list = data.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    vm.page.total = data.total;
+                    vm.page.current_page = data.current_page;
+                    vm.page.per_page = data.per_page;
+                    vm.page.last_page = data.last_page;
+                    vm.page.to = data.to;
+                    vm.parent = to.query.parent;
+                    injection.loading.finish();
+                    injection.sidebar.active('setting');
+                });
             });
         },
         data() {
+            const self = this;
             return {
                 addCategoryModal: false,
                 categoryAdd: {
@@ -21,11 +38,7 @@
                     id: '',
                     name: '',
                 },
-                deleteCategoryModal: false,
-                editCategoryModal: false,
-                loading: false,
-                self: this,
-                slideColumns: [
+                columns: [
                     {
                         align: 'center',
                         type: 'selection',
@@ -43,21 +56,71 @@
                     {
                         align: 'center',
                         key: 'action',
-                        render() {
-                            return `<dropdown>
-                                    <i-button type="ghost">设置<icon type="arrow-down-b"></icon></i-button>
-                                    <dropdown-menu slot="list">
-                                    <dropdown-item @click.native="editCategory">编辑分类信息</dropdown-item>
-                                    <dropdown-item name="goodSku" @click.native="lookGroup">查看组图</dropdown-item>
-                                    </dropdown-menu></dropdown>
-                                    <i-button @click.native="remove" class="delete-ad"
-                                     type="ghost">删除</i-button>`;
+                        render(h, data) {
+                            return h('div', [
+                                h('dropdown', {
+                                    scopedSlots: {
+                                        list() {
+                                            return h('dropdown-menu', [
+                                                h('dropdown-item', {
+                                                    on: {
+                                                        click() {
+                                                            self.editCategory();
+                                                        },
+                                                    },
+                                                }, '编辑分类信息'),
+                                                h('dropdown-item', {
+                                                    on: {
+                                                        click() {
+                                                            self.lookGroup();
+                                                        },
+                                                    },
+                                                    props: {
+                                                        name: 'goodSku',
+                                                    },
+                                                }, '查看组图'),
+                                                h('dropdown-item', '加入商品库'),
+                                            ]);
+                                        },
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'ghost',
+                                        },
+                                    }, [
+                                        '设置',
+                                        h('icon', {
+                                            props: {
+                                                type: 'arrow-down-b',
+                                            },
+                                        }),
+                                    ]),
+                                ]),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.remove(data.index);
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '删除'),
+                            ]);
                         },
                         title: '操作',
-                        width: 180,
+                        width: 200,
                     },
                 ],
-                slideData: [
+                deleteCategoryModal: false,
+                editCategoryModal: false,
+                list: [
                     {
                         categoryId: '3464',
                         categoryName: '首页轮播图-家用电器',
@@ -75,6 +138,8 @@
                         categoryName: '首页轮播图-家用电器',
                     },
                 ],
+                loading: false,
+                self: this,
             };
         },
         methods: {
@@ -152,9 +217,9 @@
                             <i-button type="ghost" @click.native="addCategory">+新增分类</i-button>
                             <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
                             <i-table class="slide-table"
-                                     :columns="slideColumns"
+                                     :columns="columns"
                                      :context="self"
-                                     :data="slideData"
+                                     :data="list"
                                      ref="slideList"
                                      highlight-row>
                             </i-table>
