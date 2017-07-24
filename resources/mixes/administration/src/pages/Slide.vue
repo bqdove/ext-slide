@@ -27,6 +27,22 @@
             const self = this;
             return {
                 addCategoryModal: false,
+                addRules: {
+                    category_id: [
+                        {
+                            message: '分类ID不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                    category_name: [
+                        {
+                            message: '分类名称不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
                 categoryAdd: {
                     category_id: '',
                     category_name: '',
@@ -45,12 +61,12 @@
                         width: 60,
                     },
                     {
-                        key: 'categoryName',
+                        key: 'category_name',
                         title: '分类名称',
                         width: 240,
                     },
                     {
-                        key: 'categoryId',
+                        key: 'category_id',
                         title: '分类ID',
                     },
                     {
@@ -120,24 +136,7 @@
                 ],
                 deleteCategoryModal: false,
                 editCategoryModal: false,
-                list: [
-                    {
-                        categoryId: '3464',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                    {
-                        categoryId: '4643',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                    {
-                        categoryId: '4676',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                    {
-                        categoryId: '1234',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                ],
+                list: [],
                 loading: false,
                 page: {
                     current_page: 1,
@@ -175,7 +174,7 @@
                         self.$http.post(`${window.slideApi}/slide/category/set`, self.categoryAdd).then(response => {
                             if (response.data.data) {
                                 self.$notice.open({
-                                    title: '新增文件夹信息成功！',
+                                    title: '新增分类信息成功！',
                                 });
                                 this.addCategoryModal = false;
                                 self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
@@ -250,7 +249,6 @@
                             <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
                             <i-table class="slide-table"
                                      :columns="columns"
-                                     :context="self"
                                      :data="list"
                                      ref="slideList"
                                      highlight-row>
@@ -293,17 +291,17 @@
                                 v-model="addCategoryModal"
                                 title="新增分类" class="upload-picture-modal">
                             <div class="slide-category-modal">
-                                <i-form ref="categoryAdd" :model="categoryAdd" :rules="ruleValidate" :label-width="100">
+                                <i-form ref="categoryAdd" :model="categoryAdd" :rules="addRules" :label-width="100">
                                     <row>
                                         <i-col span="14">
-                                            <form-item label="分类名称">
+                                            <form-item label="分类名称" prop="category_name">
                                                 <i-input v-model="categoryAdd.category_name"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
                                     <row>
                                         <i-col span="14">
-                                            <form-item label="分类ID">
+                                            <form-item label="分类ID" prop="category_id">
                                                 <i-input v-model="categoryAdd.category_id"></i-input>
                                             </form-item>
                                         </i-col>
