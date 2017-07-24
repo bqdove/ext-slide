@@ -1,11 +1,11 @@
 <script>
     import injection from '../helpers/injection';
 
-    window.api = 'http://pay.ibenchu.xyz:8080/api';
+    window.slideApi = 'https://allen.ibenchu.pw/api';
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/slide/category/list`).then(response => {
+            injection.http.post(`${window.slideApi}/slide/category/list`).then(response => {
                 const data = response.data.data;
                 next(vm => {
                     vm.list = data.data.map(item => {
@@ -27,9 +27,25 @@
             const self = this;
             return {
                 addCategoryModal: false,
+                addRules: {
+                    category_id: [
+                        {
+                            message: '分类ID不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                    category_name: [
+                        {
+                            message: '分类名称不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
                 categoryAdd: {
-                    id: '',
-                    name: '',
+                    category_id: '',
+                    category_name: '',
                 },
                 categoryDelete: {
                     id: '5346',
@@ -45,12 +61,12 @@
                         width: 60,
                     },
                     {
-                        key: 'categoryName',
+                        key: 'category_name',
                         title: '分类名称',
                         width: 240,
                     },
                     {
-                        key: 'categoryId',
+                        key: 'category_id',
                         title: '分类ID',
                     },
                     {
@@ -101,7 +117,43 @@
                                 h('i-button', {
                                     on: {
                                         click() {
-                                            self.remove(data.index);
+                                            self.list[data.index].loading = true;
+                                            self.$http.post(`${window.slideApi}/slide/category/delete`, {
+                                                category_id: self.list[data.index].id,
+                                            }).then(() => {
+                                                self.$notice.open({
+                                                    title: '删除分类信息成功！',
+                                                });
+                                                self.$loading.start();
+                                                self.$notice.open({
+                                                    title: '正在刷新数据...',
+                                                });
+                                                self.$http.post(`${window.slideApi}/slide/category/list`).then(response => {
+                                                    const dataList = response.data.data;
+                                                    self.list = dataList.data.map(item => {
+                                                        item.loading = false;
+                                                        return item;
+                                                    });
+                                                    self.page.total = dataList.total;
+                                                    self.page.total = dataList.total;
+                                                    self.page.current_page = dataList.current_page;
+                                                    self.page.per_page = dataList.per_page;
+                                                    self.page.last_page = dataList.last_page;
+                                                    self.page.to = dataList.to;
+                                                    self.$loading.finish();
+                                                    self.$notice.open({
+                                                        title: '刷新数据完成！',
+                                                    });
+                                                }).catch(() => {
+                                                    self.$loading.fail();
+                                                });
+                                            }).catch(() => {
+                                                self.$notice.error({
+                                                    title: '删除分类信息错误！',
+                                                });
+                                            }).finally(() => {
+                                                self.list[data.index].loading = false;
+                                            });
                                         },
                                     },
                                     props: {
@@ -120,31 +172,45 @@
                 ],
                 deleteCategoryModal: false,
                 editCategoryModal: false,
-                list: [
-                    {
-                        categoryId: '3464',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                    {
-                        categoryId: '4643',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                    {
-                        categoryId: '4676',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                    {
-                        categoryId: '1234',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                ],
+                list: [],
                 loading: false,
+                page: {
+                    current_page: 1,
+                    from: 1,
+                    last_page: 0,
+                    per_page: 0,
+                    to: 0,
+                    total: 0,
+                },
                 self: this,
             };
         },
         methods: {
             addCategory() {
                 this.addCategoryModal = true;
+            },
+            changePage(page) {
+                const self = this;
+                self.$loading.start();
+                self.$notice.open({
+                    title: '正在搜索数据...',
+                });
+                self.$http.post(`${window.slideApi}/slide/category/list?page=${page}`).then(res => {
+                    const data = res.data.data;
+                    self.list = data.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    self.page.total = data.total;
+                    self.page.current_page = data.current_page;
+                    self.page.per_page = data.per_page;
+                    self.page.last_page = data.last_page;
+                    self.page.to = data.to;
+                    injection.loading.finish();
+                    self.$notice.open({
+                        title: '搜索数据完成！',
+                    });
+                });
             },
             editCategory() {
                 this.editCategoryModal = true;
@@ -155,15 +221,63 @@
                     path: 'slide/group',
                 });
             },
+            refreshData() {
+                const self = this;
+                self.$loading.start();
+                self.$notice.open({
+                    title: '正在刷新数据...',
+                });
+                self.$http.post(`${window.slideApi}/slide/category/list`).then(response => {
+                    const dataList = response.data.data;
+                    self.list = dataList.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    self.page.total = dataList.total;
+                    self.page.total = dataList.total;
+                    self.page.current_page = dataList.current_page;
+                    self.page.per_page = dataList.per_page;
+                    self.page.last_page = dataList.last_page;
+                    self.page.to = dataList.to;
+                    self.$loading.finish();
+                    self.$notice.open({
+                        title: '刷新数据完成！',
+                    });
+                });
+            },
             remove() {
                 this.deleteCategoryModal = true;
             },
             submitAddCategory() {
                 const self = this;
                 self.loading = true;
+                injection.loading.start();
                 self.$refs.categoryAdd.validate(valid => {
                     if (valid) {
-                        window.console.log(valid);
+                        self.$http.post(`${window.slideApi}/slide/category/set`, self.categoryAdd).then(response => {
+                            if (response.data.code === 200) {
+                                self.$notice.open({
+                                    title: '新增分类信息成功！',
+                                });
+                                this.addCategoryModal = false;
+                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                    const data = res.data.data;
+                                    self.list = data.data.map(item => {
+                                        item.loading = false;
+                                        return item;
+                                    });
+                                    self.page.total = data.total;
+                                    self.page.current_page = data.current_page;
+                                    self.page.per_page = data.per_page;
+                                    self.page.last_page = data.last_page;
+                                    self.page.to = data.to;
+                                    injection.loading.finish();
+                                    injection.sidebar.active('setting');
+                                });
+                            }
+                        }).catch(() => {}).finally(() => {
+                            self.loading = false;
+                        });
                     } else {
                         self.loading = false;
                         self.$notice.error({
@@ -215,14 +329,22 @@
                         </div>
                         <div class="slide-list">
                             <i-button type="ghost" @click.native="addCategory">+新增分类</i-button>
-                            <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
+                            <i-button type="text" icon="android-sync" class="refresh"
+                            @click.native="refreshData">刷新</i-button>
                             <i-table class="slide-table"
                                      :columns="columns"
-                                     :context="self"
                                      :data="list"
                                      ref="slideList"
                                      highlight-row>
                             </i-table>
+                            <div class="page">
+                                <page :current="page.current_page"
+                                      @on-change="changePage"
+                                      :page-size="page.per_page"
+                                      :total="page.total"
+                                      v-if="page.total > page.per_page"
+                                      show-elevator></page>
+                            </div>
                         </div>
                         <modal
                                 v-model="editCategoryModal"
@@ -261,18 +383,18 @@
                                 v-model="addCategoryModal"
                                 title="新增分类" class="upload-picture-modal">
                             <div class="slide-category-modal">
-                                <i-form ref="categoryAdd" :model="categoryAdd" :rules="ruleValidate" :label-width="100">
+                                <i-form ref="categoryAdd" :model="categoryAdd" :rules="addRules" :label-width="100">
                                     <row>
                                         <i-col span="14">
-                                            <form-item label="分类名称">
-                                                <i-input v-model="categoryAdd.name"></i-input>
+                                            <form-item label="分类名称" prop="category_name">
+                                                <i-input v-model="categoryAdd.category_name"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
                                     <row>
                                         <i-col span="14">
-                                            <form-item label="分类ID">
-                                                <i-input v-model="categoryAdd.id"></i-input>
+                                            <form-item label="分类ID" prop="category_id">
+                                                <i-input v-model="categoryAdd.category_id"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
