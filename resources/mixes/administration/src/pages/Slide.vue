@@ -28,13 +28,6 @@
             return {
                 addCategoryModal: false,
                 addRules: {
-                    category_id: [
-                        {
-                            message: '分类ID不能为空',
-                            required: true,
-                            trigger: 'blur',
-                        },
-                    ],
                     category_name: [
                         {
                             message: '分类名称不能为空',
@@ -81,6 +74,8 @@
                                                 h('dropdown-item', {
                                                     nativeOn: {
                                                         click() {
+                                                            self.categoryEdit.id = data.row.alias;
+                                                            self.categoryEdit.name = data.row.name;
                                                             self.editCategoryModal = true;
                                                         },
                                                     },
@@ -89,7 +84,7 @@
                                                     nativeOn: {
                                                         click() {
                                                             self.$router.push({
-                                                                path: '/slide/group',
+                                                                path: `/slide/group/${data.row.id}`,
                                                             });
                                                         },
                                                     },
@@ -296,9 +291,35 @@
             submitEditCategory() {
                 const self = this;
                 self.loading = true;
+                injection.loading.start();
                 self.$refs.categoryEdit.validate(valid => {
                     if (valid) {
-                        window.console.log(valid);
+                        self.$http.post(`${window.slideApi}/slide/category/update`, {
+                            category_id: self.categoryEdit.id,
+                        }, self.categoryEdit).then(response => {
+                            if (response.data.code === 200) {
+                                self.$notice.open({
+                                    title: '新增分类信息成功！',
+                                });
+                                this.addCategoryModal = false;
+                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                    const data = res.data.data;
+                                    self.list = data.data.map(item => {
+                                        item.loading = false;
+                                        return item;
+                                    });
+                                    self.page.total = data.total;
+                                    self.page.current_page = data.current_page;
+                                    self.page.per_page = data.per_page;
+                                    self.page.last_page = data.last_page;
+                                    self.page.to = data.to;
+                                    injection.loading.finish();
+                                    injection.sidebar.active('setting');
+                                });
+                            }
+                        }).catch(() => {}).finally(() => {
+                            self.loading = false;
+                        });
                     } else {
                         self.loading = false;
                         self.$notice.error({
@@ -348,13 +369,14 @@
                                         <i-col span="14">
                                             <form-item label="分类名称">
                                                 <i-input v-model="categoryEdit.name"></i-input>
+                                                <p class="tip">商城前台不显示，名称仅用于后台标记分类</p>
                                             </form-item>
                                         </i-col>
                                     </row>
                                     <row>
                                         <i-col span="14">
                                             <form-item label="分类ID">
-                                                <i-input v-model="categoryEdit.id"></i-input>
+                                                {{ categoryEdit.id }}
                                             </form-item>
                                         </i-col>
                                     </row>
@@ -381,6 +403,7 @@
                                         <i-col span="14">
                                             <form-item label="分类名称" prop="category_name">
                                                 <i-input v-model="categoryAdd.category_name"></i-input>
+                                                <p class="tip">商城前台不显示，名称仅用于后台标记分类</p>
                                             </form-item>
                                         </i-col>
                                     </row>
@@ -388,6 +411,7 @@
                                         <i-col span="14">
                                             <form-item label="分类ID" prop="category_id">
                                                 <i-input v-model="categoryAdd.category_id"></i-input>
+                                                <p class="tip">可留空，系统会自动分配一个ID</p>
                                             </form-item>
                                         </i-col>
                                     </row>
