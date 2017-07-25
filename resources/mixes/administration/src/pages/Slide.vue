@@ -168,6 +168,15 @@
                 ],
                 deleteCategoryModal: false,
                 editCategoryModal: false,
+                editRules: {
+                    name: [
+                        {
+                            message: '分类名称不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
                 list: [],
                 loading: false,
                 page: {
@@ -294,9 +303,7 @@
                 injection.loading.start();
                 self.$refs.categoryEdit.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.slideApi}/slide/category/update`, {
-                            category_id: self.categoryEdit.id,
-                        }, self.categoryEdit).then(response => {
+                        self.$http.post(`${window.slideApi}/slide/category/update`, self.categoryEdit).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '新增分类信息成功！',
@@ -364,7 +371,7 @@
                                 v-model="editCategoryModal"
                                 title="编辑分类信息" class="upload-picture-modal">
                             <div class="slide-category-modal">
-                                <i-form ref="categoryEdit" :model="categoryEdit" :rules="ruleValidate" :label-width="100">
+                                <i-form ref="categoryEdit" :model="categoryEdit" :rules="editRules" :label-width="100">
                                     <row>
                                         <i-col span="14">
                                             <form-item label="分类名称">
