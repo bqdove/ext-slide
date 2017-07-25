@@ -8,7 +8,7 @@
 
 namespace Notadd\Slide\Handlers;
 
-use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
+use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Category;
 use Notadd\Slide\Models\Group;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * Class ConfigurationHandler.
  */
-class UpdateCategoryHandler extends AbstractSetHandler
+class UpdateCategoryHandler extends Handler
 {
     /**
      * Execute Handler.
@@ -32,51 +32,23 @@ class UpdateCategoryHandler extends AbstractSetHandler
             'category_id' => '分类id不能为空'
         ]);
 
-        $category = Category::query()->find($this->request->input('category_id'));
-
-//        if ($category instanceof Category && $category->update($this->request->only([
-//                'category_name', 'alias'
-//            ]))) {
-//            $this->withCode(200)->withMessage('分类信息更新成功');
-//        } else {
-//            $this->withCode(402)->withError('更新失败');
-//        }
 
         $category = Category::where('alias', $this->request->input('category_id'))->first();
 
-        if ($alias = $this->request->input('category_id')) {
-            if ($this->verify($alias)) {
-                return $this->withCode('403')->withError('分类id在数据库中已存在,请重新定义');
-            }
-
-            $category->alias = $alias;
+        if ($category instanceof Category)
+        {
+            $category->name = $this->request->input('category_name');
         } else {
-            do {
-                $random = mt_rand(0, 4999);
-            } while ($this->verify($random));
-
-            $category->alias = $random;
+            $this->withError(404)->withError('未找到此id分类');
         }
 
         $updateResult = $category->save();
 
         if ($updateResult) {
-            return $this->withCode(200)->withMessage('更新分类信息成功');
-        }
-
-    }
-
-    /** 分类别名验重
-     * @para   $alias
-     * @return bool
-     */
-    private function verify($alias)
-    {
-        $category = Category::where('alias', $alias)->first();
-        if ($category) {
-            return true;
+            $this->withCode(200)->withMessage('更新分类信息成功');
         } else {
-            return false;
+            $this->withError(403)->withError('更新分类信息失败');
         }
+
     }
 }
