@@ -5,7 +5,6 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-06-14 19:45
  */
-
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
@@ -26,29 +25,22 @@ class UpdateCategoryHandler extends Handler
         //更新一个分类
         $this->validate($this->request, [
             'category_name' => 'required',
-            'category_id' => 'required'
+            'category_id'   => 'required',
         ], [
             'category_name.required' => '分类名为必填字段',
-            'category_id' => '分类id不能为空'
+            'category_id'            => '分类id不能为空',
         ]);
-
-
         $category = Category::where('alias', $this->request->input('category_id'))->first();
-
-        if ($category instanceof Category)
-        {
+        if ($category instanceof Category) {
             $category->name = $this->request->input('category_name');
         } else {
             $this->withError(404)->withError('未找到此id分类');
         }
-
         $updateResult = $category->save();
-
         if ($updateResult) {
             $this->withCode(200)->withMessage('更新分类信息成功');
         } else {
             $this->withError(403)->withError('更新分类信息失败');
         }
-
     }
 }

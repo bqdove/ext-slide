@@ -24,17 +24,13 @@ class AllGroupHandler extends Handler
     protected function execute()
     {
         $this->validate($this->request, [
-            'category_id' => 'required'
+            'category_id' => 'required',
         ], [
-            'category_id.required' => '分类Id为必传参数'
+            'category_id.required' => '分类Id为必传参数',
         ]);
-
         $categoryId = $this->request->input('category_id');
-
         $category = Category::where('alias', $categoryId)->first();
-
         $groups = Group::where('category_id', $category->id)->paginate(30)->toArray();
-
         $this->withCode(200)->withData($groups)->withMessage('获取图集列表成功！');
     }
 }
