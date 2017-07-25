@@ -30,7 +30,7 @@
                 addRules: {
                     category_name: [
                         {
-                            message: '分类名称不能为空',
+                            message: '分类名称不能为空 ',
                             required: true,
                             trigger: 'blur',
                         },
