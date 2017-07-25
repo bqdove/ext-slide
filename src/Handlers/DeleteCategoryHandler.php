@@ -35,7 +35,7 @@ class DeleteCategoryHandler extends AbstractSetHandler
         $category = Category::where('alias', $cateId)->first();
 
         if (!$category) {
-            return $this->withCode('404')->withError('请重新确认分类Id是否正确');
+            $this->withCode('404')->withError('请重新确认分类Id是否正确');
         }
 
         $groups = $category->groups()->with('pictures')->get();

@@ -1,18 +1,51 @@
 <script>
     import injection from '../helpers/injection';
 
+    window.slideApi = 'https://allen.ibenchu.pw/api';
     export default {
         beforeRouteEnter(to, from, next) {
-            next(() => {
-                injection.sidebar.active('setting');
+            injection.loading.start();
+            injection.http.post(`${window.slideApi}/slide/category/list`).then(response => {
+                const data = response.data.data;
+                next(vm => {
+                    vm.list = data.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    vm.page.total = data.total;
+                    vm.page.current_page = data.current_page;
+                    vm.page.per_page = data.per_page;
+                    vm.page.last_page = data.last_page;
+                    vm.page.to = data.to;
+                    vm.parent = to.query.parent;
+                    injection.loading.finish();
+                    injection.sidebar.active('setting');
+                });
             });
         },
         data() {
+            const self = this;
             return {
                 addCategoryModal: false,
+                addRules: {
+                    category_id: [
+                        {
+                            message: '分类ID不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                    category_name: [
+                        {
+                            message: '分类名称不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
                 categoryAdd: {
-                    id: '',
-                    name: '',
+                    category_id: '',
+                    category_name: '',
                 },
                 categoryDelete: {
                     id: '5346',
@@ -21,73 +54,188 @@
                     id: '',
                     name: '',
                 },
-                deleteCategoryModal: false,
-                editCategoryModal: false,
-                loading: false,
-                self: this,
-                slideColumns: [
+                columns: [
                     {
                         align: 'center',
                         type: 'selection',
-                        width: 60,
+                        width: 80,
                     },
                     {
-                        key: 'categoryName',
+                        key: 'name',
                         title: '分类名称',
                         width: 240,
                     },
                     {
-                        key: 'categoryId',
+                        key: 'alias',
                         title: '分类ID',
                     },
                     {
                         align: 'center',
                         key: 'action',
-                        render() {
-                            return `<dropdown>
-                                    <i-button type="ghost">设置<icon type="arrow-down-b"></icon></i-button>
-                                    <dropdown-menu slot="list">
-                                    <dropdown-item @click.native="editCategory">编辑分类信息</dropdown-item>
-                                    <dropdown-item name="goodSku" @click.native="lookGroup">查看组图</dropdown-item>
-                                    </dropdown-menu></dropdown>
-                                    <i-button @click.native="remove" class="delete-ad"
-                                     type="ghost">删除</i-button>`;
+                        render(h, data) {
+                            return h('div', [
+                                h('dropdown', {
+                                    scopedSlots: {
+                                        list() {
+                                            return h('dropdown-menu', [
+                                                h('dropdown-item', {
+                                                    nativeOn: {
+                                                        click() {
+                                                            self.editCategoryModal = true;
+                                                        },
+                                                    },
+                                                }, '编辑分类信息'),
+                                                h('dropdown-item', {
+                                                    nativeOn: {
+                                                        click() {
+                                                            self.$router.push({
+                                                                path: '/slide/group',
+                                                            });
+                                                        },
+                                                    },
+                                                    props: {
+                                                        name: 'goodSku',
+                                                    },
+                                                }, '查看组图'),
+                                            ]);
+                                        },
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'ghost',
+                                        },
+                                    }, [
+                                        '设置',
+                                        h('icon', {
+                                            props: {
+                                                type: 'arrow-down-b',
+                                            },
+                                        }),
+                                    ]),
+                                ]),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.list[data.index].loading = true;
+                                            self.$http.post(`${window.slideApi}/slide/category/delete`, {
+                                                category_id: self.list[data.index].id,
+                                            }).then(() => {
+                                                self.$notice.open({
+                                                    title: '删除分类信息成功！',
+                                                });
+                                                self.$loading.start();
+                                                self.$notice.open({
+                                                    title: '正在刷新数据...',
+                                                });
+                                                self.$http.post(`${window.slideApi}/slide/category/list`).then(response => {
+                                                    const dataList = response.data.data;
+                                                    self.list = dataList.data.map(item => {
+                                                        item.loading = false;
+                                                        return item;
+                                                    });
+                                                    self.page.total = dataList.total;
+                                                    self.page.total = dataList.total;
+                                                    self.page.current_page = dataList.current_page;
+                                                    self.page.per_page = dataList.per_page;
+                                                    self.page.last_page = dataList.last_page;
+                                                    self.page.to = dataList.to;
+                                                    self.$loading.finish();
+                                                    self.$notice.open({
+                                                        title: '刷新数据完成！',
+                                                    });
+                                                }).catch(() => {
+                                                    self.$loading.fail();
+                                                });
+                                            }).catch(() => {
+                                                self.$notice.error({
+                                                    title: '删除分类信息错误！',
+                                                });
+                                            }).finally(() => {
+                                                self.list[data.index].loading = false;
+                                            });
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '删除'),
+                            ]);
                         },
                         title: '操作',
-                        width: 180,
+                        width: 200,
                     },
                 ],
-                slideData: [
-                    {
-                        categoryId: '3464',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                    {
-                        categoryId: '4643',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                    {
-                        categoryId: '4676',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                    {
-                        categoryId: '1234',
-                        categoryName: '首页轮播图-家用电器',
-                    },
-                ],
+                deleteCategoryModal: false,
+                editCategoryModal: false,
+                list: [],
+                loading: false,
+                page: {
+                    current_page: 1,
+                    from: 1,
+                    last_page: 0,
+                    per_page: 0,
+                    to: 0,
+                    total: 0,
+                },
+                parent: 0,
+                self: this,
             };
         },
         methods: {
             addCategory() {
                 this.addCategoryModal = true;
             },
-            editCategory() {
-                this.editCategoryModal = true;
-            },
-            lookGroup() {
+            changePage(page) {
                 const self = this;
-                self.$router.push({
-                    path: 'slide/group',
+                self.$loading.start();
+                self.$notice.open({
+                    title: '正在搜索数据...',
+                });
+                self.$http.post(`${window.slideApi}/slide/category/list?page=${page}`).then(res => {
+                    const data = res.data.data;
+                    self.list = data.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    self.page.total = data.total;
+                    self.page.current_page = data.current_page;
+                    self.page.per_page = data.per_page;
+                    self.page.last_page = data.last_page;
+                    self.page.to = data.to;
+                    injection.loading.finish();
+                    self.$notice.open({
+                        title: '搜索数据完成！',
+                    });
+                });
+            },
+            refreshData() {
+                const self = this;
+                self.$loading.start();
+                self.$notice.open({
+                    title: '正在刷新数据...',
+                });
+                self.$http.post(`${window.slideApi}/slide/category/list`).then(response => {
+                    const dataList = response.data.data;
+                    self.list = dataList.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    self.page.total = dataList.total;
+                    self.page.total = dataList.total;
+                    self.page.current_page = dataList.current_page;
+                    self.page.per_page = dataList.per_page;
+                    self.page.last_page = dataList.last_page;
+                    self.page.to = dataList.to;
+                    self.$loading.finish();
+                    self.$notice.open({
+                        title: '刷新数据完成！',
+                    });
                 });
             },
             remove() {
@@ -96,9 +244,33 @@
             submitAddCategory() {
                 const self = this;
                 self.loading = true;
+                injection.loading.start();
                 self.$refs.categoryAdd.validate(valid => {
                     if (valid) {
-                        window.console.log(valid);
+                        self.$http.post(`${window.slideApi}/slide/category/set`, self.categoryAdd).then(response => {
+                            if (response.data.code === 200) {
+                                self.$notice.open({
+                                    title: '新增分类信息成功！',
+                                });
+                                this.addCategoryModal = false;
+                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                    const data = res.data.data;
+                                    self.list = data.data.map(item => {
+                                        item.loading = false;
+                                        return item;
+                                    });
+                                    self.page.total = data.total;
+                                    self.page.current_page = data.current_page;
+                                    self.page.per_page = data.per_page;
+                                    self.page.last_page = data.last_page;
+                                    self.page.to = data.to;
+                                    injection.loading.finish();
+                                    injection.sidebar.active('setting');
+                                });
+                            }
+                        }).catch(() => {}).finally(() => {
+                            self.loading = false;
+                        });
                     } else {
                         self.loading = false;
                         self.$notice.error({
@@ -150,14 +322,22 @@
                         </div>
                         <div class="slide-list">
                             <i-button type="ghost" @click.native="addCategory">+新增分类</i-button>
-                            <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
+                            <i-button type="text" icon="android-sync" class="refresh"
+                            @click.native="refreshData">刷新</i-button>
                             <i-table class="slide-table"
-                                     :columns="slideColumns"
-                                     :context="self"
-                                     :data="slideData"
+                                     :columns="columns"
+                                     :data="list"
                                      ref="slideList"
                                      highlight-row>
                             </i-table>
+                            <div class="page">
+                                <page :current="page.current_page"
+                                      @on-change="changePage"
+                                      :page-size="page.per_page"
+                                      :total="page.total"
+                                      v-if="page.total > page.per_page"
+                                      show-elevator></page>
+                            </div>
                         </div>
                         <modal
                                 v-model="editCategoryModal"
@@ -196,18 +376,18 @@
                                 v-model="addCategoryModal"
                                 title="新增分类" class="upload-picture-modal">
                             <div class="slide-category-modal">
-                                <i-form ref="categoryAdd" :model="categoryAdd" :rules="ruleValidate" :label-width="100">
+                                <i-form ref="categoryAdd" :model="categoryAdd" :rules="addRules" :label-width="100">
                                     <row>
                                         <i-col span="14">
-                                            <form-item label="分类名称">
-                                                <i-input v-model="categoryAdd.name"></i-input>
+                                            <form-item label="分类名称" prop="category_name">
+                                                <i-input v-model="categoryAdd.category_name"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
                                     <row>
                                         <i-col span="14">
-                                            <form-item label="分类ID">
-                                                <i-input v-model="categoryAdd.id"></i-input>
+                                            <form-item label="分类ID" prop="category_id">
+                                                <i-input v-model="categoryAdd.category_id"></i-input>
                                             </form-item>
                                         </i-col>
                                     </row>
