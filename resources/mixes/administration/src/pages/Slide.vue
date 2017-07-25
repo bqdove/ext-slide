@@ -41,11 +41,12 @@
                     category_name: '',
                 },
                 categoryDelete: {
-                    id: '5346',
+                    category_id: '',
+                    id: '',
                 },
                 categoryEdit: {
-                    id: '',
-                    name: '',
+                    category_id: '',
+                    category_name: '',
                 },
                 columns: [
                     {
@@ -74,8 +75,10 @@
                                                 h('dropdown-item', {
                                                     nativeOn: {
                                                         click() {
-                                                            self.categoryEdit.id = data.row.alias;
-                                                            self.categoryEdit.name = data.row.name;
+                                                            self.categoryEdit.category_id
+                                                                    = data.row.alias;
+                                                            self.categoryEdit.category_name
+                                                                    = data.row.name;
                                                             self.editCategoryModal = true;
                                                         },
                                                     },
@@ -113,43 +116,8 @@
                                 h('i-button', {
                                     on: {
                                         click() {
-                                            self.list[data.index].loading = true;
-                                            self.$http.post(`${window.slideApi}/slide/category/delete`, {
-                                                category_id: self.list[data.index].id,
-                                            }).then(() => {
-                                                self.$notice.open({
-                                                    title: '删除分类信息成功！',
-                                                });
-                                                self.$loading.start();
-                                                self.$notice.open({
-                                                    title: '正在刷新数据...',
-                                                });
-                                                self.$http.post(`${window.slideApi}/slide/category/list`).then(response => {
-                                                    const dataList = response.data.data;
-                                                    self.list = dataList.data.map(item => {
-                                                        item.loading = false;
-                                                        return item;
-                                                    });
-                                                    self.page.total = dataList.total;
-                                                    self.page.total = dataList.total;
-                                                    self.page.current_page = dataList.current_page;
-                                                    self.page.per_page = dataList.per_page;
-                                                    self.page.last_page = dataList.last_page;
-                                                    self.page.to = dataList.to;
-                                                    self.$loading.finish();
-                                                    self.$notice.open({
-                                                        title: '刷新数据完成！',
-                                                    });
-                                                }).catch(() => {
-                                                    self.$loading.fail();
-                                                });
-                                            }).catch(() => {
-                                                self.$notice.error({
-                                                    title: '删除分类信息错误！',
-                                                });
-                                            }).finally(() => {
-                                                self.list[data.index].loading = false;
-                                            });
+                                            self.deleteCategoryModal = true;
+                                            self.categoryDelete.id = data.row.alias;
                                         },
                                     },
                                     props: {
@@ -169,7 +137,7 @@
                 deleteCategoryModal: false,
                 editCategoryModal: false,
                 editRules: {
-                    name: [
+                    category_name: [
                         {
                             message: '分类名称不能为空',
                             required: true,
@@ -242,9 +210,6 @@
                     });
                 });
             },
-            remove() {
-                this.deleteCategoryModal = true;
-            },
             submitAddCategory() {
                 const self = this;
                 self.loading = true;
@@ -286,9 +251,33 @@
             submitDeleteCategory() {
                 const self = this;
                 self.loading = true;
-                self.$refs.categoryDelete.validate(valid => {
+                injection.loading.start();
+                self.$refs.categoryEdit.validate(valid => {
                     if (valid) {
-                        window.console.log(valid);
+                        self.$http.post(`${window.slideApi}/slide/category/update`, self.categoryEdit).then(response => {
+                            if (response.data.code === 200) {
+                                self.$notice.open({
+                                    title: '新增分类信息成功！',
+                                });
+                                this.addCategoryModal = false;
+                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                    const data = res.data.data;
+                                    self.list = data.data.map(item => {
+                                        item.loading = false;
+                                        return item;
+                                    });
+                                    self.page.total = data.total;
+                                    self.page.current_page = data.current_page;
+                                    self.page.per_page = data.per_page;
+                                    self.page.last_page = data.last_page;
+                                    self.page.to = data.to;
+                                    injection.loading.finish();
+                                    injection.sidebar.active('setting');
+                                });
+                            }
+                        }).catch(() => {}).finally(() => {
+                            self.loading = false;
+                        });
                     } else {
                         self.loading = false;
                         self.$notice.error({
@@ -374,8 +363,8 @@
                                 <i-form ref="categoryEdit" :model="categoryEdit" :rules="editRules" :label-width="100">
                                     <row>
                                         <i-col span="14">
-                                            <form-item label="分类名称">
-                                                <i-input v-model="categoryEdit.name"></i-input>
+                                            <form-item label="分类名称" prop="category_name">
+                                                <i-input v-model="categoryEdit.category_name"></i-input>
                                                 <p class="tip">商城前台不显示，名称仅用于后台标记分类</p>
                                             </form-item>
                                         </i-col>
@@ -383,7 +372,7 @@
                                     <row>
                                         <i-col span="14">
                                             <form-item label="分类ID">
-                                                {{ categoryEdit.id }}
+                                                {{ categoryEdit.category_id }}
                                             </form-item>
                                         </i-col>
                                     </row>
@@ -444,15 +433,15 @@
                                     <row>
                                         <i-col>
                                             <p>删除后不可恢复，请输入分类ID：{{ categoryDelete.id }} 以确认删除</p>
-                                            <i-input v-model="categoryDelete.id" style="width: 124px"></i-input>
+                                            <i-input v-model="categoryDelete.category_id" style="width: 124px"></i-input>
                                         </i-col>
                                     </row>
                                     <row>
                                         <i-col>
                                             <i-button :loading="loading" type="primary"
                                                       @click.native="submitDeleteCategory">
-                                                <span v-if="!loading">确认提交</span>
-                                                <span v-else>正在提交…</span>
+                                                <span v-if="!loading">删除</span>
+                                                <span v-else>正在删除…</span>
                                             </i-button>
                                         </i-col>
                                     </row>
