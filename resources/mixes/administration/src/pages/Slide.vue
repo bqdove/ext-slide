@@ -42,8 +42,8 @@
                 },
                 categoryDelete: {
                     category_id: '',
-                    id: '',
                 },
+                categoryDeleteId: '',
                 categoryEdit: {
                     category_id: '',
                     category_name: '',
@@ -117,7 +117,7 @@
                                     on: {
                                         click() {
                                             self.deleteCategoryModal = true;
-                                            self.categoryDelete.id = data.row.alias;
+                                            self.categoryDeleteId = data.row.alias;
                                         },
                                     },
                                     props: {
@@ -135,6 +135,15 @@
                     },
                 ],
                 deleteCategoryModal: false,
+                deleteRules: {
+                    category_id: [
+                        {
+                            message: '分类ID不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
                 editCategoryModal: false,
                 editRules: {
                     category_name: [
@@ -252,14 +261,15 @@
                 const self = this;
                 self.loading = true;
                 injection.loading.start();
-                self.$refs.categoryEdit.validate(valid => {
-                    if (valid) {
-                        self.$http.post(`${window.slideApi}/slide/category/update`, self.categoryEdit).then(response => {
+                self.$refs.categoryDelete.validate(valid => {
+                    console.log(valid);
+                    if (valid && self.categoryDeleteId === self.categoryDelete.category_id) {
+                        self.$http.post(`${window.slideApi}/slide/category/delete`, self.categoryDelete).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
-                                    title: '新增分类信息成功！',
+                                    title: '删除分类信息成功！',
                                 });
-                                this.addCategoryModal = false;
+                                this.deleteCategoryModal = false;
                                 self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
                                     const data = res.data.data;
                                     self.list = data.data.map(item => {
@@ -295,9 +305,9 @@
                         self.$http.post(`${window.slideApi}/slide/category/update`, self.categoryEdit).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
-                                    title: '新增分类信息成功！',
+                                    title: '编辑分类信息成功！',
                                 });
-                                this.addCategoryModal = false;
+                                this.editCategoryModal = false;
                                 self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
                                     const data = res.data.data;
                                     self.list = data.data.map(item => {
@@ -429,11 +439,13 @@
                                 v-model="deleteCategoryModal"
                                 title="删除" class="upload-picture-modal">
                             <div class="slide-category-delete-modal">
-                                <i-form ref="categoryDelete" :model="categoryDelete" :rules="ruleValidate">
+                                <i-form ref="categoryDelete" :model="categoryDelete" :rules="deleteRules">
                                     <row>
                                         <i-col>
-                                            <p>删除后不可恢复，请输入分类ID：{{ categoryDelete.id }} 以确认删除</p>
-                                            <i-input v-model="categoryDelete.category_id" style="width: 124px"></i-input>
+                                            <p>删除后不可恢复，请输入分类ID：{{ categoryDeleteId }} 以确认删除</p>
+                                            <form-item prop="category_id">
+                                                <i-input v-model="categoryDelete.category_id" style="width: 124px"></i-input>
+                                            </form-item>
                                         </i-col>
                                     </row>
                                     <row>
