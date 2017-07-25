@@ -26,13 +26,13 @@ class UpdateCategoryHandler extends AbstractSetHandler
         //更新一个分类
         $this->validate($this->request, [
             'category_name' => 'required',
-            'id' => 'required'
+            'category_id' => 'required'
         ], [
             'category_name.required' => '分类名为必填字段',
-            'id' => '分类id不能为空'
+            'category_id' => '分类id不能为空'
         ]);
 
-        $category = Category::query()->find($this->request->input('id'));
+        $category = Category::query()->find($this->request->input('category_id'));
 
 //        if ($category instanceof Category && $category->update($this->request->only([
 //                'category_name', 'alias'
@@ -42,7 +42,7 @@ class UpdateCategoryHandler extends AbstractSetHandler
 //            $this->withCode(402)->withError('更新失败');
 //        }
 
-        $category = Category::where('alias', $this->request->input('id'))->first();
+        $category = Category::where('alias', $this->request->input('category_id'))->first();
 
         if ($alias = $this->request->input('category_id')) {
             if ($this->verify($alias)) {
