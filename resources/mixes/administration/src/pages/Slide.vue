@@ -58,15 +58,15 @@
                     {
                         align: 'center',
                         type: 'selection',
-                        width: 60,
+                        width: 80,
                     },
                     {
-                        key: 'category_name',
+                        key: 'name',
                         title: '分类名称',
                         width: 240,
                     },
                     {
-                        key: 'category_id',
+                        key: 'alias',
                         title: '分类ID',
                     },
                     {
@@ -79,23 +79,24 @@
                                         list() {
                                             return h('dropdown-menu', [
                                                 h('dropdown-item', {
-                                                    on: {
+                                                    nativeOn: {
                                                         click() {
-                                                            self.editCategory();
+                                                            self.editCategoryModal = true;
                                                         },
                                                     },
                                                 }, '编辑分类信息'),
                                                 h('dropdown-item', {
-                                                    on: {
+                                                    nativeOn: {
                                                         click() {
-                                                            self.lookGroup();
+                                                            self.$router.push({
+                                                                path: '/slide/group',
+                                                            });
                                                         },
                                                     },
                                                     props: {
                                                         name: 'goodSku',
                                                     },
                                                 }, '查看组图'),
-                                                h('dropdown-item', '加入商品库'),
                                             ]);
                                         },
                                     },
@@ -182,6 +183,7 @@
                     to: 0,
                     total: 0,
                 },
+                parent: 0,
                 self: this,
             };
         },
@@ -210,15 +212,6 @@
                     self.$notice.open({
                         title: '搜索数据完成！',
                     });
-                });
-            },
-            editCategory() {
-                this.editCategoryModal = true;
-            },
-            lookGroup() {
-                const self = this;
-                self.$router.push({
-                    path: 'slide/group',
                 });
             },
             refreshData() {

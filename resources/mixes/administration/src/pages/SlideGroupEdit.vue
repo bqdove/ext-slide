@@ -55,21 +55,21 @@
             uploadBefore() {
                 injection.loading.start();
             },
-            uploadError(error, data) {
-                const self = this;
-                injection.loading.error();
-                if (typeof data.message === 'object') {
-                    for (const p in data.message) {
-                        self.$notice.error({
-                            title: data.message[p],
-                        });
-                    }
-                } else {
-                    self.$notice.error({
-                        title: data.message,
-                    });
-                }
-            },
+//            uploadError(error, data) {
+//                const self = this;
+//                injection.loading.error();
+//                if (typeof data.message === 'object') {
+//                    for (const p in data.message) {
+//                        self.$notice.error({
+//                            title: data.message[p],
+//                        });
+//                    }
+//                } else {
+//                    self.$notice.error({
+//                        title: data.message,
+//                    });
+//                }
+//            },
             uploadFormatError(file) {
                 this.$notice.warning({
                     title: '文件格式不正确',
