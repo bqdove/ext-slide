@@ -22,8 +22,7 @@ class AllCategoryHandler extends Handler
      */
     protected function execute()
     {
-        $categories = Category::paginate(30)->toArray();
-
+        $categories = Category::OrderBy('created_at', 'desc')->paginate(3)->toArray();
         $this->withCode(200)->withData($categories)->withMessage('获取数据成功！');
     }
 }
