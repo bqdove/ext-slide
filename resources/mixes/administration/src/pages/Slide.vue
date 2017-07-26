@@ -341,7 +341,7 @@
     <div class="setting-wrap">
         <div class="slide-wrap">
             <tabs value="name1">
-                <tab-pane label="轮播图插件 " name="name1">
+                <tab-pane label="轮播图插件" name="name1">
                     <card :bordered="false">
                         <div class="prompt-box">
                             <p>关于</p>
