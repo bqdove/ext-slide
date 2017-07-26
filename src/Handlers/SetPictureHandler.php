@@ -9,15 +9,13 @@
 
 namespace Notadd\Slide\Handlers;
 
-use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
-use Notadd\Slide\Models\Group;
-use Notadd\Slide\Models\Category;
+use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Picture;
 
 /**
  * Class SetPictureHandler.
  */
-class SetPictureHandler extends AbstractSetHandler
+class SetPictureHandler extends Handler
 {
     /**
      * @return $this

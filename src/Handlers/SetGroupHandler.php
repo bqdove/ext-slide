@@ -9,7 +9,7 @@
 
 namespace Notadd\Slide\Handlers;
 
-use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
+use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Group;
 use Notadd\Slide\Models\Category;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * Class SetGroupHandler.
  */
-class SetGroupHandler extends AbstractSetHandler
+class SetGroupHandler extends Handler
 {
     /**
      * Execute Handler.
@@ -28,14 +28,16 @@ class SetGroupHandler extends AbstractSetHandler
      */
     public function execute()
     {
-        //新建图集信息,不传入group_id,需要传入分类id
+
+        //新建图集信息,需要传入分类id
         $this->validate($this->request, [
             'category_id' => 'required',
             'group_name'  => 'required',
+            'group_show' => 'required',
         ], [
             'category_id.required' => '分类id为必填参数',
-            'group_name.required' => '图集名称不能为空'
-
+            'group_name.required' => '图集名称不能为空',
+            'group_show.required' => '图集显示不能为空'
         ]);
         $cateId = $this->request->get('category_id');
         $category = Category::where('alias', $cateId)->first();
@@ -44,7 +46,7 @@ class SetGroupHandler extends AbstractSetHandler
         //如果分类Id用户自定义了，需要验证是否与数据库里的数据重复。
         if ($alias = $this->request->get('group_id')) {
             if ($this->verify($alias)) {
-                return $this->withCode(403)->withError('分类id在数据库中已存在,请重新定义');
+                $this->withCode(403)->withError('分类id在数据库中已存在,请重新定义');
             }
             $group->alias = $alias;
         } else {
