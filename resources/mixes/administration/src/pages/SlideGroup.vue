@@ -27,7 +27,7 @@
             });
         },
         data() {
-//            const self = this;
+            const self = this;
             return {
                 addGroupModal: false,
                 addRules: {
@@ -57,27 +57,85 @@
                         width: 200,
                     },
                     {
-                        key: 'enabled',
-                        render() {
-                            return `<i-switch size="large" v-model="row.status">
-                                    <span slot="open">开启</span>
-                                    <span slot="close">关闭</span>
-                                    </i-switch>`;
+                        key: 'group_show',
+                        render(h, data) {
+                            return h('i-switch', {
+                                props: {
+                                    size: 'large',
+                                    value: data.row.group_show,
+                                },
+                                scopedSlots: {
+                                    close() {
+                                        return h('span', '关闭');
+                                    },
+                                    open() {
+                                        return h('span', '开启');
+                                    },
+                                },
+                            });
                         },
                         title: '显示',
                     },
                     {
                         align: 'center',
                         key: 'action',
-                        render() {
-                            return `<dropdown>
-                                    <i-button type="ghost">设置<icon type="arrow-down-b"></icon></i-button>
-                                    <dropdown-menu slot="list">
-                                    <dropdown-item @click.native="groupSetting">组图基础设置</dropdown-item>
-                                    <dropdown-item name="goodSku" @click.native="editPicture">编辑图片内容</dropdown-item>
-                                    </dropdown-menu></dropdown>
-                                    <i-button @click.native="remove" class="delete-ad"
-                                     type="ghost">删除</i-button>`;
+                        render(h, data) {
+                            return h('div', [
+                                h('dropdown', {
+                                    scopedSlots: {
+                                        list() {
+                                            return h('dropdown-menu', [
+                                                h('dropdown-item', {
+                                                    nativeOn: {
+                                                        click() {
+                                                            self.groupSetting();
+                                                            console.log(data.row.id);
+                                                        },
+                                                    },
+                                                }, '组图基础设置'),
+                                                h('dropdown-item', {
+                                                    nativeOn: {
+                                                        click() {
+                                                            self.editPicture();
+                                                        },
+                                                    },
+                                                    props: {
+                                                        name: 'goodSku',
+                                                    },
+                                                }, '编辑图片内容'),
+                                            ]);
+                                        },
+                                    },
+                                }, [
+                                    h('i-button', {
+                                        props: {
+                                            size: 'small',
+                                            type: 'ghost',
+                                        },
+                                    }, [
+                                        '设置',
+                                        h('icon', {
+                                            props: {
+                                                type: 'arrow-down-b',
+                                            },
+                                        }),
+                                    ]),
+                                ]),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.deleteGroupModal = true;
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '删除'),
+                            ]);
                         },
                         title: '操作',
                         width: 180,
@@ -85,9 +143,9 @@
                 ],
                 deleteGroupModal: false,
                 groupAdd: {
-                    enabled: '',
                     group_id: '',
                     group_name: '',
+                    group_show: '',
                 },
                 groupDelete: {
                     id: '',
@@ -142,6 +200,7 @@
                     category_id: self.parent.id,
                     group_id: self.groupAdd.group_id,
                     group_name: self.groupAdd.group_name,
+                    group_show: self.groupAdd.group_show,
                 };
                 self.$refs.groupAdd.validate(valid => {
                     if (valid) {
