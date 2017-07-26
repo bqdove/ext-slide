@@ -224,8 +224,16 @@
             },
             submitAddCategory() {
                 const self = this;
-                self.loading = true;
                 injection.loading.start();
+//                const reg = /^\d$/;
+//                if (self.categoryAdd.category_id.length > 0
+//                        && !reg.test(self.categoryAdd.category_id)) {
+//                    self.$notice.error({
+//                        title: '分类ID请输入数字格式！',
+//                    });
+//                } else {
+//                }
+                self.loading = true;
                 self.$refs.categoryAdd.validate(valid => {
                     if (valid) {
                         self.$http.post(`${window.slideApi}/slide/category/set`, self.categoryAdd).then(response => {

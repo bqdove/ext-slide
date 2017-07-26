@@ -109,7 +109,12 @@
                                                 h('dropdown-item', {
                                                     nativeOn: {
                                                         click() {
-                                                            self.editPicture();
+                                                            self.$router.push({
+                                                                path: '/slide/group/edit',
+                                                                query: {
+                                                                    id: data.row.alias,
+                                                                },
+                                                            });
                                                         },
                                                     },
                                                     props: {
@@ -232,12 +237,6 @@
                     self.$notice.open({
                         title: '搜索数据完成！',
                     });
-                });
-            },
-            editPicture() {
-                const self = this;
-                self.$router.push({
-                    path: 'group/edit',
                 });
             },
             goBack() {
