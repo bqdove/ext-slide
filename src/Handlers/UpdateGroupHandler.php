@@ -9,13 +9,13 @@
 
 namespace Notadd\Slide\Handlers;
 
-use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
+use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Group;
 
 /**
  * Class UpdateGroupHandler.
  */
-class UpdateGroupHandler extends AbstractSetHandler
+class UpdateGroupHandler extends Handler
 {
     /**
      * Execute Handler.
@@ -40,7 +40,7 @@ class UpdateGroupHandler extends AbstractSetHandler
             $group = Group::where('alias', $groupId)->first();
             if ($alias = $this->request->input('group_id')) {
                 if ($this->verify($alias)) {
-                    return $this->withCode('403')->withError('图集id在数据库中已存在,请重新定义');
+                    $this->withCode('403')->withError('图集id在数据库中已存在,请重新定义');
                 }
                 $group->alias = $alias;
             } else {
