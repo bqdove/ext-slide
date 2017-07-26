@@ -1,11 +1,12 @@
 <?php
 /**
- * This file is part of Notadd.
+ * The file is part of Notadd
  *
- * @author Allen <674397601@qq.com>
- * @copyright (c) 2017, iLeyun.org
- * @datetime 2017-06-14 19:45
+ * @author: AllenGu<674397601@qq.com>
+ * @copyright (c) 2017, notadd.com
+ * @datetime: 17-7-24 下午5:08
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
@@ -14,7 +15,7 @@ use Notadd\Slide\Models\Group;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Class ConfigurationHandler.
+ * Class DeleteGroupHandler.
  */
 class DeleteGroupHandler extends AbstractSetHandler
 {

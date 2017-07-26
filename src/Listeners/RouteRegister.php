@@ -1,10 +1,12 @@
 <?php
 /**
- * This file is part of Notadd.
+ * The file is part of Notadd
  *
- * @copyright (c) 2017, iBenchu.org
- * @datetime 2017-02-23 19:42
+ * @author: AllenGu<674397601@qq.com>
+ * @copyright (c) 2017, notadd.com
+ * @datetime: 17-7-24 下午5:08
  */
+
 namespace Notadd\Slide\Listeners;
 
 use Notadd\Slide\Controllers\CategoryController;

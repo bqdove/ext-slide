@@ -1,18 +1,19 @@
 <?php
 /**
- * This file is part of Notadd.
+ * The file is part of Notadd
  *
- * @copyright (c) 2017, iBenchu.org
- * @datetime 2017-04-10 19:41
+ * @author: AllenGu<674397601@qq.com>
+ * @copyright (c) 2017, notadd.com
+ * @datetime: 17-7-24 下午5:08
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
-use Notadd\Slide\Controllers\CategoryController;
 use Notadd\Slide\Models\Category;
 
 /**
- * Class GetHandler.
+ * Class GetCategoryHandler.
  */
 class GetCategoryHandler extends Handler
 {

@@ -1,10 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: bc021
- * Date: 17-6-13
- * Time: 下午6:05
+ * The file is part of Notadd
+ *
+ * @author: AllenGu<674397601@qq.com>
+ * @copyright (c) 2017, notadd.com
+ * @datetime: 17-7-24 下午5:08
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Illuminate\Container\Container;
@@ -29,7 +31,7 @@ class UploadHandler extends Handler
     /**
      * UploadHandler constructor.
      *
-     * @param \Illuminate\Container\Container   $container
+     * @param \Illuminate\Container\Container $container
      * @param \Illuminate\Filesystem\Filesystem $filesystem
      */
     public function __construct(Container $container, Filesystem $filesystem)
@@ -54,7 +56,7 @@ class UploadHandler extends Handler
         $this->validate($this->request, [
             'file' => 'required|image',
         ], [
-            'file.image'    => '上传文件格式必须为图片格式！',
+            'file.image' => '上传文件格式必须为图片格式！',
             'file.required' => '必须上传一个文件！',
         ]);
         $avatar = $this->request->file('file');
@@ -85,7 +87,7 @@ class UploadHandler extends Handler
      *
      * @param string $path
      * @param string $dots
-     * @param null   $data
+     * @param null $data
      *
      * @return \Illuminate\Support\Collection|null
      */

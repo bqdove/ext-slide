@@ -1,10 +1,12 @@
 <?php
 /**
- * This file is part of Notadd.
+ * The file is part of Notadd
  *
- * @copyright (c) 2017, iBenchu.org
- * @datetime 2017-06-14 19:45
+ * @author: AllenGu<674397601@qq.com>
+ * @copyright (c) 2017, notadd.com
+ * @datetime: 17-7-24 下午5:08
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
@@ -13,7 +15,7 @@ use Notadd\Slide\Models\Group;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Class ConfigurationHandler.
+ * Class UpdateCategoryHandler.
  */
 class UpdateCategoryHandler extends Handler
 {
@@ -25,10 +27,10 @@ class UpdateCategoryHandler extends Handler
         //更新一个分类
         $this->validate($this->request, [
             'category_name' => 'required',
-            'category_id'   => 'required',
+            'category_id' => 'required',
         ], [
             'category_name.required' => '分类名为必填字段',
-            'category_id'            => '分类id不能为空',
+            'category_id' => '分类id不能为空',
         ]);
         $category = Category::where('alias', $this->request->input('category_id'))->first();
         if ($category instanceof Category) {
