@@ -4,29 +4,41 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.slideApi}/slide/category/get`, {
-                category_id: to.params.id,
+            injection.http.post(`${window.slideApi}/slide/group/list`, {
+                category_id: to.query.id,
             }).then(response => {
                 const data = response.data.data;
                 next(vm => {
-                    vm.list = data.data.map(item => {
-                        item.loading = false;
-                        return item;
-                    });
+                    if (data.data !== undefined) {
+                        vm.list = data.data.map(item => {
+                            item.loading = false;
+                            return item;
+                        });
+                    }
                     vm.page.total = data.total;
                     vm.page.current_page = data.current_page;
                     vm.page.per_page = data.per_page;
                     vm.page.last_page = data.last_page;
                     vm.page.to = data.to;
-                    vm.parent = to.query.parent;
+                    vm.parent.id = to.query.id;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
                 });
             });
         },
         data() {
+//            const self = this;
             return {
                 addGroupModal: false,
+                addRules: {
+                    group_name: [
+                        {
+                            message: '组图名称不能为空 ',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
                 columns: [
                     {
                         align: 'center',
@@ -34,13 +46,13 @@
                         width: 60,
                     },
                     {
-                        key: 'categoryName',
+                        key: 'group_name',
                         title: '组图名称',
                         width: 220,
                     },
                     {
                         align: 'center',
-                        key: 'categoryId',
+                        key: 'group_id',
                         title: '组图ID',
                         width: 200,
                     },
@@ -74,8 +86,8 @@
                 deleteGroupModal: false,
                 groupAdd: {
                     enabled: '',
-                    id: '',
-                    name: '',
+                    group_id: '',
+                    group_name: '',
                 },
                 groupDelete: {
                     id: '',
@@ -94,6 +106,9 @@
                     per_page: 0,
                     to: 0,
                     total: 0,
+                },
+                parent: {
+                    id: '',
                 },
                 self: this,
                 slideGroupModal: false,
@@ -122,9 +137,40 @@
             submitAddGroup() {
                 const self = this;
                 self.loading = true;
+                injection.loading.start();
+                const params = {
+                    category_id: self.parent.id,
+                    group_id: self.groupAdd.group_id,
+                    group_name: self.groupAdd.group_name,
+                };
                 self.$refs.groupAdd.validate(valid => {
                     if (valid) {
-                        window.console.log(valid);
+                        self.$http.post(`${window.slideApi}/slide/group/set`, params).then(response => {
+                            if (response.data.code === 200) {
+                                self.$notice.open({
+                                    title: '新增组图信息成功！',
+                                });
+                                this.addGroupModal = false;
+                                self.$http.post(`${window.slideApi}/slide/group/list`, {
+                                    category_id: self.parent.id,
+                                }).then(res => {
+                                    const data = res.data.data;
+                                    self.list = data.data.map(item => {
+                                        item.loading = false;
+                                        return item;
+                                    });
+                                    self.page.total = data.total;
+                                    self.page.current_page = data.current_page;
+                                    self.page.per_page = data.per_page;
+                                    self.page.last_page = data.last_page;
+                                    self.page.to = data.to;
+                                    injection.loading.finish();
+                                    injection.sidebar.active('setting');
+                                });
+                            }
+                        }).catch(() => {}).finally(() => {
+                            self.loading = false;
+                        });
                     } else {
                         self.loading = false;
                         self.$notice.error({
@@ -233,11 +279,11 @@
                         v-model="addGroupModal"
                         title="新增组图" class="upload-picture-modal">
                     <div>
-                        <i-form ref="groupAdd" :model="groupAdd" :rules="ruleValidate" :label-width="100">
+                        <i-form ref="groupAdd" :model="groupAdd" :rules="addRules" :label-width="100">
                             <row>
                                 <i-col span="14">
-                                    <form-item label="组图名称">
-                                        <i-input v-model="groupAdd.name"></i-input>
+                                    <form-item label="组图名称" prop="group_name">
+                                        <i-input v-model="groupAdd.group_name"></i-input>
                                         <p class="tip">商城前台不显示，名称仅用于后台标记分类</p>
                                     </form-item>
                                 </i-col>
@@ -245,7 +291,7 @@
                             <row>
                                 <i-col span="14">
                                     <form-item label="组图ID">
-                                        <i-input v-model="groupAdd.id"></i-input>
+                                        <i-input v-model="groupAdd.group_id"></i-input>
                                         <p class="tip">可留空，系统会自动分配一个ID</p>
                                     </form-item>
                                 </i-col>
@@ -257,39 +303,6 @@
                                             <radio label="是"></radio>
                                             <radio label="否"></radio>
                                         </radio-group>
-                                    </form-item>
-                                </i-col>
-                            </row>
-                            <row>
-                                <i-col span="14">
-                                    <form-item>
-                                        <i-button :loading="loading" type="primary"
-                                                  @click.native="submitEditCategory">
-                                            <span v-if="!loading">确认提交</span>
-                                            <span v-else>正在提交…</span>
-                                        </i-button>
-                                    </form-item>
-                                </i-col>
-                            </row>
-                        </i-form>
-                    </div>
-                </modal>
-                <modal
-                        v-model="addCategoryModal"
-                        title="新增分类" class="upload-picture-modal">
-                    <div class="slide-category-modal">
-                        <i-form ref="groupAdd" :model="groupAdd" :rules="ruleValidate" :label-width="100">
-                            <row>
-                                <i-col span="14">
-                                    <form-item label="组图名称">
-                                        <i-input v-model="groupAdd.name"></i-input>
-                                    </form-item>
-                                </i-col>
-                            </row>
-                            <row>
-                                <i-col span="14">
-                                    <form-item label="组图ID">
-                                        <i-input v-model="groupAdd.id"></i-input>
                                     </form-item>
                                 </i-col>
                             </row>

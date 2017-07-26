@@ -87,7 +87,10 @@
                                                     nativeOn: {
                                                         click() {
                                                             self.$router.push({
-                                                                path: `/slide/group/${data.row.id}`,
+                                                                path: '/slide/group',
+                                                                query: {
+                                                                    id: data.row.alias,
+                                                                },
                                                             });
                                                         },
                                                     },
