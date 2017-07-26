@@ -3,30 +3,31 @@
 
     export default {
         beforeRouteEnter(to, from, next) {
-            next(() => {
-                injection.sidebar.active('setting');
+            injection.loading.start();
+            injection.http.post(`${window.slideApi}/slide/category/get`, {
+                category_id: to.params.id,
+            }).then(response => {
+                const data = response.data.data;
+                next(vm => {
+                    vm.list = data.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    vm.page.total = data.total;
+                    vm.page.current_page = data.current_page;
+                    vm.page.per_page = data.per_page;
+                    vm.page.last_page = data.last_page;
+                    vm.page.to = data.to;
+                    vm.parent = to.query.parent;
+                    injection.loading.finish();
+                    injection.sidebar.active('setting');
+                });
             });
         },
         data() {
             return {
                 addGroupModal: false,
-                deleteGroupModal: false,
-                groupAdd: {
-                    enabled: '',
-                    id: '',
-                    name: '',
-                },
-                groupDelete: {
-                    id: '',
-                },
-                groupSet: {
-                    enabled: '',
-                    id: '',
-                    name: '',
-                },
-                loading: false,
-                self: this,
-                slideColumns: [
+                columns: [
                     {
                         align: 'center',
                         type: 'selection',
@@ -70,28 +71,31 @@
                         width: 180,
                     },
                 ],
-                slideData: [
-                    {
-                        categoryId: '3464',
-                        categoryName: '首页轮播图-家用电器',
-                        status: true,
-                    },
-                    {
-                        categoryId: '4643',
-                        categoryName: '首页轮播图-家用电器',
-                        status: true,
-                    },
-                    {
-                        categoryId: '4676',
-                        categoryName: '首页轮播图-家用电器',
-                        status: true,
-                    },
-                    {
-                        categoryId: '1234',
-                        categoryName: '首页轮播图-家用电器',
-                        status: true,
-                    },
-                ],
+                deleteGroupModal: false,
+                groupAdd: {
+                    enabled: '',
+                    id: '',
+                    name: '',
+                },
+                groupDelete: {
+                    id: '',
+                },
+                groupSet: {
+                    enabled: '',
+                    id: '',
+                    name: '',
+                },
+                list: [],
+                loading: false,
+                page: {
+                    current_page: 1,
+                    from: 1,
+                    last_page: 0,
+                    per_page: 0,
+                    to: 0,
+                    total: 0,
+                },
+                self: this,
                 slideGroupModal: false,
             };
         },
@@ -174,9 +178,8 @@
                     <i-button type="ghost" @click.native="addGroup">+新增组图</i-button>
                     <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
                     <i-table class="slide-table"
-                             :columns="slideColumns"
-                             :context="self"
-                             :data="slideData"
+                             :columns="columns"
+                             :data="list"
                              ref="slideList"
                              highlight-row>
                     </i-table>

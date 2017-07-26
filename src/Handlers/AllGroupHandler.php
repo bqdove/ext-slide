@@ -24,13 +24,11 @@ class AllGroupHandler extends Handler
     protected function execute()
     {
         $this->validate($this->request, [
-            'category_id' => 'required'
+            'category_id' => 'required',
         ], [
-            'category_id.required' => '分类Id为必传参数'
+            'category_id.required' => '分类Id为必传参数',
         ]);
-
         $categoryId = $this->request->input('category_id');
-
         $category = Category::where('alias', $categoryId)->first();
 
         $groups = Group::where('category_id', $category->id)->orderBy('created_at', 'desc')->paginate(3)->toArray();

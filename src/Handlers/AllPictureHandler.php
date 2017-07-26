@@ -23,9 +23,9 @@ class ALlPictureHandler extends Handler
     protected function execute()
     {
         $this->validate($this->request, [
-            'group_id' => 'required'
+            'group_id' => 'required',
         ], [
-            'group_ip.required' => '图集id为必填字段'
+            'group_ip.required' => '图集id为必填字段',
         ]);
         $pictures = Picture::where('group_id', $this->request->input('group_id'))->get()->toArray();
         if (count($pictures) > 0) {

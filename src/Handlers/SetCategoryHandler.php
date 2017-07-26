@@ -5,7 +5,6 @@
  * @copyright (c) 2017, iBenchu.org
  * @datetime 2017-06-14 19:45
  */
-
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
@@ -21,13 +20,12 @@ class SetCategoryHandler extends AbstractSetHandler
      * Execute Handler.
      *
      * @return bool
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function execute()
     {
-
         //新建一个分类
         $category = new Category();
-
         if (!$this->request->get('category_name')) {
             return $this->withCode(402)->withError('分类名称不能为空');
         }
@@ -37,28 +35,19 @@ class SetCategoryHandler extends AbstractSetHandler
             if ($this->verify($alias)) {
                 return $this->withCode('403')->withError('分类id在数据库中已存在,请重新定义');
             }
-
             $category->alias = $alias;
         } else {
             do {
                 $random = mt_rand(0, 4999);
             } while ($this->verify($random));
-
             $category->alias = $random;
         }
-
         $category->name = $this->request->get('category_name');
-
         $category->user_id = 1;//默认上传用户Id为1,管理员用户
-
         $category->path = $category->alias;
-
         $createResult = Storage::makeDirectory($category->alias);
-
         $this->container->make('files')->move(base_path('/storage/app/' . $category->alias), base_path('/public/upload/' . $category->alias));
-
 //        $createResult = Storage::move(app_path('/storage/app/' .$category->alias), base_path('/public/upload/'.$category->alias));
-
         if ($category->save() && $createResult) {
             return $this->withCode(200)->withMessage('分类信息保存成功');
         } else {
@@ -68,6 +57,7 @@ class SetCategoryHandler extends AbstractSetHandler
 
     /** 分类别名验重
      * @para   $alias
+     *
      * @return bool
      */
     private function verify($alias)

@@ -5,7 +5,6 @@
  * Date: 17-6-12
  * Time: 下午6:09
  */
-
 namespace Notadd\Slide;
 
 use Illuminate\Events\Dispatcher;

@@ -7,7 +7,6 @@
  */
 namespace Notadd\Slide\Listeners;
 
-use Notadd\Slide\Controllers\SlideController;
 use Notadd\Slide\Controllers\CategoryController;
 use Notadd\Slide\Controllers\GroupController;
 use Notadd\Slide\Controllers\PictureController;
@@ -51,6 +50,7 @@ class RouteRegister extends AbstractRouteRegister
                     $this->router->post('update', PictureController::class.'@update');
                     $this->router->post('upload',PictureController::class.'@upload');
                 });
+
         });
     }
 }
