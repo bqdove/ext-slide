@@ -9,13 +9,13 @@
 
 namespace Notadd\Slide\Handlers;
 
-use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
+use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Group;
 
 /**
  * Class ShowGroupHandler.
  */
-class ShowGroupHandler extends AbstractSetHandler
+class ShowGroupHandler extends Handler
 {
     /**
      * @return $this
