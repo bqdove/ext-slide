@@ -3,8 +3,21 @@
 
     export default {
         beforeRouteEnter(to, from, next) {
-            next(() => {
-                injection.sidebar.active('setting');
+            injection.loading.start();
+            injection.http.post(`${window.slideApi}/slide/group/get`, {
+                group_id: to.query.id,
+            }).then(response => {
+                const data = response.data.data;
+                next(vm => {
+                    if (data !== undefined) {
+                        vm.list = data.map(item => {
+                            item.loading = false;
+                            return item;
+                        });
+                    }
+                    injection.loading.finish();
+                    injection.sidebar.active('setting');
+                });
             });
         },
         data() {
