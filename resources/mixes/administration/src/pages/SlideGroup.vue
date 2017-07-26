@@ -39,6 +39,7 @@
                         },
                     ],
                 },
+                categoryDeleteId: '',
                 columns: [
                     {
                         align: 'center',
@@ -137,6 +138,7 @@
                                     on: {
                                         click() {
                                             self.deleteGroupModal = true;
+                                            self.categoryDeleteId = data.row.alias;
                                         },
                                     },
                                     props: {
@@ -154,13 +156,22 @@
                     },
                 ],
                 deleteGroupModal: false,
+                deleteRules: {
+                    group_id: [
+                        {
+                            message: '组图ID不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
                 groupAdd: {
                     group_id: '',
                     group_name: '',
                     group_show: '是',
                 },
                 groupDelete: {
-                    id: '',
+                    group_id: '',
                 },
                 groupSet: {
                     id: '',
@@ -268,9 +279,36 @@
             submitDeleteGroup() {
                 const self = this;
                 self.loading = true;
+                injection.loading.start();
                 self.$refs.groupDelete.validate(valid => {
-                    if (valid) {
-                        window.console.log(valid);
+                    console.log(valid);
+                    if (valid && self.categoryDeleteId === self.groupDelete.group_id) {
+                        self.$http.post(`${window.slideApi}/slide/group/delete`, self.groupDelete).then(response => {
+                            if (response.data.code === 200) {
+                                self.$notice.open({
+                                    title: '删除组图信息成功！',
+                                });
+                                this.deleteGroupModal = false;
+                                self.$http.post(`${window.slideApi}/slide/group/list`, {
+                                    category_id: self.parent.id,
+                                }).then(res => {
+                                    const data = res.data.data;
+                                    self.list = data.data.map(item => {
+                                        item.loading = false;
+                                        return item;
+                                    });
+                                    self.page.total = data.total;
+                                    self.page.current_page = data.current_page;
+                                    self.page.per_page = data.per_page;
+                                    self.page.last_page = data.last_page;
+                                    self.page.to = data.to;
+                                    injection.loading.finish();
+                                    injection.sidebar.active('setting');
+                                });
+                            }
+                        }).catch(() => {}).finally(() => {
+                            self.loading = false;
+                        });
                     } else {
                         self.loading = false;
                         self.$notice.error({
@@ -447,19 +485,21 @@
                         v-model="deleteGroupModal"
                         title="删除" class="upload-picture-modal">
                     <div class="slide-category-delete-modal">
-                        <i-form ref="groupDelete" :model="groupDelete" :rules="ruleValidate">
+                        <i-form ref="groupDelete" :model="groupDelete" :rules="deleteRules">
                             <row>
                                 <i-col>
-                                    <p>删除后不可恢复，请输入组图ID：{{ groupDelete.id }} 以确认删除</p>
-                                    <i-input v-model="groupDelete.id" style="width: 124px"></i-input>
+                                    <p>删除后不可恢复，请输入组图ID：{{ categoryDeleteId }} 以确认删除</p>
+                                    <form-item prop="group_id">
+                                        <i-input v-model="groupDelete.group_id" style="width: 124px"></i-input>
+                                    </form-item>
                                 </i-col>
                             </row>
                             <row>
                                 <i-col>
                                     <i-button :loading="loading" type="primary"
                                               @click.native="submitDeleteGroup">
-                                        <span v-if="!loading">确认提交</span>
-                                        <span v-else>正在提交…</span>
+                                        <span v-if="!loading">删除</span>
+                                        <span v-else>正在删除…</span>
                                     </i-button>
                                 </i-col>
                             </row>
