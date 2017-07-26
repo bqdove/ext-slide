@@ -82,7 +82,9 @@ class Extension extends AbstractExtension
      */
     public static function stylesheet()
     {
-        return asset('assets/extensions/notadd/slide/css/extension.min.css');
+        return [
+            asset('assets/extensions/notadd/slide/css/extension.min.css')
+        ];
     }
 
     /**
