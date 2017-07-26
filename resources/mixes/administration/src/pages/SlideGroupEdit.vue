@@ -6,15 +6,9 @@
             injection.loading.start();
             injection.http.post(`${window.slideApi}/slide/group/get`, {
                 group_id: to.query.id,
-            }).then(response => {
-                const data = response.data.data;
+            }).then(() => {
                 next(vm => {
-                    if (data !== undefined) {
-                        vm.list = data.map(item => {
-                            item.loading = false;
-                            return item;
-                        });
-                    }
+                    vm.parent.id = to.query.id;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
                 });
@@ -32,6 +26,9 @@
                     picture4: '',
                     title: '',
                 },
+                parent: {
+                    id: '',
+                },
             };
         },
         methods: {
@@ -43,13 +40,13 @@
                 this.form.picture1 = '';
             },
             removeSlide2() {
-                this.form.picture1 = '';
+                this.form.picture2 = '';
             },
             removeSlide3() {
-                this.form.picture1 = '';
+                this.form.picture3 = '';
             },
             removeSlide4() {
-                this.form.picture1 = '';
+                this.form.picture4 = '';
             },
             submitAddGroup() {
                 const self = this;
@@ -118,7 +115,7 @@
                     <row>
                         <i-col span="14">
                             <form-item label="上传图片" prop="picture">
-                                <div>
+                                <div class="upload-picture-box">
                                     <div class="image-preview" v-if="form.picture1">
                                         <img :src="form.picture1">
                                         <icon type="ios-trash-outline" @click.native="removeSlide1"></icon>
@@ -127,7 +124,8 @@
                                             <span>图片库上传</span>
                                         </div>
                                     </div>
-                                    <upload :action="action"
+                                    <upload class="local-upload"
+                                            :action="action"
                                             :before-upload="uploadBefore"
                                             :format="['jpg','jpeg','png']"
                                             :headers="{
@@ -142,11 +140,28 @@
                                             v-if="form.picture1 === '' || form.picture1 === null">
                                         <div class="clearfix upload-picture">
                                             <span>本地上传</span>
+                                        </div>
+                                    </upload>
+                                    <upload class="picture-gallery-upload"
+                                            :action="action"
+                                            :before-upload="uploadBefore"
+                                            :format="['jpg','jpeg','png']"
+                                            :headers="{
+                                                Authorization: `Bearer ${$store.state.token.access_token}`
+                                            }"
+                                            :max-size="2048"
+                                            :on-error="uploadError"
+                                            :on-format-error="uploadFormatError"
+                                            :on-success="uploadSuccess"
+                                            ref="upload"
+                                            :show-upload-list="false"
+                                            v-if="form.picture1 === '' || form.picture1 === null">
+                                        <div class="clearfix upload-picture">
                                             <span>图片库上传</span>
                                         </div>
                                     </upload>
                                 </div>
-                                <div>
+                                <!--<div>
                                     <div class="image-preview" v-if="form.picture2">
                                         <img :src="form.picture2">
                                         <icon type="ios-trash-outline" @click.native="removeSlide2"></icon>
@@ -229,7 +244,7 @@
                                             <span>图片库上传</span>
                                         </div>
                                     </upload>
-                                </div>
+                                </div>-->
                             </form-item>
                         </i-col>
                     </row>

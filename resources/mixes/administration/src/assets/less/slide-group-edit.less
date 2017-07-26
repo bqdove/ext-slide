@@ -23,6 +23,29 @@
         }
         .ivu-form {
             .ivu-form-item {
+                .upload-picture-box {
+                    position: relative;
+                    height: 124px;
+                    width: 268px;
+                    margin-bottom: 20px;
+                    background: #f5f7f9 url("../image/upload.png") center no-repeat;
+                    > .local-upload {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 133px;
+                        height: 32px;
+                        margin-bottom: 0;
+                    }
+                    > .picture-gallery-upload {
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        width: 133px;
+                        height: 32px;
+                        margin-bottom: 0;
+                    }
+                }
                 .image-preview {
                     position: relative;
                     width: 268px;
@@ -90,15 +113,7 @@
                     }
                 }
                 .ivu-upload {
-                    position: relative;
-                    background: #f5f7f9;
-                    height: 124px;
-                    width: 268px;
-                    margin-bottom: 20px;
-                    > .ivu-upload-select {
-                        background: url("../image/upload.png") center no-repeat;
-                        height: 124px;
-                    }
+
                     .upload-picture {
                         position: absolute;
                         left: 0;
