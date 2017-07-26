@@ -46,23 +46,23 @@
                         width: 60,
                     },
                     {
-                        key: 'group_name',
+                        key: 'name',
                         title: '组图名称',
                         width: 220,
                     },
                     {
                         align: 'center',
-                        key: 'group_id',
+                        key: 'alias',
                         title: '组图ID',
                         width: 200,
                     },
                     {
-                        key: 'group_show',
+                        key: 'show',
                         render(h, data) {
                             return h('i-switch', {
                                 props: {
                                     size: 'large',
-                                    value: data.row.group_show,
+                                    value: data.row.show,
                                 },
                                 scopedSlots: {
                                     close() {
@@ -88,8 +88,18 @@
                                                 h('dropdown-item', {
                                                     nativeOn: {
                                                         click() {
-                                                            self.groupSetting();
-                                                            console.log(data.row.id);
+                                                            self.groupSet.id
+                                                                    = data.row.alias;
+                                                            self.groupSet.group_name
+                                                                    = data.row.name;
+                                                            self.groupSet.group_show
+                                                                    = data.row.show;
+                                                            if (data.row.show === 1) {
+                                                                self.groupSet.group_show = '是';
+                                                            } else {
+                                                                self.groupSet.group_show = '否';
+                                                            }
+                                                            self.slideGroupModal = true;
                                                         },
                                                     },
                                                 }, '组图基础设置'),
@@ -138,22 +148,22 @@
                             ]);
                         },
                         title: '操作',
-                        width: 180,
+                        width: 200,
                     },
                 ],
                 deleteGroupModal: false,
                 groupAdd: {
                     group_id: '',
                     group_name: '',
-                    group_show: '',
+                    group_show: '是',
                 },
                 groupDelete: {
                     id: '',
                 },
                 groupSet: {
-                    enabled: '',
                     id: '',
-                    name: '',
+                    group_name: '',
+                    group_show: '',
                 },
                 list: [],
                 loading: false,
@@ -196,6 +206,11 @@
                 const self = this;
                 self.loading = true;
                 injection.loading.start();
+                if (self.groupAdd.group_show === '是') {
+                    self.groupAdd.group_show = 1;
+                } else {
+                    self.groupAdd.group_show = 0;
+                }
                 const params = {
                     category_id: self.parent.id,
                     group_id: self.groupAdd.group_id,
@@ -297,7 +312,7 @@
                             <row>
                                 <i-col span="14">
                                     <form-item label="组图名称">
-                                        <i-input v-model="groupSet.name"></i-input>
+                                        <i-input v-model="groupSet.group_name"></i-input>
                                         <p class="tip">商城前台不显示，名称仅用于后台标记分类</p>
                                     </form-item>
                                 </i-col>
@@ -313,7 +328,7 @@
                             <row>
                                 <i-col span="14">
                                     <form-item label="是否显示">
-                                        <radio-group v-model="groupSet.enabled">
+                                        <radio-group v-model="groupSet.group_show">
                                             <radio label="是"></radio>
                                             <radio label="否"></radio>
                                         </radio-group>
@@ -358,7 +373,7 @@
                             <row>
                                 <i-col span="14">
                                     <form-item label="是否显示">
-                                        <radio-group v-model="groupAdd.enabled">
+                                        <radio-group v-model="groupAdd.group_show">
                                             <radio label="是"></radio>
                                             <radio label="否"></radio>
                                         </radio-group>
