@@ -1,10 +1,10 @@
 <?php
 /**
- * This file is part of Notadd.
+ * The file is part of Notadd
  *
- * @author Allen <674397601@qq.com>
- * @copyright (c) 2017, iBenchu.org
- * @datetime 2017-06-23 19:44
+ * @author: AllenGu<674397601@qq.com>
+ * @copyright (c) 2017, notadd.com
+ * @datetime: 17-7-24 下午5:08
  */
 namespace Notadd\Slide\Models;
 

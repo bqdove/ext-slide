@@ -1,10 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: bc021
- * Date: 17-6-13
- * Time: 下午2:53
+ * The file is part of Notadd
+ *
+ * @author: AllenGu<674397601@qq.com>
+ * @copyright (c) 2017, notadd.com
+ * @datetime: 17-7-24 下午5:08
  */
+
 namespace Notadd\Slide\Controllers;
 
 use Notadd\Foundation\Routing\Abstracts\Controller;

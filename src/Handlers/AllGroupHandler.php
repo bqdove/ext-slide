@@ -1,10 +1,12 @@
 <?php
 /**
- * This file is part of Notadd.
+ * The file is part of Notadd
  *
- * @copyright (c) 2017, iBenchu.org
- * @datetime 2017-04-10 19:41
+ * @author: AllenGu<674397601@qq.com>
+ * @copyright (c) 2017, notadd.com
+ * @datetime: 17-7-24 下午5:08
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
@@ -12,7 +14,7 @@ use Notadd\Slide\Models\Group;
 use Notadd\Slide\Models\Category;
 
 /**
- * Class GetHandler.
+ * Class AllGroupHandler.
  */
 class AllGroupHandler extends Handler
 {
@@ -29,6 +31,7 @@ class AllGroupHandler extends Handler
             'category_id.required' => '分类Id为必传参数',
         ]);
         $categoryId = $this->request->input('category_id');
+
         $category = Category::where('alias', $categoryId)->first();
 
         $groups = Group::where('category_id', $category->id)->orderBy('created_at', 'desc')->paginate(3)->toArray();

@@ -1,18 +1,19 @@
 <?php
 /**
- * This file is part of Notadd.
+ * The file is part of Notadd
  *
- * @author TwilRoad <269044570@qq.com>
- * @copyright (c) 2017, iBenchu.org
- * @datetime 2017-04-10 19:41
+ * @author: AllenGu<674397601@qq.com>
+ * @copyright (c) 2017, notadd.com
+ * @datetime: 17-7-24 下午5:08
  */
+
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Group;
 
 /**
- * Class GetHandler.
+ * Class GetGroupHandler.
  */
 class GetGroupHandler extends Handler
 {
@@ -31,9 +32,9 @@ class GetGroupHandler extends Handler
         $group = Group::where('alias', $this->request->query('group_id'))->first();
         if ($group instanceof Group) {
             $this->withCode(200)->withData([
-                'group_id'   => object_get($group, 'id'),
+                'group_id' => object_get($group, 'id'),
                 'group_name' => object_get($group, 'name'),
-                'show'       => object_get($group, 'show'),
+                'show' => object_get($group, 'show'),
             ])->withMessage('获取图集数据成功！');
         } else if (is_null($group)) {
             $this->withCode(402)->withError('图集不存在');
