@@ -90,6 +90,8 @@
                                                         click() {
                                                             self.groupSet.id
                                                                     = data.row.alias;
+                                                            self.groupSetId
+                                                                    = data.row.alias;
                                                             self.groupSet.group_name
                                                                     = data.row.name;
                                                             self.groupSet.group_show
@@ -179,6 +181,16 @@
                     id: '',
                 },
                 self: this,
+                groupSetId: '',
+                setRules: {
+                    group_name: [
+                        {
+                            message: '组图名称不能为空 ',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
                 slideGroupModal: false,
             };
         },
@@ -270,9 +282,46 @@
             submitSetGroup() {
                 const self = this;
                 self.loading = true;
+                injection.loading.start();
+                if (self.groupSet.group_show === '是') {
+                    self.groupSet.group_show = 1;
+                } else {
+                    self.groupSet.group_show = 0;
+                }
+                const params = {
+                    id: self.groupSetId,
+                    group_id: self.groupSet.id,
+                    group_name: self.groupSet.group_name,
+                    group_show: self.groupSet.group_show,
+                };
                 self.$refs.groupSet.validate(valid => {
                     if (valid) {
-                        window.console.log(valid);
+                        self.$http.post(`${window.slideApi}/slide/group/update`, params).then(response => {
+                            if (response.data.code === 200) {
+                                self.$notice.open({
+                                    title: '组图设置信息成功！',
+                                });
+                                this.slideGroupModal = false;
+                                self.$http.post(`${window.slideApi}/slide/group/list`, {
+                                    category_id: self.parent.id,
+                                }).then(res => {
+                                    const data = res.data.data;
+                                    self.list = data.data.map(item => {
+                                        item.loading = false;
+                                        return item;
+                                    });
+                                    self.page.total = data.total;
+                                    self.page.current_page = data.current_page;
+                                    self.page.per_page = data.per_page;
+                                    self.page.last_page = data.last_page;
+                                    self.page.to = data.to;
+                                    injection.loading.finish();
+                                    injection.sidebar.active('setting');
+                                });
+                            }
+                        }).catch(() => {}).finally(() => {
+                            self.loading = false;
+                        });
                     } else {
                         self.loading = false;
                         self.$notice.error({
@@ -308,10 +357,10 @@
                         v-model="slideGroupModal"
                         title="组图基础设置" class="upload-picture-modal">
                     <div>
-                        <i-form ref="groupSet" :model="groupSet" :rules="ruleValidate" :label-width="100">
+                        <i-form ref="groupSet" :model="groupSet" :rules="setRules" :label-width="100">
                             <row>
                                 <i-col span="14">
-                                    <form-item label="组图名称">
+                                    <form-item label="组图名称" prop="group_name">
                                         <i-input v-model="groupSet.group_name"></i-input>
                                         <p class="tip">商城前台不显示，名称仅用于后台标记分类</p>
                                     </form-item>
