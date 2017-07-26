@@ -209,6 +209,31 @@
             addGroup() {
                 this.addGroupModal = true;
             },
+            changePage(page) {
+                const self = this;
+                self.$loading.start();
+                self.$notice.open({
+                    title: '正在搜索数据...',
+                });
+                self.$http.post(`${window.slideApi}/slide/group/list?page=${page}`, {
+                    category_id: self.parent.id,
+                }).then(res => {
+                    const data = res.data.data;
+                    self.list = data.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    self.page.total = data.total;
+                    self.page.current_page = data.current_page;
+                    self.page.per_page = data.per_page;
+                    self.page.last_page = data.last_page;
+                    self.page.to = data.to;
+                    injection.loading.finish();
+                    self.$notice.open({
+                        title: '搜索数据完成！',
+                    });
+                });
+            },
             editPicture() {
                 const self = this;
                 self.$router.push({
@@ -219,11 +244,31 @@
                 const self = this;
                 self.$router.go(-1);
             },
-            groupSetting() {
-                this.slideGroupModal = true;
-            },
-            remove() {
-                this.deleteGroupModal = true;
+            refreshData() {
+                const self = this;
+                self.$loading.start();
+                self.$notice.open({
+                    title: '正在刷新数据...',
+                });
+                self.$http.post(`${window.slideApi}/slide/group/list`, {
+                    category_id: self.parent.id,
+                }).then(response => {
+                    const dataList = response.data.data;
+                    self.list = dataList.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    self.page.total = dataList.total;
+                    self.page.total = dataList.total;
+                    self.page.current_page = dataList.current_page;
+                    self.page.per_page = dataList.per_page;
+                    self.page.last_page = dataList.last_page;
+                    self.page.to = dataList.to;
+                    self.$loading.finish();
+                    self.$notice.open({
+                        title: '刷新数据完成！',
+                    });
+                });
             },
             submitAddGroup() {
                 const self = this;
@@ -383,13 +428,22 @@
             <card :bordered="false">
                 <div class="slide-list">
                     <i-button type="ghost" @click.native="addGroup">+新增组图</i-button>
-                    <i-button type="text" icon="android-sync" class="refresh">刷新</i-button>
+                    <i-button type="text" icon="android-sync" class="refresh"
+                              @click.native="refreshData">刷新</i-button>
                     <i-table class="slide-table"
                              :columns="columns"
                              :data="list"
                              ref="slideList"
                              highlight-row>
                     </i-table>
+                    <div class="page">
+                        <page :current="page.current_page"
+                              @on-change="changePage"
+                              :page-size="page.per_page"
+                              :total="page.total"
+                              v-if="page.total > page.per_page"
+                              show-elevator></page>
+                    </div>
                 </div>
                 <modal
                         v-model="slideGroupModal"
