@@ -60,8 +60,23 @@
                         > div {
                             display: block;
                             cursor: pointer;
-                            margin-bottom: -2px;
-                            span {
+                            > .local-upload {
+                                position: absolute;
+                                bottom: -2px;
+                                left: 0;
+                                width: 133px;
+                                height: 32px;
+                                margin-bottom: 0;
+                            }
+                            > .picture-gallery-upload {
+                                position: absolute;
+                                bottom: -2px;
+                                right: 0;
+                                width: 133px;
+                                height: 32px;
+                                margin-bottom: 0;
+                            }
+                            .ivu-upload {
                                 &:first-child {
                                     margin-left: -2px;
                                 }
@@ -92,24 +107,24 @@
                     }
                     > div {
                         display: none;
-                        position: absolute;
-                        left: 0;
-                        bottom: 0;
-                        z-index: 10;
-                        span {
-                            width: 133px;
-                            height: 32px;
-                            line-height: 32px;
-                            text-align: center;
-                            background: rgba(227, 232, 238, .8);
-                            &:first-child {
-                                float: left;
-                                margin-right: 2px;
-                            }
-                            &:last-child {
-                                float: right;
-                            }
-                        }
+                        //position: absolute;
+                        //left: 0;
+                        //bottom: 0;
+                        //z-index: 10;
+                        //span {
+                        //    width: 133px;
+                        //    height: 32px;
+                        //    line-height: 32px;
+                        //    text-align: center;
+                        //    background: rgba(227, 232, 238, .8);
+                        //    &:first-child {
+                        //        float: left;
+                        //        margin-right: 2px;
+                        //    }
+                        //    &:last-child {
+                        //        float: right;
+                        //    }
+                        //}
                     }
                 }
                 .ivu-upload {
