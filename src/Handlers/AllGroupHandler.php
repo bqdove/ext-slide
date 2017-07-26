@@ -33,7 +33,7 @@ class AllGroupHandler extends Handler
 
         $category = Category::where('alias', $categoryId)->first();
 
-        $groups = Group::where('category_id', $category->id)->paginate(30)->toArray();
+        $groups = Group::where('category_id', $category->id)->orderBy('created_at', 'desc')->paginate(3)->toArray();
 
         $this->withCode(200)->withData($groups)->withMessage('获取图集列表成功！');
     }

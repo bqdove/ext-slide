@@ -31,7 +31,7 @@ class SetGroupHandler extends AbstractSetHandler
             'category_id' => 'required',
             'group_name' => 'required'
         ], [
-            'category_id.required' => '分类ＩＤ为必填参数',
+            'category_id.required' => '分类id为必填参数',
             'group_name.required' => '图集名称不能为空'
         ]);
 
