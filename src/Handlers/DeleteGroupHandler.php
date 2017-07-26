@@ -9,15 +9,14 @@
 
 namespace Notadd\Slide\Handlers;
 
-use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
+use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Category;
 use Notadd\Slide\Models\Group;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Class DeleteGroupHandler.
  */
-class DeleteGroupHandler extends AbstractSetHandler
+class DeleteGroupHandler extends Handler
 {
     /**
      * Execute Handler.

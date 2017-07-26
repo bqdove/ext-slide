@@ -8,13 +8,13 @@
  */
 namespace Notadd\Slide\Handlers;
 
-use Notadd\Foundation\Passport\Abstracts\SetHandler as AbstractSetHandler;
+use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Category;
 
 /**
  * Class DeleteCategoryHandler.
  */
-class DeleteCategoryHandler extends AbstractSetHandler
+class DeleteCategoryHandler extends Handler
 {
     /**
      * Execute Handler.
