@@ -14,8 +14,8 @@
                             item.loading = false;
                             return item;
                         });
+                        vm.form = response.data.data[0];
                     }
-                    vm.form = response.data.data[0];
                     vm.parent.id = to.query.id;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
@@ -57,6 +57,7 @@
                     path: '',
                     title: '',
                 },
+                loading: false,
                 parent: {
                     id: '',
                 },
@@ -184,7 +185,9 @@
                 self.$notice.open({
                     title: data.message,
                 });
-                self.form.path = data.data.path;
+                self.pictureList.forEach(item => {
+                   item.path = data.data.path;
+                });
             },
         },
     };
@@ -207,9 +210,9 @@
                     <row>
                         <i-col span="14">
                             <form-item label="上传图片" prop="path">
-                                <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path" @click.native="getDetailMessage">
-                                        <img :src="form.path">
+                                <div class="upload-picture-box" v-for="image in pictureList">
+                                    <div class="image-preview" v-if="image.path" @click.native="getDetailMessage">
+                                        <img :src="image.path">
                                         <icon type="ios-trash-outline" @click.native="removeSlide1"></icon>
                                         <div class="clearfix">
                                             <upload class="local-upload"
@@ -261,7 +264,7 @@
                                             :on-success="uploadSuccess"
                                             ref="upload"
                                             :show-upload-list="false"
-                                            v-if="form.path === '' || form.path === null">
+                                            v-if="image.path === '' || image.path === null">
                                         <div class="clearfix upload-picture">
                                             <span>本地上传</span>
                                         </div>
@@ -279,7 +282,7 @@
                                             :on-success="uploadSuccess"
                                             ref="upload"
                                             :show-upload-list="false"
-                                            v-if="form.path === '' || form.path === null">
+                                            v-if="image.path === '' || image.path === null">
                                         <div class="clearfix upload-picture">
                                             <span>图片库上传</span>
                                         </div>
