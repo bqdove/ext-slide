@@ -5,10 +5,18 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.slideApi}/slide/group/get`, {
+            injection.http.post(`${window.slideApi}/slide/picture/list`, {
                 group_id: to.query.id,
-            }).then(() => {
+            }).then(response => {
                 next(vm => {
+                    if (response.data.data !== undefined) {
+                        vm.pictureList = response.data.data.map(item => {
+                            item.loading = false;
+                            vm.form = item;
+                            return item;
+                        });
+                    }
+                    vm.form = response.data.data[0];
                     vm.parent.id = to.query.id;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
@@ -48,17 +56,14 @@
                     background: '',
                     link: '',
                     path: '',
-                    picture1: '',
-                    picture2: '',
-                    picture3: '',
-                    picture4: '',
                     title: '',
                 },
                 parent: {
                     id: '',
                 },
+                pictureList: [],
                 rules: {
-                    picture1: [
+                    path: [
                         {
                             message: '上传图片不能为空',
                             required: true,
@@ -91,7 +96,7 @@
                     self.$notice.open({
                         title: '正在刷新数据...',
                     });
-                    self.form.picture1 = '';
+                    self.form.path = '';
                 }).catch(() => {
                     self.$notice.error({
                         title: '删除图片信息错误！',
@@ -166,7 +171,6 @@
                 self.$notice.open({
                     title: data.message,
                 });
-                self.form.picture1 = data.data.path;
                 self.form.path = data.data.path;
             },
         },
@@ -189,10 +193,10 @@
                 <i-form ref="form" :model="form" :rules="rules" :label-width="200">
                     <row>
                         <i-col span="14">
-                            <form-item label="上传图片" prop="picture1">
+                            <form-item label="上传图片" prop="path">
                                 <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.picture1">
-                                        <img :src="form.picture1">
+                                    <div class="image-preview" v-if="form.path">
+                                        <img :src="form.path">
                                         <icon type="ios-trash-outline" @click.native="removeSlide1"></icon>
                                         <div class="clearfix">
                                             <upload class="local-upload"
@@ -244,7 +248,7 @@
                                             :on-success="uploadSuccess"
                                             ref="upload"
                                             :show-upload-list="false"
-                                            v-if="form.picture1 === '' || form.picture1 === null">
+                                            v-if="form.path === '' || form.path === null">
                                         <div class="clearfix upload-picture">
                                             <span>本地上传</span>
                                         </div>
@@ -262,7 +266,7 @@
                                             :on-success="uploadSuccess"
                                             ref="upload"
                                             :show-upload-list="false"
-                                            v-if="form.picture1 === '' || form.picture1 === null">
+                                            v-if="form.path === '' || form.path === null">
                                         <div class="clearfix upload-picture">
                                             <span>图片库上传</span>
                                         </div>
