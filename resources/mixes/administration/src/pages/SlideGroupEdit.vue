@@ -16,10 +16,11 @@
         },
         data() {
             return {
-                action: `${window.api}/mall/admin/upload`,
+                action: `${window.slideApi}/slide/picture/upload?group_id=${this.$route.query.id}`,
                 form: {
-                    color: '',
+                    background: '',
                     link: '',
+                    path: '',
                     picture1: '',
                     picture2: '',
                     picture3: '',
@@ -37,7 +38,22 @@
                 self.$router.go(-1);
             },
             removeSlide1() {
-                this.form.picture1 = '';
+                const self = this;
+                self.$http.post(`${window.slideApi}/slide/picture/delete`, {
+                    path: self.form.path,
+                }).then(() => {
+                    self.$notice.open({
+                        title: '删除图片信息成功！',
+                    });
+//                    self.$loading.start();
+//                    self.$notice.open({
+//                        title: '正在刷新数据...',
+//                    });
+                }).catch(() => {
+                    self.$notice.error({
+                        title: '删除文件夹信息错误！',
+                    });
+                });
             },
             removeSlide2() {
                 this.form.picture2 = '';
@@ -92,7 +108,8 @@
                 self.$notice.open({
                     title: data.message,
                 });
-                self.form.picture1 = data.data.path;
+                self.form.picture1 = `${window.slideUploadApi}/${data.data.path}`;
+                self.form.path = data.data.path;
             },
         },
     };
@@ -219,7 +236,7 @@
                     <row>
                         <i-col span="14">
                             <form-item label="图片背景颜色">
-                                <i-input v-model="form.color"></i-input>
+                                <i-input v-model="form.background"></i-input>
                                 <p class="tip">为确保现实效果美观，可设置轮播图整体背景填充色用于弥补图片在不同分辨率下显示区域
                                     超出图片时的问题，可根据图片的基础底色作为参照进行颜色设置</p>
                             </form-item>

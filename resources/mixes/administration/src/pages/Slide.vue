@@ -2,6 +2,7 @@
     import injection from '../helpers/injection';
 
     window.slideApi = 'https://allen.ibenchu.pw/api';
+    window.slideUploadApi = 'https://allen.ibenchu.pw';
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
