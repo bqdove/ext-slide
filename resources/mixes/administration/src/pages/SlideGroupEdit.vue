@@ -12,7 +12,6 @@
                     if (response.data.data !== undefined) {
                         vm.pictureList = response.data.data.map(item => {
                             item.loading = false;
-                            vm.form = item;
                             return item;
                         });
                     }
@@ -77,8 +76,19 @@
             colorShow() {
                 this.colorPicker = true;
             },
-            updateValue() {
-                this.colorPicker = false;
+            getDetailMessage() {
+                const self = this;
+                injection.loading.start();
+                injection.http.post(`${window.slideApi}/slide/picture/get`, {
+                    path: self.path,
+                }).then(response => {
+                    self.pictureList = response.data.data.map(item => {
+                        item.loading = false;
+                        return item;
+                    });
+                    injection.loading.finish();
+                    injection.sidebar.active('setting');
+                });
             },
             goBack() {
                 const self = this;
@@ -141,6 +151,9 @@
                     }
                 });
             },
+            updateValue() {
+                this.colorPicker = false;
+            },
             uploadBefore() {
                 injection.loading.start();
             },
@@ -195,7 +208,7 @@
                         <i-col span="14">
                             <form-item label="上传图片" prop="path">
                                 <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path">
+                                    <div class="image-preview" v-if="form.path" @click.native="getDetailMessage">
                                         <img :src="form.path">
                                         <icon type="ios-trash-outline" @click.native="removeSlide1"></icon>
                                         <div class="clearfix">
