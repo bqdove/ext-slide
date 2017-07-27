@@ -1,4 +1,5 @@
 <script>
+    import { Sketch } from 'vue-color';
     import injection from '../helpers/injection';
 
     export default {
@@ -14,9 +15,34 @@
                 });
             });
         },
+        components: {
+            'sketch-picker': Sketch,
+        },
         data() {
             return {
                 action: `${window.slideApi}/slide/picture/upload?group_id=${this.$route.query.id}`,
+                defaultProps: {
+                    hex: '#194d33',
+                    hsl: {
+                        h: 150,
+                        s: 0.5,
+                        l: 0.2,
+                        a: 1,
+                    },
+                    hsv: {
+                        h: 150,
+                        s: 0.66,
+                        v: 0.30,
+                        a: 1,
+                    },
+                    rgba: {
+                        r: 25,
+                        g: 77,
+                        b: 51,
+                        a: 1,
+                    },
+                    a: 1,
+                },
                 form: {
                     background: '',
                     link: '',
@@ -54,13 +80,14 @@
                     self.$notice.open({
                         title: '删除图片信息成功！',
                     });
-//                    self.$loading.start();
-//                    self.$notice.open({
-//                        title: '正在刷新数据...',
-//                    });
+                    self.$loading.start();
+                    self.$notice.open({
+                        title: '正在刷新数据...',
+                    });
+                    self.form.picture1 = '';
                 }).catch(() => {
                     self.$notice.error({
-                        title: '删除文件夹信息错误！',
+                        title: '删除图片信息错误！',
                     });
                 });
             },
@@ -132,7 +159,7 @@
                 self.$notice.open({
                     title: data.message,
                 });
-                self.form.picture1 = `${window.slideUploadApi}/${data.data.path}`;
+                self.form.picture1 = data.data.path;
                 self.form.path = data.data.path;
             },
         },
@@ -261,6 +288,7 @@
                         <i-col span="14">
                             <form-item label="图片背景颜色" prop="background">
                                 <i-input v-model="form.background"></i-input>
+                                <sketch-picker v-model="defaultProps" class="color-picker"/>
                                 <p class="tip">为确保现实效果美观，可设置轮播图整体背景填充色用于弥补图片在不同分辨率下显示区域
                                     超出图片时的问题，可根据图片的基础底色作为参照进行颜色设置</p>
                             </form-item>
