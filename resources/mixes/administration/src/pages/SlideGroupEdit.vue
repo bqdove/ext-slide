@@ -30,6 +30,15 @@
                 parent: {
                     id: '',
                 },
+                rules: {
+                    picture1: [
+                        {
+                            message: '上传图片不能为空',
+                            required: true,
+                            trigger: 'blur',
+                        },
+                    ],
+                },
             };
         },
         methods: {
@@ -74,17 +83,23 @@
                     link: self.form.link,
                     background: self.form.background,
                 };
-                self.$http.post(`${window.slideApi}/slide/picture/set`, params).then(response => {
-                    if (response.data.code === 200) {
-                        self.$notice.open({
-                            title: '设置图片信息成功！',
+                self.$refs.form.validate(valid => {
+                    if (valid) {
+                        self.$http.post(`${window.slideApi}/slide/picture/set`, params).then(response => {
+                            if (response.data.code === 200) {
+                                self.$notice.open({
+                                    title: '设置图片信息成功！',
+                                });
+                            }
+                        }).catch(() => {}).finally(() => {
+                            self.loading = false;
+                        });
+                    } else {
+                        self.loading = false;
+                        self.$notice.error({
+                            title: '请正确填写设置信息！',
                         });
                     }
-                }).catch(() => {
-                    self.loading = false;
-                    self.$notice.error({
-                        title: '请正确填写设置信息！',
-                    });
                 });
             },
             uploadBefore() {
@@ -137,10 +152,10 @@
                     <p>关于</p>
                     <p>每编辑一张图片需要点击保存，所有相关设置完成，使用底部的"更新板块内容"前台展示页面才会变化</p>
                 </div>
-                <i-form ref="form" :model="form" :rules="ruleValidate" :label-width="200">
+                <i-form ref="form" :model="form" :rules="rules" :label-width="200">
                     <row>
                         <i-col span="14">
-                            <form-item label="上传图片" prop="picture">
+                            <form-item label="上传图片" prop="picture1">
                                 <div class="upload-picture-box">
                                     <div class="image-preview" v-if="form.picture1">
                                         <img :src="form.picture1">
