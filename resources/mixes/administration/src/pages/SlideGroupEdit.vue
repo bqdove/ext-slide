@@ -21,8 +21,9 @@
         data() {
             return {
                 action: `${window.slideApi}/slide/picture/upload?group_id=${this.$route.query.id}`,
+                colorPicker: false,
                 defaultProps: {
-                    hex: '#194d33',
+                    hex: '',
                     hsl: {
                         h: 150,
                         s: 0.5,
@@ -68,6 +69,12 @@
             };
         },
         methods: {
+            colorShow() {
+                this.colorPicker = true;
+            },
+            updateValue() {
+                this.colorPicker = false;
+            },
             goBack() {
                 const self = this;
                 self.$router.go(-1);
@@ -108,7 +115,7 @@
                     path: self.form.path,
                     title: self.form.title,
                     link: self.form.link,
-                    background: self.form.background,
+                    background: self.defaultProps.hex,
                 };
                 self.$refs.form.validate(valid => {
                     if (valid) {
@@ -287,8 +294,10 @@
                     <row>
                         <i-col span="14">
                             <form-item label="图片背景颜色" prop="background">
-                                <i-input v-model="form.background"></i-input>
-                                <sketch-picker v-model="defaultProps" class="color-picker"/>
+                                <i-input v-model="defaultProps.hex" @on-focus="colorShow"
+                                         ></i-input>
+                                <sketch-picker v-model="defaultProps" class="color-picker"
+                                               v-if="colorPicker" @input="updateValue"/>
                                 <p class="tip">为确保现实效果美观，可设置轮播图整体背景填充色用于弥补图片在不同分辨率下显示区域
                                     超出图片时的问题，可根据图片的基础底色作为参照进行颜色设置</p>
                             </form-item>
