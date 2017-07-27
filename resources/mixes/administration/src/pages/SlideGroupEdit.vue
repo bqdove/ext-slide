@@ -61,7 +61,11 @@
                 parent: {
                     id: '',
                 },
-                pictureList: [],
+                pictureList: [
+                    {
+                        path: '',
+                    },
+                ],
                 rules: {
                     path: [
                         {
@@ -158,21 +162,6 @@
             uploadBefore() {
                 injection.loading.start();
             },
-//            uploadError(error, data) {
-//                const self = this;
-//                injection.loading.error();
-//                if (typeof data.message === 'object') {
-//                    for (const p in data.message) {
-//                        self.$notice.error({
-//                            title: data.message[p],
-//                        });
-//                    }
-//                } else {
-//                    self.$notice.error({
-//                        title: data.message,
-//                    });
-//                }
-//            },
             uploadFormatError(file) {
                 this.$notice.warning({
                     title: '文件格式不正确',
@@ -185,8 +174,8 @@
                 self.$notice.open({
                     title: data.message,
                 });
-                self.pictureList.forEach(item => {
-                   item.path = data.data.path;
+                self.pictureList.forEach((item, index) => {
+                    self.pictureList[index].path = data.data.path;
                 });
             },
         },
