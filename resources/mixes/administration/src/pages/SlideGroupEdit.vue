@@ -64,18 +64,27 @@
             removeSlide4() {
                 this.form.picture4 = '';
             },
-            submitAddGroup() {
+            submit() {
                 const self = this;
                 self.loading = true;
-                self.$refs.groupAdd.validate(valid => {
-                    if (valid) {
-                        window.console.log(valid);
-                    } else {
-                        self.loading = false;
-                        self.$notice.error({
-                            title: '请正确填写设置信息！',
+                injection.loading.start();
+                const params = {
+                    path: self.form.path,
+                    title: self.form.title,
+                    link: self.form.link,
+                    background: self.form.background,
+                };
+                self.$http.post(`${window.slideApi}/slide/picture/set`, params).then(response => {
+                    if (response.data.code === 200) {
+                        self.$notice.open({
+                            title: '设置图片信息成功！',
                         });
                     }
+                }).catch(() => {
+                    self.loading = false;
+                    self.$notice.error({
+                        title: '请正确填写设置信息！',
+                    });
                 });
             },
             uploadBefore() {
@@ -219,7 +228,7 @@
                     </h5>
                     <row>
                         <i-col span="14">
-                            <form-item label="图片标题">
+                            <form-item label="图片标题" prop="title">
                                 <i-input v-model="form.title"></i-input>
                                 <p class="tip">图片标题文字将作为图片Alt形式显示</p>
                             </form-item>
@@ -227,7 +236,7 @@
                     </row>
                     <row>
                         <i-col span="14">
-                            <form-item label="图片跳转链接">
+                            <form-item label="图片跳转链接" prop="link">
                                 <i-input v-model="form.link"></i-input>
                                 <p class="tip">输入图片要跳转的URL地址，正确格式应以http://开头，点击后将以"_blank"形式另打开页面</p>
                             </form-item>
@@ -235,7 +244,7 @@
                     </row>
                     <row>
                         <i-col span="14">
-                            <form-item label="图片背景颜色">
+                            <form-item label="图片背景颜色" prop="background">
                                 <i-input v-model="form.background"></i-input>
                                 <p class="tip">为确保现实效果美观，可设置轮播图整体背景填充色用于弥补图片在不同分辨率下显示区域
                                     超出图片时的问题，可根据图片的基础底色作为参照进行颜色设置</p>
@@ -250,7 +259,7 @@
                                     <span v-if="!loading">确认提交</span>
                                     <span v-else>正在提交…</span>
                                 </i-button>
-                                <i-button type="ghost">更新板块内容</i-button>
+                                <!--<i-button type="ghost">更新板块内容</i-button>-->
                             </form-item>
                         </i-col>
                     </row>
