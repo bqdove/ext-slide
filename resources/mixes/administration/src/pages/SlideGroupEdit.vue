@@ -179,6 +179,23 @@
                     title: data.message,
                 });
                 self.form.path1 = data.data.path;
+                if (data.data.path) {
+                    injection.loading.start();
+                    injection.http.post(`${window.slideApi}/slide/picture/list`, {
+                        group_id: self.parent.id,
+                    }).then(response => {
+                        const data = response.data.data;
+                        if (data !== undefined) {
+                            self.form = response.data.data[0];
+                            self.form.path1 = data[0].path;
+                            self.form.path2 = data[1].path;
+                            self.form.path3 = data[2].path;
+                            self.form.path4 = data[3].path;
+                        }
+                        injection.loading.finish();
+                        injection.sidebar.active('setting');
+                    });
+                }
             },
             uploadSuccess2(data) {
                 const self = this;
