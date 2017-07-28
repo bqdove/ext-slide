@@ -12,27 +12,27 @@
                 next(vm => {
                     if (data !== undefined) {
                         vm.pictureDetail = data[0];
-                    }
-                    if (data[0] === undefined) {
-                        vm.form.path1 = '';
-                    } else if (data[1] === undefined) {
-                        vm.form.path2 = '';
-                    } else if (data[2] === undefined) {
-                        vm.form.path3 = '';
-                    } else if (data[3] === undefined) {
-                        vm.form.path4 = '';
-                    }
-                    if (data[0] !== undefined) {
-                        vm.form.path1 = data[0].path;
-                    }
-                    if (data[1] !== undefined) {
-                        vm.form.path2 = data[1].path;
-                    }
-                    if (data[2] !== undefined) {
-                        vm.form.path3 = data[2].path;
-                    }
-                    if (data[3] !== undefined) {
-                        vm.form.path4 = data[3].path;
+                        if (data[0] === undefined) {
+                            vm.form.path1 = '';
+                        } else if (data[1] === undefined) {
+                            vm.form.path2 = '';
+                        } else if (data[2] === undefined) {
+                            vm.form.path3 = '';
+                        } else if (data[3] === undefined) {
+                            vm.form.path4 = '';
+                        }
+                        if (data[0] !== undefined) {
+                            vm.form.path1 = data[0].path;
+                        }
+                        if (data[1] !== undefined) {
+                            vm.form.path2 = data[1].path;
+                        }
+                        if (data[2] !== undefined) {
+                            vm.form.path3 = data[2].path;
+                        }
+                        if (data[3] !== undefined) {
+                            vm.form.path4 = data[3].path;
+                        }
                     }
                     vm.parent.id = to.query.id;
                     injection.loading.finish();
@@ -184,11 +184,14 @@
                 injection.loading.start();
                 if (self.paramCount === 1) {
                     count = self.form.path1;
-                } else if (self.paramCount === 2) {
+                }
+                if (self.paramCount === 2) {
                     count = self.form.path2;
-                } else if (self.paramCount === 3) {
+                }
+                if (self.paramCount === 3) {
                     count = self.form.path3;
-                } else if (self.paramCount === 4) {
+                }
+                if (self.paramCount === 4) {
                     count = self.form.path4;
                 }
                 const params = {
