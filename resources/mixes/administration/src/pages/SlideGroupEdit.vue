@@ -11,10 +11,6 @@
                 const data = response.data.data;
                 next(vm => {
                     if (data !== undefined) {
-                        vm.pictureList = response.data.data.map(item => {
-                            item.loading = false;
-                            return item;
-                        });
                         vm.form = response.data.data[0];
                         vm.form.path1 = data[0].path;
                         vm.form.path2 = data[1].path;
@@ -251,23 +247,11 @@
                                             <span>本地上传</span>
                                         </div>
                                     </upload>
-                                    <upload class="picture-gallery-upload"
-                                            :action="action"
-                                            :before-upload="uploadBefore"
-                                            :format="['jpg','jpeg','png']"
-                                            :headers="{
-                                                Authorization: `Bearer ${$store.state.token.access_token}`
-                                            }"
-                                            :max-size="2048"
-                                            :on-error="uploadError"
-                                            :on-format-error="uploadFormatError"
-                                            :on-success="uploadSuccess1"
-                                            ref="upload"
-                                            :show-upload-list="false">
+                                    <div class="picture-gallery-upload ivu-upload">
                                         <div class="clearfix upload-picture">
                                             <span>图片库上传</span>
                                         </div>
-                                    </upload>
+                                    </div>
                                 </div>
                                 <div class="upload-picture-box">
                                     <div class="image-preview" v-if="form.path2" @click.native="getDetailMessage">
@@ -291,23 +275,11 @@
                                             <span>本地上传</span>
                                         </div>
                                     </upload>
-                                    <upload class="picture-gallery-upload"
-                                            :action="action"
-                                            :before-upload="uploadBefore"
-                                            :format="['jpg','jpeg','png']"
-                                            :headers="{
-                                                Authorization: `Bearer ${$store.state.token.access_token}`
-                                            }"
-                                            :max-size="2048"
-                                            :on-error="uploadError"
-                                            :on-format-error="uploadFormatError"
-                                            :on-success="uploadSuccess2"
-                                            ref="upload"
-                                            :show-upload-list="false">
+                                    <div class="picture-gallery-upload ivu-upload">
                                         <div class="clearfix upload-picture">
                                             <span>图片库上传</span>
                                         </div>
-                                    </upload>
+                                    </div>
                                 </div>
                                 <div class="upload-picture-box">
                                     <div class="image-preview" v-if="form.path3" @click.native="getDetailMessage">
@@ -331,23 +303,11 @@
                                             <span>本地上传</span>
                                         </div>
                                     </upload>
-                                    <upload class="picture-gallery-upload"
-                                            :action="action"
-                                            :before-upload="uploadBefore"
-                                            :format="['jpg','jpeg','png']"
-                                            :headers="{
-                                                Authorization: `Bearer ${$store.state.token.access_token}`
-                                            }"
-                                            :max-size="2048"
-                                            :on-error="uploadError"
-                                            :on-format-error="uploadFormatError"
-                                            :on-success="uploadSuccess3"
-                                            ref="upload"
-                                            :show-upload-list="false">
+                                    <div class="picture-gallery-upload ivu-upload">
                                         <div class="clearfix upload-picture">
                                             <span>图片库上传</span>
                                         </div>
-                                    </upload>
+                                    </div>
                                 </div>
                                 <div class="upload-picture-box">
                                     <div class="image-preview" v-if="form.path4" @click.native="getDetailMessage">
@@ -371,23 +331,11 @@
                                             <span>本地上传</span>
                                         </div>
                                     </upload>
-                                    <upload class="picture-gallery-upload"
-                                            :action="action"
-                                            :before-upload="uploadBefore"
-                                            :format="['jpg','jpeg','png']"
-                                            :headers="{
-                                                Authorization: `Bearer ${$store.state.token.access_token}`
-                                            }"
-                                            :max-size="2048"
-                                            :on-error="uploadError"
-                                            :on-format-error="uploadFormatError"
-                                            :on-success="uploadSuccess4"
-                                            ref="upload"
-                                            :show-upload-list="false">
+                                    <div class="picture-gallery-upload ivu-upload">
                                         <div class="clearfix upload-picture">
                                             <span>图片库上传</span>
                                         </div>
-                                    </upload>
+                                    </div>
                                 </div>
                             </form-item>
                         </i-col>
