@@ -11,25 +11,28 @@
                 const data = response.data.data;
                 next(vm => {
                     if (data !== undefined) {
-//                        vm.form = response.data.data[0];
-                        if (data[0] === undefined) {
-                            vm.form.path1 = '';
-                        } else if (data[1] === undefined) {
-                            vm.form.path2 = '';
-                        } else if (data[2] === undefined) {
-                            vm.form.path3 = '';
-                        } else if (data[3] === undefined) {
-                            vm.form.path4 = '';
-                        }
-                        if (data[0] !== undefined) {
-                            vm.form.path1 = data[0].path;
-                        } else if (data[1] !== undefined) {
-                            vm.form.path2 = data[1].path;
-                        } else if (data[2] !== undefined) {
-                            vm.form.path3 = data[2].path;
-                        } else if (data[3] !== undefined) {
-                            vm.form.path4 = data[3].path;
-                        }
+                        vm.pictureDetail = data[0];
+                    }
+                    if (data[0] === undefined) {
+                        vm.form.path1 = '';
+                    } else if (data[1] === undefined) {
+                        vm.form.path2 = '';
+                    } else if (data[2] === undefined) {
+                        vm.form.path3 = '';
+                    } else if (data[3] === undefined) {
+                        vm.form.path4 = '';
+                    }
+                    if (data[0] !== undefined) {
+                        vm.form.path1 = data[0].path;
+                    }
+                    if (data[1] !== undefined) {
+                        vm.form.path2 = data[1].path;
+                    }
+                    if (data[2] !== undefined) {
+                        vm.form.path3 = data[2].path;
+                    }
+                    if (data[3] !== undefined) {
+                        vm.form.path4 = data[3].path;
                     }
                     vm.parent.id = to.query.id;
                     injection.loading.finish();
