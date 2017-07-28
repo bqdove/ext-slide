@@ -67,17 +67,20 @@
                     a: 1,
                 },
                 form: {
-                    background: '',
-                    link: '',
                     path1: '',
                     path2: '',
                     path3: '',
                     path4: '',
-                    title: '',
                 },
                 loading: false,
+                paramCount: '',
                 parent: {
                     id: '',
+                },
+                pictureDetail: {
+                    background: '',
+                    link: '',
+                    title: '',
                 },
                 pictureList: [
                     {
@@ -101,6 +104,7 @@
             },
             getDetailMessage(param) {
                 const self = this;
+                self.paramCount = param;
                 let count = '';
                 if (param === 1) {
                     count = self.form.path1;
@@ -115,7 +119,7 @@
                 self.$http.post(`${window.slideApi}/slide/picture/get`, {
                     path: count,
                 }).then(response => {
-                    self.form = response.data.data;
+                    self.pictureDetail = response.data.data;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
                 });
@@ -172,12 +176,22 @@
             },
             submit() {
                 const self = this;
+                let count = '';
                 self.loading = true;
                 injection.loading.start();
+                if (self.paramCount === 1) {
+                    count = self.form.path1;
+                } else if (self.paramCount === 2) {
+                    count = self.form.path2;
+                } else if (self.paramCount === 3) {
+                    count = self.form.path3;
+                } else if (self.paramCount === 4) {
+                    count = self.form.path4;
+                }
                 const params = {
-                    path: self.form.path,
-                    title: self.form.title,
-                    link: self.form.link,
+                    path: count,
+                    title: self.pictureDetail.title,
+                    link: self.pictureDetail.link,
                     background: self.defaultProps.hex,
                 };
                 self.$refs.form.validate(valid => {
@@ -386,7 +400,7 @@
                     <row>
                         <i-col span="14">
                             <form-item label="图片标题" prop="title">
-                                <i-input v-model="form.title"></i-input>
+                                <i-input v-model="pictureDetail.title"></i-input>
                                 <p class="tip">图片标题文字将作为图片Alt形式显示</p>
                             </form-item>
                         </i-col>
@@ -394,7 +408,7 @@
                     <row>
                         <i-col span="14">
                             <form-item label="图片跳转链接" prop="link">
-                                <i-input v-model="form.link"></i-input>
+                                <i-input v-model="pictureDetail.link"></i-input>
                                 <p class="tip">输入图片要跳转的URL地址，正确格式应以http://开头，点击后将以"_blank"形式另打开页面</p>
                             </form-item>
                         </i-col>
@@ -403,7 +417,7 @@
                         <i-col span="14">
                             <form-item label="图片背景颜色" prop="background">
                                 <i-input v-model="defaultProps.hex" @on-focus="colorShow"
-                                         ></i-input>
+                                         value="pictureDetail.background"></i-input>
                                 <sketch-picker v-model="defaultProps" class="color-picker"
                                                v-if="colorPicker" @input="updateValue"/>
                                 <p class="tip">为确保现实效果美观，可设置轮播图整体背景填充色用于弥补图片在不同分辨率下显示区域
