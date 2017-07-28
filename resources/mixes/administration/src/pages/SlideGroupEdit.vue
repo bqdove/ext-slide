@@ -99,16 +99,23 @@
             colorShow() {
                 this.colorPicker = true;
             },
-            getDetailMessage() {
+            getDetailMessage(param) {
                 const self = this;
+                let count = '';
+                if (param === 1) {
+                    count = self.form.path1;
+                } else if (param === 2) {
+                    count = self.form.path2;
+                } else if (param === 3) {
+                    count = self.form.path3;
+                } else if (param === 4) {
+                    count = self.form.path4;
+                }
                 injection.loading.start();
-                injection.http.post(`${window.slideApi}/slide/picture/get`, {
-                    path: self.path,
+                self.$http.post(`${window.slideApi}/slide/picture/get`, {
+                    path: count,
                 }).then(response => {
-                    self.pictureList = response.data.data.map(item => {
-                        item.loading = false;
-                        return item;
-                    });
+                    self.form = response.data.data;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
                 });
@@ -258,7 +265,7 @@
                         <i-col span="14">
                             <form-item label="上传图片" prop="path1">
                                 <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path1" @click.native="getDetailMessage">
+                                    <div class="image-preview" v-if="form.path1" @click="getDetailMessage(1)">
                                         <img :src="form.path1">
                                         <icon type="ios-trash-outline" @click.native="removeSlide(1)"></icon>
                                     </div>
@@ -286,7 +293,7 @@
                                     </div>
                                 </div>
                                 <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path2" @click.native="getDetailMessage">
+                                    <div class="image-preview" v-if="form.path2" @click="getDetailMessage(2)">
                                         <img :src="form.path2">
                                         <icon type="ios-trash-outline" @click.native="removeSlide(2)"></icon>
                                     </div>
@@ -314,7 +321,7 @@
                                     </div>
                                 </div>
                                 <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path3" @click.native="getDetailMessage">
+                                    <div class="image-preview" v-if="form.path3" @click="getDetailMessage(3)">
                                         <img :src="form.path3">
                                         <icon type="ios-trash-outline" @click.native="removeSlide(3)"></icon>
                                     </div>
@@ -342,7 +349,7 @@
                                     </div>
                                 </div>
                                 <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path4" @click.native="getDetailMessage">
+                                    <div class="image-preview" v-if="form.path4" @click="getDetailMessage(4)">
                                         <img :src="form.path4">
                                         <icon type="ios-trash-outline" @click.native="removeSlide(4)"></icon>
                                     </div>
