@@ -179,23 +179,6 @@
                     title: data.message,
                 });
                 self.form.path1 = data.data.path;
-                if (data.data.path) {
-                    injection.loading.start();
-                    injection.http.post(`${window.slideApi}/slide/picture/list`, {
-                        group_id: self.parent.id,
-                    }).then(response => {
-                        const data = response.data.data;
-                        if (data !== undefined) {
-                            self.form = response.data.data[0];
-                            self.form.path1 = data[0].path;
-                            self.form.path2 = data[1].path;
-                            self.form.path3 = data[2].path;
-                            self.form.path4 = data[3].path;
-                        }
-                        injection.loading.finish();
-                        injection.sidebar.active('setting');
-                    });
-                }
             },
             uploadSuccess2(data) {
                 const self = this;
@@ -259,7 +242,26 @@
                                             :on-format-error="uploadFormatError"
                                             :on-success="uploadSuccess1"
                                             ref="upload"
-                                            :show-upload-list="false">
+                                            :show-upload-list="false"
+                                            v-if="form.path1 === ''">
+                                        <div class="clearfix upload-picture">
+                                            <span>本地上传</span>
+                                        </div>
+                                    </upload>
+                                    <upload class="local-upload"
+                                            action="`${window.slideApi}/slide/picture/update?path=${form.path1}`"
+                                            :before-upload="uploadBefore"
+                                            :format="['jpg','jpeg','png']"
+                                            :headers="{
+                                                Authorization: `Bearer ${$store.state.token.access_token}`
+                                            }"
+                                            :max-size="2048"
+                                            :on-error="uploadError"
+                                            :on-format-error="uploadFormatError"
+                                            :on-success="uploadSuccess1"
+                                            ref="upload"
+                                            :show-upload-list="false"
+                                            v-if="form.path1 !== ''">
                                         <div class="clearfix upload-picture">
                                             <span>本地上传</span>
                                         </div>
