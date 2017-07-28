@@ -203,42 +203,6 @@
                                     <div class="image-preview" v-if="image.path" @click.native="getDetailMessage">
                                         <img :src="image.path">
                                         <icon type="ios-trash-outline" @click.native="removeSlide1"></icon>
-                                        <div class="clearfix">
-                                            <upload class="local-upload"
-                                                    :action="action"
-                                                    :before-upload="uploadBefore"
-                                                    :format="['jpg','jpeg','png']"
-                                                    :headers="{
-                                                        Authorization: `Bearer ${$store.state.token.access_token}`
-                                                    }"
-                                                    :max-size="2048"
-                                                    :on-error="uploadError"
-                                                    :on-format-error="uploadFormatError"
-                                                    :on-success="uploadSuccess"
-                                                    ref="upload"
-                                                    :show-upload-list="false">
-                                                <div class="clearfix upload-picture">
-                                                    <span>本地上传</span>
-                                                </div>
-                                            </upload>
-                                            <upload class="picture-gallery-upload"
-                                                    :action="action"
-                                                    :before-upload="uploadBefore"
-                                                    :format="['jpg','jpeg','png']"
-                                                    :headers="{
-                                                        Authorization: `Bearer ${$store.state.token.access_token}`
-                                                    }"
-                                                    :max-size="2048"
-                                                    :on-error="uploadError"
-                                                    :on-format-error="uploadFormatError"
-                                                    :on-success="uploadSuccess"
-                                                    ref="upload"
-                                                    :show-upload-list="false">
-                                                <div class="clearfix upload-picture">
-                                                    <span>图片库上传</span>
-                                                </div>
-                                            </upload>
-                                        </div>
                                     </div>
                                     <upload class="local-upload"
                                             :action="action"
@@ -252,8 +216,7 @@
                                             :on-format-error="uploadFormatError"
                                             :on-success="uploadSuccess"
                                             ref="upload"
-                                            :show-upload-list="false"
-                                            v-if="image.path === '' || image.path === null">
+                                            :show-upload-list="false">
                                         <div class="clearfix upload-picture">
                                             <span>本地上传</span>
                                         </div>
@@ -270,8 +233,7 @@
                                             :on-format-error="uploadFormatError"
                                             :on-success="uploadSuccess"
                                             ref="upload"
-                                            :show-upload-list="false"
-                                            v-if="image.path === '' || image.path === null">
+                                            :show-upload-list="false">
                                         <div class="clearfix upload-picture">
                                             <span>图片库上传</span>
                                         </div>

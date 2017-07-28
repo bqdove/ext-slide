@@ -38,129 +38,65 @@
                     }
                 }
                 .upload-picture-box {
+                    &:hover {
+                        .local-upload,
+                        .picture-gallery-upload {
+                            z-index: 10;
+                        }
+                    }
                     position: relative;
                     height: 124px;
                     width: 268px;
                     margin-bottom: 20px;
                     background: #f5f7f9 url("../image/upload.png") center no-repeat;
-                    > .local-upload {
+                    z-index: 1;
+                    > .ivu-upload {
                         position: absolute;
+                        background: rgba(227, 232, 238, .8);
                         bottom: 0;
-                        left: 0;
                         width: 133px;
                         height: 32px;
+                        line-height: 32px;
+                        text-align: center;
                         margin-bottom: 0;
+                    }
+                    > .local-upload {
+                        left: 0;
+                        margin-right: 2px;
                     }
                     > .picture-gallery-upload {
-                        position: absolute;
-                        bottom: 0;
                         right: 0;
-                        width: 133px;
-                        height: 32px;
-                        margin-bottom: 0;
                     }
-                }
-                .image-preview {
-                    position: relative;
-                    width: 268px;
-                    height: 124px;
-                    z-index: 1;
-                    &:hover {
-                        border: solid 2px #657180;
+                    .image-preview {
+                        position: relative;
+                        width: 268px;
+                        height: 124px;
+                        z-index: 1;
+                        &:hover {
+                            border: solid 2px #657180;
+                            > i {
+                                display: block;
+                                cursor: pointer;
+                            }
+                        }
                         > i {
-                            display: block;
-                            cursor: pointer;
-                        }
-                        > div {
-                            display: block;
-                            cursor: pointer;
-                            > .local-upload {
-                                position: absolute;
-                                bottom: -2px;
-                                left: 0;
-                                width: 133px;
-                                height: 32px;
-                                margin-bottom: 0;
-                            }
-                            > .picture-gallery-upload {
-                                position: absolute;
-                                bottom: -2px;
-                                right: 0;
-                                width: 133px;
-                                height: 32px;
-                                margin-bottom: 0;
-                            }
-                            .ivu-upload {
-                                &:first-child {
-                                    margin-left: -2px;
-                                }
-                                &:last-child {
-                                    margin-right: -2px;
-                                }
-                            }
-                        }
-                    }
-                    > i {
-                        display: none;
-                        width: 24px;
-                        height: 24px;
-                        line-height: 24px;
-                        text-align: center;
-                        border-radius: 50%;
-                        background: rgba(0,0,0,.5);
-                        color: #fff;
-                        top: 10px;
-                        font-size: 20px;
-                        position: absolute;
-                        right: 10px;
-                    }
-                    > img {
-                        display: block;
-                        width: 100%;
-                        height: 100%;
-                    }
-                    > div {
-                        display: none;
-                        //position: absolute;
-                        //left: 0;
-                        //bottom: 0;
-                        //z-index: 10;
-                        //span {
-                        //    width: 133px;
-                        //    height: 32px;
-                        //    line-height: 32px;
-                        //    text-align: center;
-                        //    background: rgba(227, 232, 238, .8);
-                        //    &:first-child {
-                        //        float: left;
-                        //        margin-right: 2px;
-                        //    }
-                        //    &:last-child {
-                        //        float: right;
-                        //    }
-                        //}
-                    }
-                }
-                .ivu-upload {
-
-                    .upload-picture {
-                        position: absolute;
-                        left: 0;
-                        bottom: 0;
-                        z-index: 10;
-                        span {
-                            width: 133px;
-                            height: 32px;
-                            line-height: 32px;
+                            display: none;
+                            width: 24px;
+                            height: 24px;
+                            line-height: 24px;
                             text-align: center;
-                            background: rgba(227, 232, 238, .8);
-                            &:first-child {
-                                float: left;
-                                margin-right: 2px;
-                            }
-                            &:last-child {
-                                float: right;
-                            }
+                            border-radius: 50%;
+                            background: rgba(0,0,0,.5);
+                            color: #fff;
+                            top: 10px;
+                            font-size: 20px;
+                            position: absolute;
+                            right: 10px;
+                        }
+                        > img {
+                            display: block;
+                            width: 100%;
+                            height: 100%;
                         }
                     }
                 }
