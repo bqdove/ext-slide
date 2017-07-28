@@ -13,6 +13,7 @@
                     if (data !== undefined) {
                         vm.form = response.data.data[0];
                         vm.form.path1 = data[0].path;
+                        console.log(data[1]);
                         vm.form.path2 = data[1].path;
                         vm.form.path3 = data[2].path;
                         vm.form.path4 = data[3].path;
@@ -103,10 +104,20 @@
                 const self = this;
                 self.$router.go(-1);
             },
-            removeSlide1() {
+            removeSlide(param) {
                 const self = this;
+                let count = '';
+                if (param === 1) {
+                    count = self.form.path1;
+                } else if (param === 2) {
+                    count = self.form.path2;
+                } else if (param === 3) {
+                    count = self.form.path3;
+                } else if (param === 4) {
+                    count = self.form.path4;
+                }
                 self.$http.post(`${window.slideApi}/slide/picture/delete`, {
-                    path: self.form.path,
+                    path: count,
                 }).then(() => {
                     self.$notice.open({
                         title: '删除图片信息成功！',
@@ -115,7 +126,15 @@
                     self.$notice.open({
                         title: '正在刷新数据...',
                     });
-                    self.form.path = '';
+                    if (param === 1) {
+                        self.form.path1 = '';
+                    } else if (param === 2) {
+                        self.form.path2 = '';
+                    } else if (param === 3) {
+                        self.form.path3 = '';
+                    } else if (param === 4) {
+                        self.form.path4 = '';
+                    }
                 }).catch(() => {
                     self.$notice.error({
                         title: '删除图片信息错误！',
@@ -242,26 +261,7 @@
                                             :on-format-error="uploadFormatError"
                                             :on-success="uploadSuccess1"
                                             ref="upload"
-                                            :show-upload-list="false"
-                                            v-if="form.path1 === ''">
-                                        <div class="clearfix upload-picture">
-                                            <span>本地上传</span>
-                                        </div>
-                                    </upload>
-                                    <upload class="local-upload"
-                                            action="`${window.slideApi}/slide/picture/update?path=${form.path1}`"
-                                            :before-upload="uploadBefore"
-                                            :format="['jpg','jpeg','png']"
-                                            :headers="{
-                                                Authorization: `Bearer ${$store.state.token.access_token}`
-                                            }"
-                                            :max-size="2048"
-                                            :on-error="uploadError"
-                                            :on-format-error="uploadFormatError"
-                                            :on-success="uploadSuccess1"
-                                            ref="upload"
-                                            :show-upload-list="false"
-                                            v-if="form.path1 !== ''">
+                                            :show-upload-list="false">
                                         <div class="clearfix upload-picture">
                                             <span>本地上传</span>
                                         </div>
