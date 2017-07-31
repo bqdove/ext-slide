@@ -1,12 +1,11 @@
 <script>
     import injection from '../helpers/injection';
 
-    window.slideApi = 'https://allen.ibenchu.pw/api';
-    window.slideUploadApi = 'https://allen.ibenchu.pw';
+//    window.api = 'https://allen.ibenchu.pw/api';
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.slideApi}/slide/category/list`).then(response => {
+            injection.http.post(`${window.api}/slide/category/list`).then(response => {
                 const data = response.data.data;
                 next(vm => {
                     vm.list = data.data.map(item => {
@@ -182,7 +181,7 @@
                 self.$notice.open({
                     title: '正在搜索数据...',
                 });
-                self.$http.post(`${window.slideApi}/slide/category/list?page=${page}`).then(res => {
+                self.$http.post(`${window.api}/slide/category/list?page=${page}`).then(res => {
                     const data = res.data.data;
                     self.list = data.data.map(item => {
                         item.loading = false;
@@ -205,7 +204,7 @@
                 self.$notice.open({
                     title: '正在刷新数据...',
                 });
-                self.$http.post(`${window.slideApi}/slide/category/list`).then(response => {
+                self.$http.post(`${window.api}/slide/category/list`).then(response => {
                     const dataList = response.data.data;
                     self.list = dataList.data.map(item => {
                         item.loading = false;
@@ -237,13 +236,13 @@
                 self.loading = true;
                 self.$refs.categoryAdd.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.slideApi}/slide/category/set`, self.categoryAdd).then(response => {
+                        self.$http.post(`${window.api}/slide/category/set`, self.categoryAdd).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '新增分类信息成功！',
                                 });
                                 this.addCategoryModal = false;
-                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                self.$http.post(`${window.api}/slide/category/list`).then(res => {
                                     const data = res.data.data;
                                     self.list = data.data.map(item => {
                                         item.loading = false;
@@ -276,13 +275,13 @@
                 self.$refs.categoryDelete.validate(valid => {
                     console.log(valid);
                     if (valid && self.categoryDeleteId === self.categoryDelete.category_id) {
-                        self.$http.post(`${window.slideApi}/slide/category/delete`, self.categoryDelete).then(response => {
+                        self.$http.post(`${window.api}/slide/category/delete`, self.categoryDelete).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '删除分类信息成功！',
                                 });
                                 this.deleteCategoryModal = false;
-                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                self.$http.post(`${window.api}/slide/category/list`).then(res => {
                                     const data = res.data.data;
                                     self.list = data.data.map(item => {
                                         item.loading = false;
@@ -314,13 +313,13 @@
                 injection.loading.start();
                 self.$refs.categoryEdit.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.slideApi}/slide/category/update`, self.categoryEdit).then(response => {
+                        self.$http.post(`${window.api}/slide/category/update`, self.categoryEdit).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '编辑分类信息成功！',
                                 });
                                 this.editCategoryModal = false;
-                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                self.$http.post(`${window.api}/slide/category/list`).then(res => {
                                     const data = res.data.data;
                                     self.list = data.data.map(item => {
                                         item.loading = false;

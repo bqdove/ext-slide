@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.slideApi}/slide/group/list`, {
+            injection.http.post(`${window.api}/slide/group/list`, {
                 category_id: to.query.id,
             }).then(response => {
                 const data = response.data.data;
@@ -220,7 +220,7 @@
                 self.$notice.open({
                     title: '正在搜索数据...',
                 });
-                self.$http.post(`${window.slideApi}/slide/group/list?page=${page}`, {
+                self.$http.post(`${window.api}/slide/group/list?page=${page}`, {
                     category_id: self.parent.id,
                 }).then(res => {
                     const data = res.data.data;
@@ -249,7 +249,7 @@
                 self.$notice.open({
                     title: '正在刷新数据...',
                 });
-                self.$http.post(`${window.slideApi}/slide/group/list`, {
+                self.$http.post(`${window.api}/slide/group/list`, {
                     category_id: self.parent.id,
                 }).then(response => {
                     const dataList = response.data.data;
@@ -286,13 +286,13 @@
                 };
                 self.$refs.groupAdd.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.slideApi}/slide/group/set`, params).then(response => {
+                        self.$http.post(`${window.api}/slide/group/set`, params).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '新增组图信息成功！',
                                 });
                                 this.addGroupModal = false;
-                                self.$http.post(`${window.slideApi}/slide/group/list`, {
+                                self.$http.post(`${window.api}/slide/group/list`, {
                                     category_id: self.parent.id,
                                 }).then(res => {
                                     const data = res.data.data;
@@ -327,13 +327,13 @@
                 self.$refs.groupDelete.validate(valid => {
                     console.log(valid);
                     if (valid && self.categoryDeleteId === self.groupDelete.group_id) {
-                        self.$http.post(`${window.slideApi}/slide/group/delete`, self.groupDelete).then(response => {
+                        self.$http.post(`${window.api}/slide/group/delete`, self.groupDelete).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '删除组图信息成功！',
                                 });
                                 this.deleteGroupModal = false;
-                                self.$http.post(`${window.slideApi}/slide/group/list`, {
+                                self.$http.post(`${window.api}/slide/group/list`, {
                                     category_id: self.parent.id,
                                 }).then(res => {
                                     const data = res.data.data;
@@ -378,13 +378,13 @@
                 };
                 self.$refs.groupSet.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.slideApi}/slide/group/update`, params).then(response => {
+                        self.$http.post(`${window.api}/slide/group/update`, params).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '组图设置信息成功！',
                                 });
                                 this.slideGroupModal = false;
-                                self.$http.post(`${window.slideApi}/slide/group/list`, {
+                                self.$http.post(`${window.api}/slide/group/list`, {
                                     category_id: self.parent.id,
                                 }).then(res => {
                                     const data = res.data.data;

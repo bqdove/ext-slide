@@ -5,7 +5,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.slideApi}/slide/picture/list`, {
+            injection.http.post(`${window.api}/slide/picture/list`, {
                 group_id: to.query.id,
             }).then(response => {
                 const data = response.data.data;
@@ -45,7 +45,7 @@
         },
         data() {
             return {
-                action: `${window.slideApi}/slide/picture/upload?group_id=${this.$route.query.id}`,
+                action: `${window.api}/slide/picture/upload?group_id=${this.$route.query.id}`,
                 colorPicker: false,
                 defaultProps: {
                     hex: '',
@@ -119,7 +119,7 @@
                     count = self.form.path4;
                 }
                 injection.loading.start();
-                self.$http.post(`${window.slideApi}/slide/picture/get`, {
+                self.$http.post(`${window.api}/slide/picture/get`, {
                     path: count,
                 }).then(response => {
                     self.pictureDetail = response.data.data;
@@ -143,7 +143,7 @@
                 } else if (param === 4) {
                     count = self.form.path4;
                 }
-                self.$http.post(`${window.slideApi}/slide/picture/delete`, {
+                self.$http.post(`${window.api}/slide/picture/delete`, {
                     path: count,
                 }).then(() => {
                     self.$notice.open({
@@ -202,7 +202,7 @@
                 };
                 self.$refs.form.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.slideApi}/slide/picture/set`, params).then(response => {
+                        self.$http.post(`${window.api}/slide/picture/set`, params).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '设置图片信息成功！',
