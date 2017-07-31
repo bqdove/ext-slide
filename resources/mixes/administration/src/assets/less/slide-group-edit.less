@@ -23,100 +23,80 @@
         }
         .ivu-form {
             .ivu-form-item {
-                .image-preview {
-                    position: relative;
-                    width: 268px;
-                    height: 124px;
-                    z-index: 1;
-                    &:hover {
-                        border: solid 2px #657180;
-                        > i {
-                            display: block;
-                            cursor: pointer;
-                        }
-                        > div {
-                            display: block;
-                            cursor: pointer;
-                            margin-bottom: -2px;
-                            span {
-                                &:first-child {
-                                    margin-left: -2px;
-                                }
-                                &:last-child {
-                                    margin-right: -2px;
-                                }
-                            }
-                        }
-                    }
-                    > i {
-                        display: none;
-                        width: 24px;
-                        height: 24px;
-                        line-height: 24px;
-                        text-align: center;
-                        border-radius: 50%;
-                        background: rgba(0,0,0,.5);
-                        color: #fff;
-                        top: 10px;
-                        font-size: 20px;
-                        position: absolute;
-                        right: 10px;
-                    }
-                    > img {
-                        display: block;
-                        width: 100%;
-                        height: 100%;
-                    }
-                    > div {
-                        display: none;
-                        position: absolute;
-                        left: 0;
-                        bottom: 0;
-                        z-index: 10;
-                        span {
-                            width: 133px;
-                            height: 32px;
-                            line-height: 32px;
+                .color-picker {
+                    margin-top: 10px;
+                    .vue-color__sketch__field {
+                        .vue-color__editable-input__input {
+                            padding: 0;
+                            width: 88%;
+                            line-height: 2.4;
                             text-align: center;
-                            background: rgba(227, 232, 238, .8);
-                            &:first-child {
-                                float: left;
-                                margin-right: 2px;
-                            }
-                            &:last-child {
-                                float: right;
-                            }
+                        }
+                        .vue-color__editable-input__label {
+                            line-height: 2;
                         }
                     }
                 }
-                .ivu-upload {
+                .upload-picture-box {
+                    &:hover {
+                        .local-upload,
+                        .picture-gallery-upload {
+                            z-index: 10;
+                        }
+                    }
                     position: relative;
-                    background: #f5f7f9;
                     height: 124px;
                     width: 268px;
                     margin-bottom: 20px;
-                    > .ivu-upload-select {
-                        background: url("../image/upload.png") center no-repeat;
-                        height: 124px;
-                    }
-                    .upload-picture {
+                    background: #f5f7f9 url("../image/upload.png") center no-repeat;
+                    z-index: 1;
+                    > .ivu-upload {
                         position: absolute;
-                        left: 0;
+                        background: rgba(227, 232, 238, .8);
                         bottom: 0;
-                        z-index: 10;
-                        span {
-                            width: 133px;
-                            height: 32px;
-                            line-height: 32px;
+                        width: 133px;
+                        height: 32px;
+                        line-height: 32px;
+                        text-align: center;
+                        margin-bottom: 0;
+                    }
+                    > .local-upload {
+                        left: 0;
+                        margin-right: 2px;
+                    }
+                    > .picture-gallery-upload {
+                        right: 0;
+                    }
+                    .image-preview {
+                        position: relative;
+                        width: 268px;
+                        height: 124px;
+                        z-index: 1;
+                        &:hover {
+                            border: solid 2px #657180;
+                            > i {
+                                display: block;
+                                cursor: pointer;
+                            }
+                        }
+                        > i {
+                            display: none;
+                            width: 24px;
+                            height: 24px;
+                            line-height: 24px;
                             text-align: center;
-                            background: rgba(227, 232, 238, .8);
-                            &:first-child {
-                                float: left;
-                                margin-right: 2px;
-                            }
-                            &:last-child {
-                                float: right;
-                            }
+                            border-radius: 50%;
+                            background: rgba(0,0,0,.5);
+                            color: #fff;
+                            top: 10px;
+                            font-size: 20px;
+                            position: absolute;
+                            right: 10px;
+                        }
+                        > img {
+                            display: block;
+                            width: 100%;
+                            height: 100%;
                         }
                     }
                 }

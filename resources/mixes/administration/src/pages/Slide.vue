@@ -1,11 +1,11 @@
 <script>
     import injection from '../helpers/injection';
 
-    window.slideApi = 'https://allen.ibenchu.pw/api';
+//    window.api = 'https://allen.ibenchu.pw/api';
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.slideApi}/slide/category/list`).then(response => {
+            injection.http.post(`${window.api}/slide/category/list`).then(response => {
                 const data = response.data.data;
                 next(vm => {
                     vm.list = data.data.map(item => {
@@ -87,7 +87,10 @@
                                                     nativeOn: {
                                                         click() {
                                                             self.$router.push({
-                                                                path: `/slide/group/${data.row.id}`,
+                                                                path: '/slide/group',
+                                                                query: {
+                                                                    id: data.row.alias,
+                                                                },
                                                             });
                                                         },
                                                     },
@@ -178,7 +181,7 @@
                 self.$notice.open({
                     title: '正在搜索数据...',
                 });
-                self.$http.post(`${window.slideApi}/slide/category/list?page=${page}`).then(res => {
+                self.$http.post(`${window.api}/slide/category/list?page=${page}`).then(res => {
                     const data = res.data.data;
                     self.list = data.data.map(item => {
                         item.loading = false;
@@ -201,7 +204,7 @@
                 self.$notice.open({
                     title: '正在刷新数据...',
                 });
-                self.$http.post(`${window.slideApi}/slide/category/list`).then(response => {
+                self.$http.post(`${window.api}/slide/category/list`).then(response => {
                     const dataList = response.data.data;
                     self.list = dataList.data.map(item => {
                         item.loading = false;
@@ -221,17 +224,25 @@
             },
             submitAddCategory() {
                 const self = this;
-                self.loading = true;
                 injection.loading.start();
+//                const reg = /^\d$/;
+//                if (self.categoryAdd.category_id.length > 0
+//                        && !reg.test(self.categoryAdd.category_id)) {
+//                    self.$notice.error({
+//                        title: '分类ID请输入数字格式！',
+//                    });
+//                } else {
+//                }
+                self.loading = true;
                 self.$refs.categoryAdd.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.slideApi}/slide/category/set`, self.categoryAdd).then(response => {
+                        self.$http.post(`${window.api}/slide/category/set`, self.categoryAdd).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '新增分类信息成功！',
                                 });
                                 this.addCategoryModal = false;
-                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                self.$http.post(`${window.api}/slide/category/list`).then(res => {
                                     const data = res.data.data;
                                     self.list = data.data.map(item => {
                                         item.loading = false;
@@ -264,13 +275,13 @@
                 self.$refs.categoryDelete.validate(valid => {
                     console.log(valid);
                     if (valid && self.categoryDeleteId === self.categoryDelete.category_id) {
-                        self.$http.post(`${window.slideApi}/slide/category/delete`, self.categoryDelete).then(response => {
+                        self.$http.post(`${window.api}/slide/category/delete`, self.categoryDelete).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '删除分类信息成功！',
                                 });
                                 this.deleteCategoryModal = false;
-                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                self.$http.post(`${window.api}/slide/category/list`).then(res => {
                                     const data = res.data.data;
                                     self.list = data.data.map(item => {
                                         item.loading = false;
@@ -302,13 +313,13 @@
                 injection.loading.start();
                 self.$refs.categoryEdit.validate(valid => {
                     if (valid) {
-                        self.$http.post(`${window.slideApi}/slide/category/update`, self.categoryEdit).then(response => {
+                        self.$http.post(`${window.api}/slide/category/update`, self.categoryEdit).then(response => {
                             if (response.data.code === 200) {
                                 self.$notice.open({
                                     title: '编辑分类信息成功！',
                                 });
                                 this.editCategoryModal = false;
-                                self.$http.post(`${window.slideApi}/slide/category/list`).then(res => {
+                                self.$http.post(`${window.api}/slide/category/list`).then(res => {
                                     const data = res.data.data;
                                     self.list = data.data.map(item => {
                                         item.loading = false;
