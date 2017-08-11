@@ -29,6 +29,7 @@ class CreateSlidePicturesTable extends Migration
                 $table->string('background', 10)->nullable()->comment('填充颜色');
                 $table->unsignedInteger('group_id')->comment('图片所属组Id');
                 $table->string('link')->nullable()->comment('图片跳转链接地址');
+                $table->string('image_name')->comment('图片名');
                 $table->softDeletes();
                 $table->timestamps();
             });

@@ -29,6 +29,7 @@ class CreateSlideGroupsTable extends Migration
                 $table->string('summery',64)->nullable()->comment('组简介');//分类简介
                 $table->unsignedTinyInteger('show')->default(true)->comment('是否展示');//默认展示
                 $table->unsignedInteger('category_id')->comment('分类的Id');
+                $table->string('path')->comment('组图文件夹');
                 $table->softDeletes();
                 $table->timestamps();
             });
