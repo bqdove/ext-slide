@@ -26,6 +26,8 @@ class RouteRegister extends AbstractRouteRegister
     {
             $this->router->group(['middleware' => ['cross', 'web'], 'prefix' => 'api/slide'], function () {
 
+
+
                 $this->router->group(['prefix' => 'category'],function() {
                     $this->router->post('set', CategoryController::class.'@set');
                     $this->router->post('get', CategoryController::class.'@get');
@@ -51,6 +53,7 @@ class RouteRegister extends AbstractRouteRegister
                     $this->router->post('delete', PictureController::class.'@delete');
                     $this->router->post('update', PictureController::class.'@update');
                     $this->router->post('upload',PictureController::class.'@upload');
+                    $this->router->post('data', PictureController::class.'@data');
                 });
 
         });
