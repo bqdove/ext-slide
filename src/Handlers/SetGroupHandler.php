@@ -68,9 +68,9 @@ class SetGroupHandler extends Handler
             $this->container->make('files')->deleteDirectory(base_path('/storage/app/' . $category->path));
         }
         if ($group->save()) {
-            return $this->withCode(200)->withMessage('图集信息保存成功');
+            $this->withCode(200)->withMessage('图集信息保存成功');
         } else {
-            return $this->withCode(401)->withError('保存图集信息失败，请稍后重试');
+            $this->withCode(401)->withError('保存图集信息失败，请稍后重试');
         }
     }
 
