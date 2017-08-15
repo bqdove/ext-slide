@@ -10,6 +10,7 @@
 namespace Notadd\Slide\Handlers;
 
 use Notadd\Foundation\Routing\Abstracts\Handler;
+use Notadd\Slide\Models\Group;
 use Notadd\Slide\Models\Picture;
 
 class GetPicturesHandler extends Handler
@@ -22,15 +23,16 @@ class GetPicturesHandler extends Handler
     protected function execute()
     {
         $this->validate($this->request, [
-            'group_id' => 'required|numeric'
+            'group_id' => 'required'
         ], [
             'group_id.required' => '组图id为必传参数',
-            'group_id.numeric' => '组图id必须为数字'
         ]);
 
         $id = $this->request->input('group_id');
 
-        $pictures = Picture::query()->where('group_id', $id)->orderBy('orderBy', 'asc')->get();
+        $id = Group::query()->where('alias', $id)->first()->id;
+
+        $pictures = Picture::query()->where('group_id', $id)->orderBy('created_at', 'asc')->get();
 
         $this->withCode(200)->withData($pictures)->withMessage('获取数据成功');
 
