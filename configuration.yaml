@@ -6,6 +6,11 @@ author:
     - 269044570@qq.com
 version: 0.1.0
 provider: Notadd\BCaptcha\Extension
+assets:
+    scripts:
+        - assets/extensions/notadd/slide/js/extension.min.js
+    stylesheets:
+        - assets/extensions/notadd/slide/css/extension.min.css
 events:
     subscribes:
         - Notadd\BCaptcha\Listeners\CsrfTokenRegister
