@@ -11,7 +11,8 @@ assets:
         - assets/extensions/notadd/slide/js/extension.min.js
     stylesheets:
         - assets/extensions/notadd/slide/css/extension.min.css
+csrf:
+    - 'api/slide*'
 events:
     subscribes:
-        - Notadd\BCaptcha\Listeners\CsrfTokenRegister
         - Notadd\BCaptcha\Listeners\RouteRegister
