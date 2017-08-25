@@ -27,7 +27,7 @@ class CreateExtSlideGroupsTable extends Migration
                 $table->string('name', 64)->comment('组名');//组名
                 $table->string('alias')->comment('组别名');//组别名
                 $table->string('summery',64)->nullable()->comment('组简介');//分类简介
-                $table->unsignedTinyInteger('show')->default(true)->comment('是否展示');//默认展示
+                $table->boolean('show')->default(true)->comment('是否展示');//默认展示
                 $table->unsignedInteger('category_id')->comment('分类的Id');
                 $table->string('path')->comment('组图文件夹');
                 $table->softDeletes();
