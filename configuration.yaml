@@ -1,0 +1,18 @@
+name: 验证码
+identification: notadd/captcha
+description: 验证码插件的配置和管理。
+author:
+    - twilroad
+    - 269044570@qq.com
+version: 0.1.0
+provider: Notadd\BCaptcha\Extension
+assets:
+    scripts:
+        - assets/extensions/notadd/slide/js/extension.min.js
+    stylesheets:
+        - assets/extensions/notadd/slide/css/extension.min.css
+csrf:
+    - 'api/slide*'
+events:
+    subscribes:
+        - Notadd\BCaptcha\Listeners\RouteRegister

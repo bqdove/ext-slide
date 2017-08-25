@@ -6,12 +6,8 @@
  * @copyright (c) 2017, notadd.com
  * @datetime: 17-7-24 下午5:08
  */
-
 namespace Notadd\Slide;
 
-use Illuminate\Events\Dispatcher;
-use Notadd\Slide\Listeners\CsrfTokenRegister;
-use Notadd\Slide\Listeners\RouteRegister;
 use Notadd\Foundation\Extension\Abstracts\Extension as AbstractExtension;
 
 /**
@@ -24,24 +20,12 @@ class Extension extends AbstractExtension
      */
     public function boot()
     {
-        $this->app->make(Dispatcher::class)->subscribe(CsrfTokenRegister::class);
-        $this->app->make(Dispatcher::class)->subscribe(RouteRegister::class);
         $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/translations'), 'slide');
         $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'slide');
         $this->publishes([
             realpath(__DIR__ . '/../resources/mixes/administration/dist/assets/extensions/notadd/slide') => public_path('assets/extensions/notadd/slide'),
         ], 'public');
         $this->loadMigrationsFrom(realpath(__DIR__ . '/../databases/migrations'));
-    }
-
-    /**
-     * Description of extension
-     *
-     * @return string
-     */
-    public static function description()
-    {
-        return '幻灯片插件。';
     }
 
     /**
@@ -57,39 +41,6 @@ class Extension extends AbstractExtension
     }
 
     /**
-     * Name of extension.
-     *
-     * @return string
-     */
-    public static function name()
-    {
-        return '幻灯片插件';
-    }
-
-    /**
-     * Get script of extension.
-     *
-     * @return string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    public static function script()
-    {
-        return asset('assets/extensions/notadd/slide/js/extension.min.js');
-    }
-
-    /**
-     * Get stylesheet of extension.
-     *
-     * @return array
-     */
-    public static function stylesheet()
-    {
-        return [
-            asset('assets/extensions/notadd/slide/css/extension.min.css')
-        ];
-    }
-
-    /**
      * Uninstall for extension.
      *
      * @return \Closure
@@ -99,15 +50,5 @@ class Extension extends AbstractExtension
         return function () {
             return true;
         };
-    }
-
-    /**
-     * Version of extension.
-     *
-     * @return string
-     */
-    public static function version()
-    {
-        return '0.1.0';
     }
 }
