@@ -1,11 +1,11 @@
-name: 验证码
-identification: notadd/captcha
-description: 验证码插件的配置和管理。
+name: 幻灯片插件
+identification: notadd/ext-slide
+description: 幻灯片管理插件。
 author:
-    - twilroad
-    - 269044570@qq.com
+    - Allen
+    - 674397601@qq.com
 version: 0.1.0
-provider: Notadd\BCaptcha\Extension
+provider: Notadd\Slide\Extension
 assets:
     scripts:
         - assets/extensions/notadd/slide/js/extension.min.js
@@ -15,4 +15,4 @@ csrf:
     - 'api/slide*'
 events:
     subscribes:
-        - Notadd\BCaptcha\Listeners\RouteRegister
+        - Notadd\Slide\Listeners\RouteRegister
