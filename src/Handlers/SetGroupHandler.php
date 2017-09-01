@@ -62,7 +62,7 @@ class SetGroupHandler extends Handler
         $group->path = $group->alias;
         $groupPath = $category->path . '/' . $group->alias;
         $createResult = Storage::makeDirectory($groupPath);
-        $this->container->make('files')->move(base_path('/storage/app/' . $groupPath), base_path('/public/upload/' . $groupPath));
+        $this->container->make('files')->move(base_path('storage/app/' . $groupPath), base_path('statics/uploads/' . $groupPath));
         //因为移动时只移动了组文件夹，所以要在移动后删除分类文件夹
         if ($this->container->make('files')->exists(base_path('/storage/app/' . $category->path))) {
             $this->container->make('files')->deleteDirectory(base_path('/storage/app/' . $category->path));
