@@ -18,7 +18,7 @@ class Picture extends Model
     /**
      * @var string
      */
-    protected $table = 'slide_pictures';
+    protected $table = 'ext_slide_pictures';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
