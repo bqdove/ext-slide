@@ -16,3 +16,7 @@ csrf:
 events:
     subscribes:
         - Notadd\Slide\Listeners\RouteRegister
+migrations:
+    - databases/migrations
+publishes:
+    assets/extensions/notadd/slide: resources/mixes/administration/dist/assets/extensions/notadd/slide

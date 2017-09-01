@@ -22,10 +22,6 @@ class Extension extends AbstractExtension
     {
         $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/translations'), 'slide');
         $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'slide');
-        $this->publishes([
-            realpath(__DIR__ . '/../resources/mixes/administration/dist/assets/extensions/notadd/slide') => public_path('assets/extensions/notadd/slide'),
-        ], 'public');
-        $this->loadMigrationsFrom(realpath(__DIR__ . '/../databases/migrations'));
     }
 
     /**
