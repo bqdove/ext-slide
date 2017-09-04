@@ -235,7 +235,7 @@
                 const self = this;
                 injection.loading.finish();
                 self.$notice.open({
-                    title: data.message,
+                    title: data.message[0],
                 });
                 self.form.path1 = data.data.path;
             },
@@ -243,7 +243,7 @@
                 const self = this;
                 injection.loading.finish();
                 self.$notice.open({
-                    title: data.message,
+                    title: data.message[0],
                 });
                 self.form.path2 = data.data.path;
             },
@@ -251,7 +251,7 @@
                 const self = this;
                 injection.loading.finish();
                 self.$notice.open({
-                    title: data.message,
+                    title: data.message[0],
                 });
                 self.form.path3 = data.data.path;
             },
@@ -259,7 +259,7 @@
                 const self = this;
                 injection.loading.finish();
                 self.$notice.open({
-                    title: data.message,
+                    title: data.message[0],
                 });
                 self.form.path4 = data.data.path;
             },

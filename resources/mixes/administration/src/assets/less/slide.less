@@ -14,13 +14,21 @@
             .slide-table {
                 margin-top: 10px;
                 border: 0 none;
-                .ivu-table:after,
-                .ivu-table:before {
+                .ivu-table:after {
                     background-color: inherit;
+                }
+                .ivu-table:before {
+                    background-color: #e9eaec;
                 }
                 .ivu-btn-small {
                     padding: 3px 19px;
                     border-radius: 4px;
+                }
+                .ivu-dropdown {
+                    .ivu-btn-small {
+                        padding: 3px 15px;
+                        border-radius: 4px;
+                    }
                 }
             }
         }
@@ -35,6 +43,14 @@
     .tip {
         color: rgba(101, 113, 128, 0.5);
         line-height: 18px;
+    }
+    .page {
+        margin-top: 20px;
+        margin-bottom: 50px;
+        text-align: center;
+    }
+    .ivu-table-wrapper {
+        border-top: 1px solid #e9eaec !important;
     }
 }
 .upload-picture-modal {
