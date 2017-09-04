@@ -2,13 +2,13 @@
 /**
  * The file is part of Notadd
  *
- * @author: AllenGu<674397601@qq.com>
+ * @author        : AllenGu<674397601@qq.com>
  * @copyright (c) 2017, notadd.com
- * @datetime: 17-7-24 下午5:08
+ * @datetime      : 17-7-24 下午5:08
  */
-
 namespace Notadd\Slide\Handlers;
 
+use Illuminate\Support\Collection;
 use Notadd\Foundation\Routing\Abstracts\Handler;
 use Notadd\Slide\Models\Category;
 use Notadd\Slide\Models\Group;
@@ -20,10 +20,6 @@ class DeleteGroupHandler extends Handler
 {
     /**
      * Execute Handler.
-     *
-     * @return bool
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function execute()
     {
@@ -32,29 +28,26 @@ class DeleteGroupHandler extends Handler
         ], [
             'group_id.required' => '图集ID为必传参数',
         ]);
-        $group = Group::where('alias', $this->request->input('group_id'))->first();
-        $category = Category::find($group->category_id);
+        $this->beginTransaction();
+        $group = Group::query()->where('alias', $this->request->input('group_id'))->first();
+        $category = Category::query()->find($group->category_id);
         $pictures = $group->pictures()->get();
         $groupPath = $category->path . '/' . $group->path;
-        //如果图集为空，那么直接删除图集
-        if (count($pictures) == 0) {
-            $result = $group->delete();
-            $deletefiles = $this->container->make('files')->deleteDirectory(base_path('/public/upload/' . $groupPath));
-            if ($result && $deletefiles) {
-                return $this->withCode(200)->withMessage('删除图集成功');
-            }
+        if ($pictures instanceof Collection && $pictures->isNotEmpty()) {
+            //如果图集不为空，那么循环删除该图集的所有图片
+            $pictures->each(function ($picture) {
+                $picture->delete();
+            });
         }
-        //如果图集不为空，那么循环删除该图集的所有图片
-        foreach ($pictures as $picture) {
-            $picture->delete();
+        if (is_dir(base_path('/statics/upload/' . $groupPath))) {
+            $this->container->make('files')->deleteDirectory(base_path('/statics/upload/' . $groupPath));
         }
-        //图集图片循环删除完毕后尝试删除当前图集信息
-        $deleteDbData = $group->delete();
-        $deleteFile = $this->container->make('files')->deleteDirectory(base_path('/public/upload/' . $groupPath));
-        if ($deleteDbData && $deleteFile) {
-            return $this->withCode(200)->withMessage('删除图集成功');
+        if ($group->delete()) {
+            $this->commitTransaction();
+            $this->withCode(200)->withMessage('删除图集成功');
         } else {
-            return $this->withCode->withError('删除图集失败');
+            $this->rollBackTransaction();
+            $this->withCode(500)->withError('删除图集失败');
         }
     }
 }
