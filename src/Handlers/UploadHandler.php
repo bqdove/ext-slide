@@ -44,32 +44,42 @@ class UploadHandler extends Handler
     public function execute()
     {
         //获得图集的文件地址
+        $this->validate($this->request, [
+            'group_id' => 'required',
+            'file' => 'required|image',
+        ], [
+            'group_id.required' => '组图id不能为空',
+            'file.image' => '上传文件格式必须为图片格式！',
+            'file.required' => '必须上传一个文件！',
+        ]);
+
         $groupId = $this->request->input('group_id');
+
         $group = Group::where('alias', $groupId)->first();
+
         if ($group) {
             $groupPath = $group->path;
             $categoryId = $group->category_id;
         }
+
         $category = Category::find($categoryId);
+
         $catePath = $category->path;
-        $frontPath = $catePath . '/' . $groupPath;
-        $this->validate($this->request, [
-            'file' => 'required|image',
-        ], [
-            'file.image' => '上传文件格式必须为图片格式！',
-            'file.required' => '必须上传一个文件！',
-        ]);
-        $avatar = $this->request->file('file');
-        $realName = $avatar->getClientOriginalName();
-        $error = $avatar->getError();
-        $hash = hash_file('md5', $avatar->getPathname(), false);
-        $groupPath = $category->path . '/' . $group->path;
-        $dictionary = base_path('public/upload/' . $groupPath);
-        $file = Str::substr($hash, 0, 32) . '.' . $avatar->getClientOriginalExtension();
+
+
+        $img = $this->request->file('file');
+        $realName = $img->getClientOriginalName();
+        $error = $img->getError();
+        $hash = hash_file('md5', $img->getPathname(), false);
+        $groupPath = $catePath. '/' .$groupPath;
+
+        $dictionary = base_path('statics/uploads/' . $groupPath);
+        $random = random_int(0, 9999999);
+        $file = Str::substr($hash, 0, 32) . $random . '.' . $img->getClientOriginalExtension();
         if (!$this->files->exists($dictionary . DIRECTORY_SEPARATOR . $file)) {
-            $avatar->move($dictionary, $file);
+            $img->move($dictionary, $file);
         }
-        $this->data['path'] = $dictionary . '/' . $hash . '.' . $avatar->getClientOriginalExtension();;
+        $this->data['path'] = url('uploads/' . $groupPath . '/' . $hash . $random . '.' . $img->getClientOriginalExtension());
         $this->data['file_name'] = $realName;
         $this->data['error'] = $error;
         $picture = new Picture();

@@ -29,7 +29,9 @@ class GetGroupHandler extends Handler
         ], [
             'group_id.required' => '图集ID为必传参数',
         ]);
-        $group = Group::where('alias', $this->request->query('group_id'))->first();
+
+        $group = Group::where('alias', $this->request->input('group_id'))->first();
+
         if ($group instanceof Group) {
             $this->withCode(200)->withData([
                 'group_id' => object_get($group, 'id'),

@@ -27,23 +27,33 @@ class DeletePictureHandler extends Handler
      */
     public function execute()
     {
+
         $this->validate($this->request, [
             'path' => 'required',
         ], [
             'path.required' => '图片路径为必传参数',
         ]);
         $path = $this->request->input('path');
+
+        $subPath = strstr($path, '/upload');
+
+        $completePath = base_path('/public'. $subPath);
+
         $picture = Picture::where('path', $path)->first();
+
+        if (Picture::where('path', $path)->first() || $this->container->make('files')->exists($completePath)) {
+            $this->withCode('500')->withError('删除失败，请稍候再试');
+        }
+
         if ($picture instanceof Picture) {
             $picture->delete();
         }
-        if ($this->container->make('files')->exists($path)) {
-            $this->container->make('files')->delete($path);
-        }
-        if (Picture::where('path', $path)->first() || $this->container->make('files')->exists($path)) {
-            return $this->withCode('402')->withError('删除失败，请稍候再试');
+
+        if ($this->container->make('files')->exists($completePath)) {
+            $this->container->make('files')->delete($completePath);
         }
 
-        return $this->success()->withMessage('删除成功');
+
+        $this->withCode(200)->withMessage('删除成功');
     }
 }

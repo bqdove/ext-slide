@@ -12,9 +12,11 @@ namespace Notadd\Slide\Controllers;
 use Notadd\Foundation\Routing\Abstracts\Controller;
 use Notadd\Slide\Handlers\DeletePictureHandler;
 use Notadd\Slide\Handlers\GetPictureHandler;
+use Notadd\Slide\Handlers\GetPicturesHandler;
 use Notadd\Slide\Handlers\SetPictureHandler;
 use Notadd\Slide\Handlers\UploadHandler;
 use Notadd\Slide\Handlers\AllPictureHandler;
+use Notadd\Slide\Handlers\UpdatePictureHandler;
 
 /**
  * Class PictureController.
@@ -97,5 +99,15 @@ class PictureController extends Controller
         if (!$this->mk_dir(dirname($dir), $mode)) return false;
 
         return @mkdir($dir, $mode);
+    }
+
+    public function update(UpdatePictureHandler $handler)
+    {
+        return $handler->toResponse()->generateHttpResponse();
+    }
+
+    public function data(GetPicturesHandler $handler)
+    {
+        return $handler->toResponse()->generateHttpResponse();
     }
 }

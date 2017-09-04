@@ -18,7 +18,7 @@ class Group extends Model
     /**
      * @var string
      */
-    protected $table = 'slide_groups';
+    protected $table = 'ext_slide_groups';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

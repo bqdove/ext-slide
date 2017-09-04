@@ -1,5 +1,5 @@
 {
-    "name": "notadd/slide",
+    "name": "notadd/ext-slide",
     "description": "Notadd Extension for slide.",
     "type": "notadd-extension",
     "keywords": ["Slide", "Slider", "extension", "notadd-extension", "notadd", "Notadd"],

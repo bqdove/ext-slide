@@ -25,20 +25,23 @@ class SetPictureHandler extends Handler
     public function execute()
     {
         $this->validate($this->request, [
-            'title' => 'required',
-            'link' => 'required',
+            'path' => 'required',
         ], [
-            'title.required' => '图片标题为必填字段',
-            'link.required' => '图片跳转链接为必填字段',
+            'path.required' => '图片路径为必传字段',
         ]);
-        $link = $this->request->input('link');
-        $title = $this->request->input('title');
         $path = $this->request->input('path');
+
+        $link = $this->request->input('link');
+
+        $title = $this->request->input('title');
+
         $background = $this->request->input('background');
-        if (!$background) {
-            $background = '';
-        }
-        if (!$this->container->make('files')->exists($path)) {
+
+        $subPath = strstr($path, '/upload');
+
+        $completePath = base_path('/public'. $subPath);
+
+        if (!$this->container->make('files')->exists($completePath)) {
             return $this->withCode('402')->withError('该图片已经不存在，请重新上传');
         }
         if ($picture = Picture::where('path', $path)->first()) {
