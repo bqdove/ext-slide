@@ -55,7 +55,7 @@ class UploadHandler extends Handler
 
         $groupId = $this->request->input('group_id');
 
-        $group = Group::where('alias', $groupId)->first();
+        $group = Group::query()->where('alias', $groupId)->first();
 
         if ($group) {
             $groupPath = $group->path;
