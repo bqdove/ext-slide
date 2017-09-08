@@ -37,7 +37,7 @@ class SetPictureHandler extends Handler
 
         $background = $this->request->input('background');
 
-        $subPath = strstr($path, '/upload');
+        $subPath = strstr($path, '/uploads');
 
         $completePath = base_path('/public'. $subPath);
 
