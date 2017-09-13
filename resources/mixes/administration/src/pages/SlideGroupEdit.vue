@@ -10,7 +10,7 @@
             }).then(response => {
                 const data = response.data.data;
                 next(vm => {
-                    if (data !== undefined) {
+                    if (data.length > 0) {
                         vm.pictureDetail = data[0];
                         if (data[0] === undefined) {
                             vm.form.path1 = '';
