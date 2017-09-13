@@ -20,8 +20,8 @@ class Extension extends AbstractExtension
      */
     public function boot()
     {
-        $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/translations'), 'slide');
-        $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'slide');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/translations'), 'ext-slide');
+        $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'ext-slide');
     }
 
     /**
