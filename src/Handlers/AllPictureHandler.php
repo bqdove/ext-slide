@@ -33,8 +33,6 @@ class ALlPictureHandler extends Handler
 
         $group = Group::query()->where('alias', $this->request->input('group_id'))->first();
 
-        dd($group);
-
         $pictures = Picture::query()->where('group_id', $group->id)->orderBy('created_at', 'asc')->limit(4)->get();
 
         if (count($pictures) > 0) {
