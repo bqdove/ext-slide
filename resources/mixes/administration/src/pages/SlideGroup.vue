@@ -18,8 +18,6 @@
                     vm.page.total = data.total;
                     vm.page.current_page = data.current_page;
                     vm.page.per_page = data.per_page;
-                    vm.page.last_page = data.last_page;
-                    vm.page.to = data.to;
                     vm.parent.id = to.query.id;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
@@ -187,10 +185,7 @@
                 loading: false,
                 page: {
                     current_page: 1,
-                    from: 1,
-                    last_page: 0,
                     per_page: 0,
-                    to: 0,
                     total: 0,
                 },
                 parent: {
@@ -231,8 +226,6 @@
                     self.page.total = data.total;
                     self.page.current_page = data.current_page;
                     self.page.per_page = data.per_page;
-                    self.page.last_page = data.last_page;
-                    self.page.to = data.to;
                     injection.loading.finish();
                     self.$notice.open({
                         title: '搜索数据完成！',
@@ -258,11 +251,8 @@
                         return item;
                     });
                     self.page.total = dataList.total;
-                    self.page.total = dataList.total;
                     self.page.current_page = dataList.current_page;
                     self.page.per_page = dataList.per_page;
-                    self.page.last_page = dataList.last_page;
-                    self.page.to = dataList.to;
                     self.$loading.finish();
                     self.$notice.open({
                         title: '刷新数据完成！',
@@ -303,8 +293,6 @@
                                     self.page.total = data.total;
                                     self.page.current_page = data.current_page;
                                     self.page.per_page = data.per_page;
-                                    self.page.last_page = data.last_page;
-                                    self.page.to = data.to;
                                     injection.loading.finish();
                                     injection.sidebar.active('setting');
                                 });
@@ -344,8 +332,6 @@
                                     self.page.total = data.total;
                                     self.page.current_page = data.current_page;
                                     self.page.per_page = data.per_page;
-                                    self.page.last_page = data.last_page;
-                                    self.page.to = data.to;
                                     injection.loading.finish();
                                     injection.sidebar.active('setting');
                                 });
@@ -395,8 +381,6 @@
                                     self.page.total = data.total;
                                     self.page.current_page = data.current_page;
                                     self.page.per_page = data.per_page;
-                                    self.page.last_page = data.last_page;
-                                    self.page.to = data.to;
                                     injection.loading.finish();
                                     injection.sidebar.active('setting');
                                 });

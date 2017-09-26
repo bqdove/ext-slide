@@ -1,7 +1,6 @@
 <script>
     import injection from '../helpers/injection';
 
-//    window.api = 'https://allen.ibenchu.pw/api';
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
@@ -15,8 +14,6 @@
                     vm.page.total = data.total;
                     vm.page.current_page = data.current_page;
                     vm.page.per_page = data.per_page;
-                    vm.page.last_page = data.last_page;
-                    vm.page.to = data.to;
                     vm.parent = to.query.parent;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
@@ -161,10 +158,7 @@
                 loading: false,
                 page: {
                     current_page: 1,
-                    from: 1,
-                    last_page: 0,
                     per_page: 0,
-                    to: 0,
                     total: 0,
                 },
                 parent: 0,
@@ -190,9 +184,7 @@
                     self.page.total = data.total;
                     self.page.current_page = data.current_page;
                     self.page.per_page = data.per_page;
-                    self.page.last_page = data.last_page;
-                    self.page.to = data.to;
-                    injection.loading.finish();
+                    self.$loading.finish();
                     self.$notice.open({
                         title: '搜索数据完成！',
                     });
@@ -211,11 +203,8 @@
                         return item;
                     });
                     self.page.total = dataList.total;
-                    self.page.total = dataList.total;
                     self.page.current_page = dataList.current_page;
                     self.page.per_page = dataList.per_page;
-                    self.page.last_page = dataList.last_page;
-                    self.page.to = dataList.to;
                     self.$loading.finish();
                     self.$notice.open({
                         title: '刷新数据完成！',
@@ -225,14 +214,6 @@
             submitAddCategory() {
                 const self = this;
                 injection.loading.start();
-//                const reg = /^\d$/;
-//                if (self.categoryAdd.category_id.length > 0
-//                        && !reg.test(self.categoryAdd.category_id)) {
-//                    self.$notice.error({
-//                        title: '分类ID请输入数字格式！',
-//                    });
-//                } else {
-//                }
                 self.loading = true;
                 self.$refs.categoryAdd.validate(valid => {
                     if (valid) {
@@ -251,8 +232,6 @@
                                     self.page.total = data.total;
                                     self.page.current_page = data.current_page;
                                     self.page.per_page = data.per_page;
-                                    self.page.last_page = data.last_page;
-                                    self.page.to = data.to;
                                     injection.loading.finish();
                                     injection.sidebar.active('setting');
                                 });
@@ -290,8 +269,6 @@
                                     self.page.total = data.total;
                                     self.page.current_page = data.current_page;
                                     self.page.per_page = data.per_page;
-                                    self.page.last_page = data.last_page;
-                                    self.page.to = data.to;
                                     injection.loading.finish();
                                     injection.sidebar.active('setting');
                                 });
@@ -328,8 +305,6 @@
                                     self.page.total = data.total;
                                     self.page.current_page = data.current_page;
                                     self.page.per_page = data.per_page;
-                                    self.page.last_page = data.last_page;
-                                    self.page.to = data.to;
                                     injection.loading.finish();
                                     injection.sidebar.active('setting');
                                 });
