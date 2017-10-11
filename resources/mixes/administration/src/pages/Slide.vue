@@ -194,39 +194,51 @@
             },
             submitAddCategory() {
                 const self = this;
-                injection.loading.start();
-                self.loading = true;
-                self.$refs.categoryAdd.validate(valid => {
-                    if (valid) {
-                        self.$http.post(`${window.api}/slide/category/set`, self.categoryAdd).then(response => {
-                            if (response.data.code === 200) {
-                                self.$notice.open({
-                                    title: '新增分类信息成功！',
-                                });
-                                this.addCategoryModal = false;
-                                self.$http.post(`${window.api}/slide/category/list`).then(res => {
-                                    const data = res.data.data;
-                                    self.list = data.data.map(item => {
-                                        item.loading = false;
-                                        return item;
+                let count = 0;
+                const reg = /^\d*$/;
+                const value = self.categoryAdd.category_id;
+                if (!reg.test(value) && value !== '') {
+                    count = -1;
+                }
+                if (count === -1) {
+                    self.$notice.error({
+                        title: '分类id请填写数字！',
+                    });
+                } else {
+                    injection.loading.start();
+                    self.loading = true;
+                    self.$refs.categoryAdd.validate(valid => {
+                        if (valid) {
+                            self.$http.post(`${window.api}/slide/category/set`, self.categoryAdd).then(response => {
+                                if (response.data.code === 200) {
+                                    self.$notice.open({
+                                        title: '新增分类信息成功！',
                                     });
-                                    self.page.total = data.total;
-                                    self.page.current_page = data.current_page;
-                                    self.page.per_page = data.per_page;
-                                    injection.loading.finish();
-                                    injection.sidebar.active('setting');
-                                });
-                            }
-                        }).catch(() => {}).finally(() => {
+                                    this.addCategoryModal = false;
+                                    self.$http.post(`${window.api}/slide/category/list`).then(res => {
+                                        const data = res.data.data;
+                                        self.list = data.data.map(item => {
+                                            item.loading = false;
+                                            return item;
+                                        });
+                                        self.page.total = data.total;
+                                        self.page.current_page = data.current_page;
+                                        self.page.per_page = data.per_page;
+                                        injection.loading.finish();
+                                        injection.sidebar.active('setting');
+                                    });
+                                }
+                            }).catch(() => {}).finally(() => {
+                                self.loading = false;
+                            });
+                        } else {
                             self.loading = false;
-                        });
-                    } else {
-                        self.loading = false;
-                        self.$notice.error({
-                            title: '请正确填写设置信息！',
-                        });
-                    }
-                });
+                            self.$notice.error({
+                                title: '请正确填写设置信息！',
+                            });
+                        }
+                    });
+                }
             },
             submitDeleteCategory() {
                 const self = this;
@@ -241,6 +253,7 @@
                                     title: '删除分类信息成功！',
                                 });
                                 this.deleteCategoryModal = false;
+                                self.self.categoryDelete.category_id = '';
                                 self.$http.post(`${window.api}/slide/category/list`).then(res => {
                                     const data = res.data.data;
                                     self.list = data.data.map(item => {
