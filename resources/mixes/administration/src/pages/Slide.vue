@@ -48,10 +48,6 @@
                 columns: [
                     {
                         align: 'center',
-                        type: 'selection',
-                        width: 80,
-                    },
-                    {
                         key: 'name',
                         title: '分类名称',
                         width: 240,
@@ -65,54 +61,40 @@
                         key: 'action',
                         render(h, data) {
                             return h('div', [
-                                h('dropdown', {
-                                    scopedSlots: {
-                                        list() {
-                                            return h('dropdown-menu', [
-                                                h('dropdown-item', {
-                                                    nativeOn: {
-                                                        click() {
-                                                            self.categoryEdit.category_id
-                                                                    = data.row.alias;
-                                                            self.categoryEdit.category_name
-                                                                    = data.row.name;
-                                                            self.editCategoryModal = true;
-                                                        },
-                                                    },
-                                                }, '编辑分类信息'),
-                                                h('dropdown-item', {
-                                                    nativeOn: {
-                                                        click() {
-                                                            self.$router.push({
-                                                                path: '/slide/group',
-                                                                query: {
-                                                                    id: data.row.alias,
-                                                                },
-                                                            });
-                                                        },
-                                                    },
-                                                    props: {
-                                                        name: 'goodSku',
-                                                    },
-                                                }, '查看组图'),
-                                            ]);
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.$router.push({
+                                                path: '/slide/group',
+                                                query: {
+                                                    id: data.row.alias,
+                                                },
+                                            });
                                         },
                                     },
-                                }, [
-                                    h('i-button', {
-                                        props: {
-                                            size: 'small',
-                                            type: 'ghost',
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                }, '查看'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.categoryEdit.category_id
+                                                    = data.row.alias;
+                                            self.categoryEdit.category_name
+                                                    = data.row.name;
+                                            self.editCategoryModal = true;
                                         },
-                                    }, [
-                                        '设置',
-                                        h('icon', {
-                                            props: {
-                                                type: 'arrow-down-b',
-                                            },
-                                        }),
-                                    ]),
-                                ]),
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '编辑'),
                                 h('i-button', {
                                     on: {
                                         click() {
@@ -131,7 +113,7 @@
                             ]);
                         },
                         title: '操作',
-                        width: 200,
+                        width: 300,
                     },
                 ],
                 deleteCategoryModal: false,
