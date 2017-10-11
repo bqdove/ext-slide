@@ -215,18 +215,7 @@
                                         title: '新增分类信息成功！',
                                     });
                                     this.addCategoryModal = false;
-                                    self.$http.post(`${window.api}/slide/category/list`).then(res => {
-                                        const data = res.data.data;
-                                        self.list = data.data.map(item => {
-                                            item.loading = false;
-                                            return item;
-                                        });
-                                        self.page.total = data.total;
-                                        self.page.current_page = data.current_page;
-                                        self.page.per_page = data.per_page;
-                                        injection.loading.finish();
-                                        injection.sidebar.active('setting');
-                                    });
+                                    self.refreshData();
                                 }
                             }).catch(() => {}).finally(() => {
                                 self.loading = false;
@@ -254,18 +243,7 @@
                                 });
                                 this.deleteCategoryModal = false;
                                 self.self.categoryDelete.category_id = '';
-                                self.$http.post(`${window.api}/slide/category/list`).then(res => {
-                                    const data = res.data.data;
-                                    self.list = data.data.map(item => {
-                                        item.loading = false;
-                                        return item;
-                                    });
-                                    self.page.total = data.total;
-                                    self.page.current_page = data.current_page;
-                                    self.page.per_page = data.per_page;
-                                    injection.loading.finish();
-                                    injection.sidebar.active('setting');
-                                });
+                                self.refreshData();
                             }
                         }).catch(() => {}).finally(() => {
                             self.loading = false;
@@ -290,18 +268,7 @@
                                     title: '编辑分类信息成功！',
                                 });
                                 this.editCategoryModal = false;
-                                self.$http.post(`${window.api}/slide/category/list`).then(res => {
-                                    const data = res.data.data;
-                                    self.list = data.data.map(item => {
-                                        item.loading = false;
-                                        return item;
-                                    });
-                                    self.page.total = data.total;
-                                    self.page.current_page = data.current_page;
-                                    self.page.per_page = data.per_page;
-                                    injection.loading.finish();
-                                    injection.sidebar.active('setting');
-                                });
+                                self.refreshData();
                             }
                         }).catch(() => {}).finally(() => {
                             self.loading = false;

@@ -277,20 +277,7 @@
                                     title: '新增组图信息成功！',
                                 });
                                 this.addGroupModal = false;
-                                self.$http.post(`${window.api}/slide/group/list`, {
-                                    category_id: self.parent.id,
-                                }).then(res => {
-                                    const data = res.data.data;
-                                    self.list = data.data.map(item => {
-                                        item.loading = false;
-                                        return item;
-                                    });
-                                    self.page.total = data.total;
-                                    self.page.current_page = data.current_page;
-                                    self.page.per_page = data.per_page;
-                                    injection.loading.finish();
-                                    injection.sidebar.active('setting');
-                                });
+                                self.refreshData();
                             }
                         }).catch(() => {}).finally(() => {
                             self.loading = false;
@@ -316,20 +303,7 @@
                                     title: '删除组图信息成功！',
                                 });
                                 this.deleteGroupModal = false;
-                                self.$http.post(`${window.api}/slide/group/list`, {
-                                    category_id: self.parent.id,
-                                }).then(res => {
-                                    const data = res.data.data;
-                                    self.list = data.data.map(item => {
-                                        item.loading = false;
-                                        return item;
-                                    });
-                                    self.page.total = data.total;
-                                    self.page.current_page = data.current_page;
-                                    self.page.per_page = data.per_page;
-                                    injection.loading.finish();
-                                    injection.sidebar.active('setting');
-                                });
+                                self.refreshData();
                             }
                         }).catch(() => {}).finally(() => {
                             self.loading = false;
@@ -365,20 +339,7 @@
                                     title: '组图设置信息成功！',
                                 });
                                 this.slideGroupModal = false;
-                                self.$http.post(`${window.api}/slide/group/list`, {
-                                    category_id: self.parent.id,
-                                }).then(res => {
-                                    const data = res.data.data;
-                                    self.list = data.data.map(item => {
-                                        item.loading = false;
-                                        return item;
-                                    });
-                                    self.page.total = data.total;
-                                    self.page.current_page = data.current_page;
-                                    self.page.per_page = data.per_page;
-                                    injection.loading.finish();
-                                    injection.sidebar.active('setting');
-                                });
+                                self.refreshData();
                             }
                         }).catch(() => {}).finally(() => {
                             self.loading = false;
