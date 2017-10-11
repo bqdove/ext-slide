@@ -75,63 +75,49 @@
                         key: 'action',
                         render(h, data) {
                             return h('div', [
-                                h('dropdown', {
-                                    scopedSlots: {
-                                        list() {
-                                            return h('dropdown-menu', [
-                                                h('dropdown-item', {
-                                                    nativeOn: {
-                                                        click() {
-                                                            self.groupSet.id
-                                                                    = data.row.alias;
-                                                            self.groupSetId
-                                                                    = data.row.alias;
-                                                            self.groupSet.group_name
-                                                                    = data.row.name;
-                                                            self.groupSet.group_show
-                                                                    = data.row.show;
-                                                            if (data.row.show === 1) {
-                                                                self.groupSet.group_show = '是';
-                                                            } else {
-                                                                self.groupSet.group_show = '否';
-                                                            }
-                                                            self.slideGroupModal = true;
-                                                        },
-                                                    },
-                                                }, '组图基础设置'),
-                                                h('dropdown-item', {
-                                                    nativeOn: {
-                                                        click() {
-                                                            self.$router.push({
-                                                                path: '/slide/group/edit',
-                                                                query: {
-                                                                    id: data.row.alias,
-                                                                },
-                                                            });
-                                                        },
-                                                    },
-                                                    props: {
-                                                        name: 'goodSku',
-                                                    },
-                                                }, '编辑图片内容'),
-                                            ]);
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.groupSet.id
+                                                    = data.row.alias;
+                                            self.groupSetId
+                                                    = data.row.alias;
+                                            self.groupSet.group_name
+                                                    = data.row.name;
+                                            self.groupSet.group_show
+                                                    = data.row.show;
+                                            if (data.row.show === 1) {
+                                                self.groupSet.group_show = '是';
+                                            } else {
+                                                self.groupSet.group_show = '否';
+                                            }
+                                            self.slideGroupModal = true;
                                         },
                                     },
-                                }, [
-                                    h('i-button', {
-                                        props: {
-                                            size: 'small',
-                                            type: 'ghost',
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                }, '设置'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
+                                            self.$router.push({
+                                                path: '/slide/group/edit',
+                                                query: {
+                                                    id: data.row.alias,
+                                                },
+                                            });
                                         },
-                                    }, [
-                                        '设置',
-                                        h('icon', {
-                                            props: {
-                                                type: 'arrow-down-b',
-                                            },
-                                        }),
-                                    ]),
-                                ]),
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                    style: {
+                                        marginLeft: '10px',
+                                    },
+                                }, '编辑'),
                                 h('i-button', {
                                     on: {
                                         click() {
@@ -150,7 +136,7 @@
                             ]);
                         },
                         title: '操作',
-                        width: 200,
+                        width: 300,
                     },
                 ],
                 deleteGroupModal: false,
@@ -276,7 +262,7 @@
                                 self.$notice.open({
                                     title: '新增组图信息成功！',
                                 });
-                                this.addGroupModal = false;
+                                self.addGroupModal = false;
                                 self.refreshData();
                             }
                         }).catch(() => {}).finally(() => {
@@ -302,7 +288,8 @@
                                 self.$notice.open({
                                     title: '删除组图信息成功！',
                                 });
-                                this.deleteGroupModal = false;
+                                self.deleteGroupModal = false;
+                                self.groupDelete.group_id = '';
                                 self.refreshData();
                             }
                         }).catch(() => {}).finally(() => {
@@ -338,7 +325,7 @@
                                 self.$notice.open({
                                     title: '组图设置信息成功！',
                                 });
-                                this.slideGroupModal = false;
+                                self.slideGroupModal = false;
                                 self.refreshData();
                             }
                         }).catch(() => {}).finally(() => {
