@@ -47,10 +47,9 @@
                 },
                 columns: [
                     {
-                        align: 'center',
                         key: 'name',
                         title: '分类名称',
-                        width: 240,
+                        width: 300,
                     },
                     {
                         key: 'alias',

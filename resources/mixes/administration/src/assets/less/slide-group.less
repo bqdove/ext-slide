@@ -10,6 +10,22 @@
             .slide-table {
                 margin-top: 10px;
                 border: 0 none;
+                .ivu-table-header {
+                    thead {
+                        th:first-child {
+                            padding-left: 60px;
+                        }
+                    }
+                }
+                .ivu-table-body {
+                    tbody {
+                        > tr {
+                            td:first-child {
+                                padding-left: 60px;
+                            }
+                        }
+                    }
+                }
                 .ivu-table:after {
                     background-color: inherit;
                 }

@@ -40,14 +40,9 @@
                 categoryDeleteId: '',
                 columns: [
                     {
-                        align: 'center',
-                        type: 'selection',
-                        width: 60,
-                    },
-                    {
                         key: 'name',
                         title: '组图名称',
-                        width: 220,
+                        width: 260,
                     },
                     {
                         align: 'center',
