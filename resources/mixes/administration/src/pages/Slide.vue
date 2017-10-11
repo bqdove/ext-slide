@@ -67,6 +67,7 @@
                                                 path: '/slide/group',
                                                 query: {
                                                     id: data.row.alias,
+                                                    name: data.row.name,
                                                 },
                                             });
                                         },
@@ -215,6 +216,8 @@
                                         title: '新增分类信息成功！',
                                     });
                                     this.addCategoryModal = false;
+                                    self.categoryAdd.category_name = '';
+                                    self.categoryAdd.category_id = '';
                                     self.refreshData();
                                 }
                             }).catch(() => {}).finally(() => {

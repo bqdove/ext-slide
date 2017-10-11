@@ -19,6 +19,7 @@
                     vm.page.current_page = data.current_page;
                     vm.page.per_page = data.per_page;
                     vm.parent.id = to.query.id;
+                    vm.parent.name = to.query.name;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
                 });
@@ -171,6 +172,7 @@
                 },
                 parent: {
                     id: '',
+                    name: '',
                 },
                 self: this,
                 groupSetId: '',
@@ -275,6 +277,9 @@
                                         title: '新增组图信息成功！',
                                     });
                                     self.addGroupModal = false;
+                                    self.groupAdd.group_name = '';
+                                    self.groupAdd.group_id = '';
+                                    self.groupAdd.group_show = '是';
                                     self.refreshData();
                                 }
                             }).catch(() => {}).finally(() => {
@@ -318,18 +323,19 @@
             },
             submitSetGroup() {
                 const self = this;
+                let status = self.groupSet.group_show;
                 self.loading = true;
                 injection.loading.start();
                 if (self.groupSet.group_show === '是') {
-                    self.groupSet.group_show = 1;
+                    status = 1;
                 } else {
-                    self.groupSet.group_show = 0;
+                    status = 0;
                 }
                 const params = {
                     id: self.groupSetId,
                     group_id: self.groupSet.id,
                     group_name: self.groupSet.group_name,
-                    group_show: self.groupSet.group_show,
+                    group_show: status,
                 };
                 self.$refs.groupSet.validate(valid => {
                     if (valid) {
@@ -362,7 +368,7 @@
                 <i-button type="text" @click.native="goBack">
                     <icon type="chevron-left"></icon>
                 </i-button>
-                <span>轮播图插件-查看组图</span>
+                <span>查看 "{{ parent.name }}" 组图</span>
             </div>
             <card :bordered="false">
                 <div class="slide-list">
