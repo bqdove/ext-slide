@@ -79,6 +79,23 @@
                                 h('i-button', {
                                     on: {
                                         click() {
+                                            self.$router.push({
+                                                path: '/slide/group/edit',
+                                                query: {
+                                                    id: data.row.alias,
+                                                    name: data.row.name,
+                                                },
+                                            });
+                                        },
+                                    },
+                                    props: {
+                                        size: 'small',
+                                        type: 'ghost',
+                                    },
+                                }, '设置'),
+                                h('i-button', {
+                                    on: {
+                                        click() {
                                             self.groupSet.id
                                                     = data.row.alias;
                                             self.groupSetId
@@ -93,22 +110,6 @@
                                                 self.groupSet.group_show = '否';
                                             }
                                             self.slideGroupModal = true;
-                                        },
-                                    },
-                                    props: {
-                                        size: 'small',
-                                        type: 'ghost',
-                                    },
-                                }, '设置'),
-                                h('i-button', {
-                                    on: {
-                                        click() {
-                                            self.$router.push({
-                                                path: '/slide/group/edit',
-                                                query: {
-                                                    id: data.row.alias,
-                                                },
-                                            });
                                         },
                                     },
                                     props: {
@@ -392,7 +393,7 @@
                 </div>
                 <modal
                         v-model="slideGroupModal"
-                        title="组图基础设置" class="upload-picture-modal">
+                        title="编辑组图" class="upload-picture-modal">
                     <div>
                         <i-form ref="groupSet" :model="groupSet" :rules="setRules" :label-width="100">
                             <row>

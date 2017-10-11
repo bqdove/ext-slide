@@ -35,6 +35,7 @@
                         }
                     }
                     vm.parent.id = to.query.id;
+                    vm.parent.name = to.query.name;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
                 });
@@ -79,6 +80,7 @@
                 paramCount: '',
                 parent: {
                     id: '',
+                    name: '',
                 },
                 pictureDetail: {
                     background: '',
@@ -273,7 +275,7 @@
                 <i-button type="text" @click.native="goBack">
                     <icon type="chevron-left"></icon>
                 </i-button>
-                <span>轮播图插件-编辑图片内容</span>
+                <span>设置 "{{ parent.name }}" 组图</span>
             </div>
             <card :bordered="false">
                 <div class="prompt-box">
