@@ -242,39 +242,52 @@
             },
             submitAddGroup() {
                 const self = this;
-                self.loading = true;
-                injection.loading.start();
+                let status = self.groupAdd.group_show;
+                let count = 0;
+                const reg = /^\d*$/;
+                const value = self.groupAdd.group_id;
                 if (self.groupAdd.group_show === '是') {
-                    self.groupAdd.group_show = 1;
+                    status = 1;
                 } else {
-                    self.groupAdd.group_show = 0;
+                    status = 0;
                 }
-                const params = {
-                    category_id: self.parent.id,
-                    group_id: self.groupAdd.group_id,
-                    group_name: self.groupAdd.group_name,
-                    group_show: self.groupAdd.group_show,
-                };
-                self.$refs.groupAdd.validate(valid => {
-                    if (valid) {
-                        self.$http.post(`${window.api}/slide/group/set`, params).then(response => {
-                            if (response.data.code === 200) {
-                                self.$notice.open({
-                                    title: '新增组图信息成功！',
-                                });
-                                self.addGroupModal = false;
-                                self.refreshData();
-                            }
-                        }).catch(() => {}).finally(() => {
+                if (!reg.test(value) && value !== '') {
+                    count = -1;
+                }
+                if (count === -1) {
+                    self.$notice.error({
+                        title: '分类id请填写数字！',
+                    });
+                } else {
+                    const params = {
+                        category_id: self.parent.id,
+                        group_id: self.groupAdd.group_id,
+                        group_name: self.groupAdd.group_name,
+                        group_show: status,
+                    };
+                    self.loading = true;
+                    injection.loading.start();
+                    self.$refs.groupAdd.validate(valid => {
+                        if (valid) {
+                            self.$http.post(`${window.api}/slide/group/set`, params).then(response => {
+                                if (response.data.code === 200) {
+                                    self.$notice.open({
+                                        title: '新增组图信息成功！',
+                                    });
+                                    self.addGroupModal = false;
+                                    self.refreshData();
+                                }
+                            }).catch(() => {}).finally(() => {
+                                self.loading = false;
+                            });
+                        } else {
                             self.loading = false;
-                        });
-                    } else {
-                        self.loading = false;
-                        self.$notice.error({
-                            title: '请正确填写设置信息！',
-                        });
-                    }
-                });
+                            self.$notice.error({
+                                title: '请正确填写设置信息！',
+                            });
+                        }
+                    });
+                }
             },
             submitDeleteGroup() {
                 const self = this;
