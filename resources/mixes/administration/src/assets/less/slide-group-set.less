@@ -12,8 +12,11 @@
                 .ivu-form {
                     .form-slide-group {
                         border: solid 1px #e3e8ee;
-                        margin-bottom: 20px;
+                        margin-top: 20px;
                         padding: 38px 0 38px 20px;
+                        &:first-child {
+                            margin-top: 0;
+                        }
                         .ivu-row {
                             > .ivu-col {
                                 &.ivu-col-span-4 {
@@ -87,16 +90,18 @@
                             }
                         }
                     }
-                    h5 {
-                        height: 40px;
-                        line-height: 40px;
-                        padding: 0 20px;
-                        font-size: 14px;
-                        background-color: #f5f7f9;
-                        margin-bottom: 30px;
-                        span {
-                            font-size: 12px;
-                            padding-left: 10px;
+                    .add-group-btn {
+                        text-align: center;
+                        > span {
+                            display: inline-block;
+                            width: 80px;
+                            height: 32px;
+                            line-height: 32px;
+                            text-align: center;
+                            background-color: #e9edf1;
+                            i {
+                                font-size: 16px;
+                            }
                         }
                     }
                 }

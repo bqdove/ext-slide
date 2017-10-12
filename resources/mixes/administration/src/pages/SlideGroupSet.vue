@@ -11,9 +11,9 @@
                 const data = response.data.data;
                 next(vm => {
                     if (data.length > 0) {
-                        vm.pictureDetail = data[0];
+                        vm.form = data[0];
                         if (data[0] === undefined) {
-                            vm.form.path1 = '';
+                            vm.form.path = '';
                         } else if (data[1] === undefined) {
                             vm.form.path2 = '';
                         } else if (data[2] === undefined) {
@@ -22,7 +22,7 @@
                             vm.form.path4 = '';
                         }
                         if (data[0] !== undefined) {
-                            vm.form.path1 = data[0].path;
+                            vm.form.path = data[0].path;
                         }
                         if (data[1] !== undefined) {
                             vm.form.path2 = data[1].path;
@@ -71,10 +71,18 @@
                     a: 1,
                 },
                 form: {
-                    path1: '',
                     path2: '',
                     path3: '',
                     path4: '',
+                    pictureList: [
+                        {
+                            path: '',
+                            sort: '',
+                            link: '',
+                            title: '',
+                            check: false,
+                        },
+                    ],
                 },
                 loading: false,
                 paramCount: '',
@@ -82,18 +90,8 @@
                     id: '',
                     name: '',
                 },
-                pictureDetail: {
-                    sort: '',
-                    link: '',
-                    title: '',
-                },
-                pictureList: [
-                    {
-                        path1: '',
-                    },
-                ],
                 rules: {
-                    path1: [
+                    path: [
                         {
                             message: '上传图片不能为空',
                             required: true,
@@ -112,7 +110,7 @@
                 self.paramCount = param;
                 let count = '';
                 if (param === 1) {
-                    count = self.form.path1;
+                    count = self.form.path;
                 } else if (param === 2) {
                     count = self.form.path2;
                 } else if (param === 3) {
@@ -124,7 +122,7 @@
                 self.$http.post(`${window.api}/slide/picture/get`, {
                     path: count,
                 }).then(response => {
-                    self.pictureDetail = response.data.data;
+                    self.form = response.data.data;
                     injection.loading.finish();
                     injection.sidebar.active('setting');
                 });
@@ -137,7 +135,7 @@
                 const self = this;
                 let count = '';
                 if (param === 1) {
-                    count = self.form.path1;
+                    count = self.form.path;
                 } else if (param === 2) {
                     count = self.form.path2;
                 } else if (param === 3) {
@@ -156,7 +154,7 @@
                         title: '正在刷新数据...',
                     });
                     if (param === 1) {
-                        self.form.path1 = '';
+                        self.form.path = '';
                     } else if (param === 2) {
                         self.form.path2 = '';
                     } else if (param === 3) {
@@ -185,7 +183,7 @@
                 self.loading = true;
                 injection.loading.start();
                 if (self.paramCount === 1) {
-                    count = self.form.path1;
+                    count = self.form.path;
                 }
                 if (self.paramCount === 2) {
                     count = self.form.path2;
@@ -198,8 +196,8 @@
                 }
                 const params = {
                     path: count,
-                    title: self.pictureDetail.title,
-                    link: self.pictureDetail.link,
+                    title: self.form.title,
+                    link: self.form.link,
                     background: self.defaultProps.hex,
                 };
                 self.$refs.form.validate(valid => {
@@ -239,7 +237,7 @@
                 self.$notice.open({
                     title: data.message[0],
                 });
-                self.form.path1 = data.data.path;
+                self.form.path = data.data.path;
             },
             uploadSuccess2(data) {
                 const self = this;
@@ -279,12 +277,12 @@
             </div>
             <card :bordered="false">
                 <i-form ref="form" :model="form" :rules="rules" :label-width="200">
-                    <div class="form-slide-group">
+                    <div class="form-slide-group" v-for="(item, index) in form.pictureList">
                         <row>
                             <i-col span="8">
                                 <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path1" @click="getDetailMessage(1)">
-                                        <img :src="form.path1">
+                                    <div class="image-preview" v-if="item.path" @click="getDetailMessage(1)">
+                                        <img :src="item.path">
                                         <icon type="ios-trash-outline" @click.native="removeSlide(1)"></icon>
                                     </div>
                                 </div>
@@ -317,7 +315,7 @@
                                 <row>
                                     <i-col>
                                         <form-item label="图片标题" prop="title">
-                                            <i-input v-model="pictureDetail.title"></i-input>
+                                            <i-input v-model="item.title"></i-input>
                                             <p class="tip">图片标题文字将作为图片Alt形式显示</p>
                                         </form-item>
                                     </i-col>
@@ -325,28 +323,33 @@
                                 <row>
                                     <i-col>
                                         <form-item label="图片跳转链接" prop="link">
-                                            <i-input v-model="pictureDetail.link"></i-input>
+                                            <i-input v-model="item.link"></i-input>
                                             <p class="tip">输入图片要跳转的URL地址，正确格式应以http://或https://开头</p>
+                                            <checkbox v-model="item.check">通过新标签页打开</checkbox>
                                         </form-item>
                                     </i-col>
                                 </row>
                                 <row>
                                     <i-col>
                                         <form-item label="排序" prop="sort">
-                                            <i-input v-model="pictureDetail.sort"></i-input>
+                                            <i-input v-model="item.sort"></i-input>
                                             <p class="tip">排序按照数字从小到大排列，输入后使用回车键更新排序</p>
                                         </form-item>
                                     </i-col>
                                 </row>
                             </i-col>
                             <i-col span="4">
-                                <span>
+                                <span v-if="index !== 0">
                                     <icon type="ios-trash-outline"></icon>
                                 </span>
                             </i-col>
                         </row>
                     </div>
-
+                    <div class="add-group-btn">
+                        <span>
+                            <icon type="android-add"></icon>
+                        </span>
+                    </div>
 
                     <row>
                         <i-col>
