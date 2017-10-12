@@ -279,9 +279,9 @@
             </div>
             <card :bordered="false">
                 <i-form ref="form" :model="form" :rules="rules" :label-width="200">
-                    <row>
-                        <i-col span="14">
-                            <form-item label="上传图片" prop="path1">
+                    <div class="">
+                        <row>
+                            <i-col span="8">
                                 <div class="upload-picture-box">
                                     <div class="image-preview" v-if="form.path1" @click="getDetailMessage(1)">
                                         <img :src="form.path1">
@@ -310,98 +310,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path2" @click="getDetailMessage(2)">
-                                        <img :src="form.path2">
-                                        <icon type="ios-trash-outline" @click.native="removeSlide(2)"></icon>
-                                    </div>
-                                    <upload class="local-upload"
-                                            :action="action"
-                                            :before-upload="uploadBefore"
-                                            :format="['jpg','jpeg','png']"
-                                            :headers="{
-                                                Authorization: `Bearer ${$store.state.token.access_token}`
-                                            }"
-                                            :max-size="2048"
-                                            :on-error="uploadError"
-                                            :on-format-error="uploadFormatError"
-                                            :on-success="uploadSuccess2"
-                                            ref="upload"
-                                            :show-upload-list="false">
-                                        <div class="clearfix upload-picture">
-                                            <span>本地上传</span>
-                                        </div>
-                                    </upload>
-                                    <div class="picture-gallery-upload ivu-upload">
-                                        <div class="clearfix upload-picture">
-                                            <span>图片库上传</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path3" @click="getDetailMessage(3)">
-                                        <img :src="form.path3">
-                                        <icon type="ios-trash-outline" @click.native="removeSlide(3)"></icon>
-                                    </div>
-                                    <upload class="local-upload"
-                                            :action="action"
-                                            :before-upload="uploadBefore"
-                                            :format="['jpg','jpeg','png']"
-                                            :headers="{
-                                                Authorization: `Bearer ${$store.state.token.access_token}`
-                                            }"
-                                            :max-size="2048"
-                                            :on-error="uploadError"
-                                            :on-format-error="uploadFormatError"
-                                            :on-success="uploadSuccess3"
-                                            ref="upload"
-                                            :show-upload-list="false">
-                                        <div class="clearfix upload-picture">
-                                            <span>本地上传</span>
-                                        </div>
-                                    </upload>
-                                    <div class="picture-gallery-upload ivu-upload">
-                                        <div class="clearfix upload-picture">
-                                            <span>图片库上传</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="form.path4" @click="getDetailMessage(4)">
-                                        <img :src="form.path4">
-                                        <icon type="ios-trash-outline" @click.native="removeSlide(4)"></icon>
-                                    </div>
-                                    <upload class="local-upload"
-                                            :action="action"
-                                            :before-upload="uploadBefore"
-                                            :format="['jpg','jpeg','png']"
-                                            :headers="{
-                                                Authorization: `Bearer ${$store.state.token.access_token}`
-                                            }"
-                                            :max-size="2048"
-                                            :on-error="uploadError"
-                                            :on-format-error="uploadFormatError"
-                                            :on-success="uploadSuccess4"
-                                            ref="upload"
-                                            :show-upload-list="false">
-                                        <div class="clearfix upload-picture">
-                                            <span>本地上传</span>
-                                        </div>
-                                    </upload>
-                                    <div class="picture-gallery-upload ivu-upload">
-                                        <div class="clearfix upload-picture">
-                                            <span>图片库上传</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <h5>
-                        图片详情设置
-                        <span>提示：每编辑完成一组详情后需要点击保存</span>
-                    </h5>
-                    <row>
+                            </i-col>
+                            <i-col span="8">222</i-col>
+                            <i-col span="8">333</i-col>
+                        </row>
+                    </div>
+
+                    <!--<row>
                         <i-col span="14">
                             <form-item label="图片标题" prop="title">
                                 <i-input v-model="pictureDetail.title"></i-input>
@@ -437,10 +352,9 @@
                                     <span v-if="!loading">确认提交</span>
                                     <span v-else>正在提交…</span>
                                 </i-button>
-                                <!--<i-button type="ghost">更新板块内容</i-button>-->
                             </form-item>
                         </i-col>
-                    </row>
+                    </row>-->
                 </i-form>
             </card>
         </div>
