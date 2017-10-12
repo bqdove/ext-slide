@@ -83,7 +83,7 @@
                     name: '',
                 },
                 pictureDetail: {
-                    background: '',
+                    sort: '',
                     link: '',
                     title: '',
                 },
@@ -313,41 +313,43 @@
                                     </div>
                                 </div>
                             </i-col>
-                            <i-col span="8">222</i-col>
-                            <i-col span="8">333</i-col>
+                            <i-col span="12">
+                                <row>
+                                    <i-col>
+                                        <form-item label="图片标题" prop="title">
+                                            <i-input v-model="pictureDetail.title"></i-input>
+                                            <p class="tip">图片标题文字将作为图片Alt形式显示</p>
+                                        </form-item>
+                                    </i-col>
+                                </row>
+                                <row>
+                                    <i-col>
+                                        <form-item label="图片跳转链接" prop="link">
+                                            <i-input v-model="pictureDetail.link"></i-input>
+                                            <p class="tip">输入图片要跳转的URL地址，正确格式应以http://或https://开头</p>
+                                        </form-item>
+                                    </i-col>
+                                </row>
+                                <row>
+                                    <i-col>
+                                        <form-item label="排序" prop="sort">
+                                            <i-input v-model="pictureDetail.sort"></i-input>
+                                            <p class="tip">排序按照数字从小到大排列，输入后使用回车键更新排序</p>
+                                        </form-item>
+                                    </i-col>
+                                </row>
+                            </i-col>
+                            <i-col span="4">
+                                <span>
+                                    <icon type="ios-trash-outline"></icon>
+                                </span>
+                            </i-col>
                         </row>
                     </div>
 
-                    <!--<row>
-                        <i-col span="14">
-                            <form-item label="图片标题" prop="title">
-                                <i-input v-model="pictureDetail.title"></i-input>
-                                <p class="tip">图片标题文字将作为图片Alt形式显示</p>
-                            </form-item>
-                        </i-col>
-                    </row>
+
                     <row>
-                        <i-col span="14">
-                            <form-item label="图片跳转链接" prop="link">
-                                <i-input v-model="pictureDetail.link"></i-input>
-                                <p class="tip">输入图片要跳转的URL地址，正确格式应以http://开头，点击后将以"_blank"形式另打开页面</p>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="14">
-                            <form-item label="图片背景颜色" prop="background">
-                                <i-input v-model="defaultProps.hex" @on-focus="colorShow"
-                                         value="pictureDetail.background"></i-input>
-                                <sketch-picker v-model="defaultProps" class="color-picker"
-                                               v-if="colorPicker" @input="updateValue"/>
-                                <p class="tip">为确保现实效果美观，可设置轮播图整体背景填充色用于弥补图片在不同分辨率下显示区域
-                                    超出图片时的问题，可根据图片的基础底色作为参照进行颜色设置</p>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="14">
+                        <i-col>
                             <form-item>
                                 <i-button :loading="loading" type="primary"
                                           @click.native="submit">
@@ -356,7 +358,7 @@
                                 </i-button>
                             </form-item>
                         </i-col>
-                    </row>-->
+                    </row>
                 </i-form>
             </card>
         </div>
