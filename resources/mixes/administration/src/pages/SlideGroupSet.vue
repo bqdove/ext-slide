@@ -102,8 +102,17 @@
             };
         },
         methods: {
-            colorShow() {
-                this.colorPicker = true;
+            addSlideGroup() {
+                this.form.pictureList.push({
+                    path: '',
+                    sort: '',
+                    link: '',
+                    title: '',
+                    check: false,
+                });
+            },
+            removeSlideGroup(index) {
+                this.form.pictureList.splice(index, 1);
             },
             getDetailMessage(param) {
                 const self = this;
@@ -283,7 +292,7 @@
                                 <div class="upload-picture-box">
                                     <div class="image-preview" v-if="item.path" @click="getDetailMessage(1)">
                                         <img :src="item.path">
-                                        <icon type="ios-trash-outline" @click.native="removeSlide(1)"></icon>
+                                        <icon type="ios-trash-outline" @click.native="removeSlide"></icon>
                                     </div>
                                 </div>
                                 <div class="btn-group">
@@ -339,14 +348,14 @@
                                 </row>
                             </i-col>
                             <i-col span="4">
-                                <span v-if="index !== 0">
+                                <span v-if="index !== 0" @click="removeSlideGroup(index)">
                                     <icon type="ios-trash-outline"></icon>
                                 </span>
                             </i-col>
                         </row>
                     </div>
                     <div class="add-group-btn">
-                        <span>
+                        <span @click="addSlideGroup">
                             <icon type="android-add"></icon>
                         </span>
                     </div>
