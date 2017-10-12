@@ -278,10 +278,6 @@
                 <span>设置 "{{ parent.name }}" 组图</span>
             </div>
             <card :bordered="false">
-                <div class="prompt-box">
-                    <p>关于</p>
-                    <p>每编辑一张图片需要点击保存，所有相关设置完成，使用底部的"更新板块内容"前台展示页面才会变化</p>
-                </div>
                 <i-form ref="form" :model="form" :rules="rules" :label-width="200">
                     <row>
                         <i-col span="14">

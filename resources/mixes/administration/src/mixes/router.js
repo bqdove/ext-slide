@@ -1,5 +1,6 @@
 import Slide from '../pages/Slide.vue';
 import SlideGroup from '../pages/SlideGroup.vue';
+import SlideGroupSet from '../pages/SlideGroupSet.vue';
 import SlideGroupEdit from '../pages/SlideGroupEdit.vue';
 
 export default function (injection) {
@@ -13,6 +14,11 @@ export default function (injection) {
             beforeEnter: injection.middleware.requireAuth,
             component: SlideGroup,
             path: 'slide/group',
+        },
+        {
+            beforeEnter: injection.middleware.requireAuth,
+            component: SlideGroupSet,
+            path: 'slide/group/set',
         },
         {
             beforeEnter: injection.middleware.requireAuth,
