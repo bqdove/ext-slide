@@ -148,7 +148,7 @@
                     self.$notice.open({
                         title: '删除图片信息成功！',
                     });
-                    self.form.path = '';
+                    item.path = '';
                     self.$loading.start();
                     self.$notice.open({
                         title: '正在刷新数据...',
@@ -219,7 +219,10 @@
                 self.$notice.open({
                     title: data.message[0],
                 });
-                self.form.path = data.data.path;
+                self.form.pictureList.forEach(item => {
+                    item.path = data.data.path;
+                });
+                window.console.log(self.form.pictureList);
             },
         },
     };
@@ -239,7 +242,8 @@
                         <row>
                             <i-col span="8">
                                 <div class="upload-picture-box">
-                                    <div class="image-preview" v-if="item.path" @click="getDetailMessage(1)">
+                                    <!--<div class="image-preview" v-if="item.path" @click="getDetailMessage(1)">-->
+                                    <div class="image-preview" v-if="item.path">
                                         <img :src="item.path">
                                         <icon type="ios-trash-outline" @click.native="removeSlide(item)"></icon>
                                     </div>
@@ -252,6 +256,7 @@
                                             :headers="{
                                                 Authorization: `Bearer ${$store.state.token.access_token}`
                                             }"
+                                            :data="'upload' + index"
                                             :max-size="2048"
                                             :on-error="uploadError"
                                             :on-format-error="uploadFormatError"
