@@ -279,7 +279,7 @@
             </div>
             <card :bordered="false">
                 <i-form ref="form" :model="form" :rules="rules" :label-width="200">
-                    <div class="">
+                    <div class="form-slide-group">
                         <row>
                             <i-col span="8">
                                 <div class="upload-picture-box">
@@ -287,6 +287,8 @@
                                         <img :src="form.path1">
                                         <icon type="ios-trash-outline" @click.native="removeSlide(1)"></icon>
                                     </div>
+                                </div>
+                                <div class="btn-group">
                                     <upload class="local-upload"
                                             :action="action"
                                             :before-upload="uploadBefore"
