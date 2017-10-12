@@ -140,51 +140,24 @@
                 const self = this;
                 self.$router.go(-1);
             },
-            removeSlide(param) {
+            removeSlide(item) {
                 const self = this;
-                let count = '';
-                if (param === 1) {
-                    count = self.form.path;
-                } else if (param === 2) {
-                    count = self.form.path2;
-                } else if (param === 3) {
-                    count = self.form.path3;
-                } else if (param === 4) {
-                    count = self.form.path4;
-                }
                 self.$http.post(`${window.api}/slide/picture/delete`, {
-                    path: count,
+                    path: item.path,
                 }).then(() => {
                     self.$notice.open({
                         title: '删除图片信息成功！',
                     });
+                    self.form.path = '';
                     self.$loading.start();
                     self.$notice.open({
                         title: '正在刷新数据...',
                     });
-                    if (param === 1) {
-                        self.form.path = '';
-                    } else if (param === 2) {
-                        self.form.path2 = '';
-                    } else if (param === 3) {
-                        self.form.path3 = '';
-                    } else if (param === 4) {
-                        self.form.path4 = '';
-                    }
                 }).catch(() => {
                     self.$notice.error({
                         title: '删除图片信息错误！',
                     });
                 });
-            },
-            removeSlide2() {
-                this.form.picture2 = '';
-            },
-            removeSlide3() {
-                this.form.picture3 = '';
-            },
-            removeSlide4() {
-                this.form.picture4 = '';
             },
             submit() {
                 const self = this;
@@ -240,37 +213,13 @@
                     desc: `文件 ${file.name} 格式不正确`,
                 });
             },
-            uploadSuccess1(data) {
+            uploadSuccess(data) {
                 const self = this;
                 injection.loading.finish();
                 self.$notice.open({
                     title: data.message[0],
                 });
                 self.form.path = data.data.path;
-            },
-            uploadSuccess2(data) {
-                const self = this;
-                injection.loading.finish();
-                self.$notice.open({
-                    title: data.message[0],
-                });
-                self.form.path2 = data.data.path;
-            },
-            uploadSuccess3(data) {
-                const self = this;
-                injection.loading.finish();
-                self.$notice.open({
-                    title: data.message[0],
-                });
-                self.form.path3 = data.data.path;
-            },
-            uploadSuccess4(data) {
-                const self = this;
-                injection.loading.finish();
-                self.$notice.open({
-                    title: data.message[0],
-                });
-                self.form.path4 = data.data.path;
             },
         },
     };
@@ -292,7 +241,7 @@
                                 <div class="upload-picture-box">
                                     <div class="image-preview" v-if="item.path" @click="getDetailMessage(1)">
                                         <img :src="item.path">
-                                        <icon type="ios-trash-outline" @click.native="removeSlide"></icon>
+                                        <icon type="ios-trash-outline" @click.native="removeSlide(item)"></icon>
                                     </div>
                                 </div>
                                 <div class="btn-group">
@@ -306,7 +255,7 @@
                                             :max-size="2048"
                                             :on-error="uploadError"
                                             :on-format-error="uploadFormatError"
-                                            :on-success="uploadSuccess1"
+                                            :on-success="uploadSuccess"
                                             ref="upload"
                                             :show-upload-list="false">
                                         <div class="clearfix upload-picture">
