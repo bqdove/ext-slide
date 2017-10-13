@@ -9,6 +9,7 @@
         .ivu-card {
             .ivu-card-body {
                 padding: 20px;
+                padding-bottom: 140px;
                 .ivu-form {
                     .form-slide-group {
                         border: solid 1px #e3e8ee;
@@ -58,10 +59,8 @@
                                         height: 190px;
                                         margin-bottom: 20px;
                                         background: #f5f7f9 url("../image/upload.png") center no-repeat;
-                                        z-index: 1;
                                         .image-preview {
                                             height: 190px;
-                                            z-index: 1;
                                             &:hover {
                                                 > i {
                                                     display: block;
@@ -110,6 +109,25 @@
                         }
                     }
                 }
+            }
+        }
+        .submit-btn {
+            position: fixed;
+            bottom: 0;
+            background: #e9edf1;
+            width: 100%;
+            height: 74px;
+            line-height: 74px;
+            text-align: center;
+            margin-left: -20px;
+            .ivu-btn {
+                width: 133px;
+                height: 32px;
+                border-radius: 0;
+                position: absolute;
+                margin-left: -218px;
+                top: 50%;
+                margin-top: -16px;
             }
         }
     }

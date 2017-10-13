@@ -80,7 +80,7 @@
                                     on: {
                                         click() {
                                             self.$router.push({
-                                                path: '/slide/group/set',
+                                                path: '/slide/group/edit',
                                                 query: {
                                                     id: data.row.alias,
                                                     name: data.row.name,

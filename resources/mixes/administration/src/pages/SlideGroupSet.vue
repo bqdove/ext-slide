@@ -195,7 +195,11 @@
                     title: data.message[0],
                 });
                 const i = Number(data.data.u_index);
-                self.form.pictureList[i].path = data.data.path;
+                self.form.pictureList.forEach((item, index) => {
+                    if (i === index) {
+                        item.path = data.data.path;
+                    }
+                });
             },
         },
     };
@@ -289,20 +293,15 @@
                             <icon type="android-add"></icon>
                         </span>
                     </div>
-
-                    <row>
-                        <i-col>
-                            <form-item>
-                                <i-button :loading="loading" type="primary"
-                                          @click.native="submit">
-                                    <span v-if="!loading">确认提交</span>
-                                    <span v-else>正在提交…</span>
-                                </i-button>
-                            </form-item>
-                        </i-col>
-                    </row>
                 </i-form>
             </card>
+            <div class="submit-btn">
+                <i-button :loading="loading" type="primary"
+                          @click.native="submit">
+                    <span v-if="!loading">确认提交</span>
+                    <span v-else>正在提交…</span>
+                </i-button>
+            </div>
         </div>
     </div>
 </template>
