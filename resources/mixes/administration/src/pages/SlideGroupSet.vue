@@ -1,5 +1,4 @@
 <script>
-    import { Sketch } from 'vue-color';
     import injection from '../helpers/injection';
 
     export default {
@@ -41,39 +40,10 @@
                 });
             });
         },
-        components: {
-            'sketch-picker': Sketch,
-        },
         data() {
             return {
                 action: `${window.api}/slide/picture/upload?group_id=${this.$route.query.id}`,
-                colorPicker: false,
-                defaultProps: {
-                    hex: '',
-                    hsl: {
-                        h: 150,
-                        s: 0.5,
-                        l: 0.2,
-                        a: 1,
-                    },
-                    hsv: {
-                        h: 150,
-                        s: 0.66,
-                        v: 0.30,
-                        a: 1,
-                    },
-                    rgba: {
-                        r: 25,
-                        g: 77,
-                        b: 51,
-                        a: 1,
-                    },
-                    a: 1,
-                },
                 form: {
-                    path2: '',
-                    path3: '',
-                    path4: '',
                     pictureList: [
                         {
                             path: '',
@@ -200,9 +170,6 @@
                         });
                     }
                 });
-            },
-            updateValue() {
-                this.colorPicker = false;
             },
             uploadExceeded(file) {
                 const self = this;
