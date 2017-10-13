@@ -1,5 +1,4 @@
 <script>
-    import { Sketch } from 'vue-color';
     import injection from '../helpers/injection';
 
     export default {
@@ -41,39 +40,10 @@
                 });
             });
         },
-        components: {
-            'sketch-picker': Sketch,
-        },
         data() {
             return {
                 action: `${window.api}/slide/picture/upload?group_id=${this.$route.query.id}`,
-                colorPicker: false,
-                defaultProps: {
-                    hex: '',
-                    hsl: {
-                        h: 150,
-                        s: 0.5,
-                        l: 0.2,
-                        a: 1,
-                    },
-                    hsv: {
-                        h: 150,
-                        s: 0.66,
-                        v: 0.30,
-                        a: 1,
-                    },
-                    rgba: {
-                        r: 25,
-                        g: 77,
-                        b: 51,
-                        a: 1,
-                    },
-                    a: 1,
-                },
                 form: {
-                    path2: '',
-                    path3: '',
-                    path4: '',
                     pictureList: [
                         {
                             path: '',
@@ -201,8 +171,13 @@
                     }
                 });
             },
-            updateValue() {
-                this.colorPicker = false;
+            uploadExceeded(file) {
+                const self = this;
+                if (file.size > 4096) {
+                    self.$notice.error({
+                        title: '该文件大小超出限制,请重新选择',
+                    });
+                }
             },
             uploadBefore() {
                 injection.loading.start();
@@ -222,7 +197,6 @@
                 self.form.pictureList.forEach(item => {
                     item.path = data.data.path;
                 });
-                window.console.log(self.form.pictureList);
             },
         },
     };
@@ -256,8 +230,11 @@
                                             :headers="{
                                                 Authorization: `Bearer ${$store.state.token.access_token}`
                                             }"
-                                            :data="'upload' + index"
-                                            :max-size="2048"
+                                            :data="{
+                                                u_index: index,
+                                            }"
+                                            :max-size="4096"
+                                            :on-exceeded-size="uploadExceeded"
                                             :on-error="uploadError"
                                             :on-format-error="uploadFormatError"
                                             :on-success="uploadSuccess"
