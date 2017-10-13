@@ -29,6 +29,9 @@ class SetPictureHandler extends Handler
         ], [
             'path.required' => '图片路径为必传字段',
         ]);
+
+        $extra = $this->request->except(['path']);
+
         $path = $this->request->input('path');
 
         $link = $this->request->input('link');
@@ -50,7 +53,7 @@ class SetPictureHandler extends Handler
             $picture->background = $background;
             $result = $picture->save();
             if ($result) {
-                return $this->withCode(200)->withMessage('设置图片信息成功');
+                return $this->withCode(200)->withExtra(['extra' => $extra])->withMessage('设置图片信息成功');
             } else {
                 return $this->withCode(500)->withError('设置图片信息失败');
             }

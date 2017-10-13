@@ -47,13 +47,17 @@ class UploadHandler extends Handler
         $this->validate($this->request, [
             'group_id' => 'required',
             'file' => 'required|image',
+            'u_index' => 'required'
         ], [
             'group_id.required' => '组图id不能为空',
             'file.image' => '上传文件格式必须为图片格式！',
             'file.required' => '必须上传一个文件！',
+            'u_index.required' => '索引为必传参数'
         ]);
 
         $groupId = $this->request->input('group_id');
+
+        $index = $this->request->input('u_index');
 
         $group = Group::query()->where('alias', $groupId)->first();
 
@@ -82,6 +86,7 @@ class UploadHandler extends Handler
         $this->data['path'] = url('uploads/' . $groupPath . '/' . $hash . $random . '.' . $img->getClientOriginalExtension());
         $this->data['file_name'] = $realName;
         $this->data['error'] = $error;
+        $this->data['u_index'] = $index;
         $picture = new Picture();
         $picture->path = $this->data['path'];
         $picture->user_id = 1;
