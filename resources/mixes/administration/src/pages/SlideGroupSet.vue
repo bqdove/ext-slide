@@ -204,6 +204,14 @@
             updateValue() {
                 this.colorPicker = false;
             },
+            uploadExceeded(file) {
+                const self = this;
+                if (file.size > 4096) {
+                    self.$notice.error({
+                        title: '该文件大小超出限制,请重新选择',
+                    });
+                }
+            },
             uploadBefore() {
                 injection.loading.start();
             },
@@ -222,7 +230,6 @@
                 self.form.pictureList.forEach(item => {
                     item.path = data.data.path;
                 });
-                window.console.log(self.form.pictureList);
             },
         },
     };
@@ -256,8 +263,11 @@
                                             :headers="{
                                                 Authorization: `Bearer ${$store.state.token.access_token}`
                                             }"
-                                            :data="'upload' + index"
-                                            :max-size="2048"
+                                            :data="{
+                                                u_index: index,
+                                            }"
+                                            :max-size="4096"
+                                            :on-exceeded-size="uploadExceeded"
                                             :on-error="uploadError"
                                             :on-format-error="uploadFormatError"
                                             :on-success="uploadSuccess"
