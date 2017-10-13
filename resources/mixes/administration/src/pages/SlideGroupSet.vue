@@ -194,9 +194,8 @@
                 self.$notice.open({
                     title: data.message[0],
                 });
-                self.form.pictureList.forEach(item => {
-                    item.path = data.data.path;
-                });
+                const i = Number(data.data.u_index);
+                self.form.pictureList[i].path = data.data.path;
             },
         },
     };
