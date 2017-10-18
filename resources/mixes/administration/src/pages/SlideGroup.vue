@@ -104,7 +104,7 @@
                                                     = data.row.name;
                                             self.groupSet.group_show
                                                     = data.row.show;
-                                            if (data.row.show === 1) {
+                                            if (data.row.show === true) {
                                                 self.groupSet.group_show = '是';
                                             } else {
                                                 self.groupSet.group_show = '否';

@@ -215,7 +215,7 @@
                                     self.$notice.open({
                                         title: '新增分类信息成功！',
                                     });
-                                    this.addCategoryModal = false;
+                                    self.addCategoryModal = false;
                                     self.categoryAdd.category_name = '';
                                     self.categoryAdd.category_id = '';
                                     self.refreshData();
@@ -244,7 +244,7 @@
                                 self.$notice.open({
                                     title: '删除分类信息成功！',
                                 });
-                                this.deleteCategoryModal = false;
+                                self.deleteCategoryModal = false;
                                 self.self.categoryDelete.category_id = '';
                                 self.refreshData();
                             }
@@ -270,7 +270,7 @@
                                 self.$notice.open({
                                     title: '编辑分类信息成功！',
                                 });
-                                this.editCategoryModal = false;
+                                self.editCategoryModal = false;
                                 self.refreshData();
                             }
                         }).catch(() => {}).finally(() => {
