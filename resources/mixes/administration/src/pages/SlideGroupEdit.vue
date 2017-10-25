@@ -1,5 +1,4 @@
 <script>
-    import { Sketch } from 'vue-color';
     import injection from '../helpers/injection';
 
     export default {
@@ -41,35 +40,10 @@
                 });
             });
         },
-        components: {
-            'sketch-picker': Sketch,
-        },
         data() {
             return {
                 action: `${window.api}/slide/picture/upload?group_id=${this.$route.query.id}`,
                 colorPicker: false,
-                defaultProps: {
-                    hex: '',
-                    hsl: {
-                        h: 150,
-                        s: 0.5,
-                        l: 0.2,
-                        a: 1,
-                    },
-                    hsv: {
-                        h: 150,
-                        s: 0.66,
-                        v: 0.30,
-                        a: 1,
-                    },
-                    rgba: {
-                        r: 25,
-                        g: 77,
-                        b: 51,
-                        a: 1,
-                    },
-                    a: 1,
-                },
                 form: {
                     path1: '',
                     path2: '',
@@ -200,7 +174,7 @@
                     path: count,
                     title: self.pictureDetail.title,
                     link: self.pictureDetail.link,
-                    background: self.defaultProps.hex,
+                    background: '',
                 };
                 self.$refs.form.validate(valid => {
                     if (valid) {
@@ -414,18 +388,6 @@
                             <form-item label="图片跳转链接" prop="link">
                                 <i-input v-model="pictureDetail.link"></i-input>
                                 <p class="tip">输入图片要跳转的URL地址，正确格式应以http://开头，点击后将以"_blank"形式另打开页面</p>
-                            </form-item>
-                        </i-col>
-                    </row>
-                    <row>
-                        <i-col span="14">
-                            <form-item label="图片背景颜色" prop="background">
-                                <i-input v-model="defaultProps.hex" @on-focus="colorShow"
-                                         value="pictureDetail.background"></i-input>
-                                <sketch-picker v-model="defaultProps" class="color-picker"
-                                               v-if="colorPicker" @input="updateValue"/>
-                                <p class="tip">为确保现实效果美观，可设置轮播图整体背景填充色用于弥补图片在不同分辨率下显示区域
-                                    超出图片时的问题，可根据图片的基础底色作为参照进行颜色设置</p>
                             </form-item>
                         </i-col>
                     </row>
