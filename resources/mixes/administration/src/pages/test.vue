@@ -1,8 +1,13 @@
 <template>
-    <p>{{ msg }}</p>
+    <div>msg</div>
 </template>
 <script>
     export default {
-        props: ['msg']
+        name: 'hello',
+        data () {
+            return {
+                msg: 'Welcome to Your Vue.js App'
+            }
+        }
     }
 </script>

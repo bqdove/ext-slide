@@ -1,73 +1,91 @@
-var path = require('path');
-var utils = require('./utils');
-var config = require('../config');
-var vueLoaderConfig = require('./vue-loader.conf');
+var path = require("path")
+var webpack = require("webpack")
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 function resolve(dir) {
-    return path.join(__dirname, '..', dir);
+
+    return path.join(__dirname, '..', dir)
 }
 
-module.exports = {
-    entry: {
-        app: './src/main.js'
-    },
-    output: {
-        path: config.build.assetsRoot,
-        filename: '[name].js',
-        publicPath: process.env.NODE_ENV === 'production'
-            ? config.build.assetsPublicPath
-            : config.dev.assetsPublicPath
-    },
-    resolve: {
-        extensions: ['.js', '.json'],
-        modules: [
-            resolve('src'),
-            resolve('node_modules')
-        ],
-        alias: {
-            'vue$': 'vue/dist/vue.common.js',
-            'src': resolve('src'),
-            'assets': resolve('src/assets'),
-            'components': resolve('src/components')
-        }
-    },
+var webpackConfig = {
+
     module: {
+
         rules: [
-            {
-                test: /\.(js|vue)$/,
-                loader: 'eslint-loader',
-                enforce: "pre",
-                include: [resolve('src'), resolve('test')],
-                options: {
-                    formatter: require('eslint-friendly-formatter')
-                }
-            },
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader',
-                options: vueLoaderConfig
-            },
+
+            // babel-loader
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
+                use: 'babel-loader',
                 include: [resolve('src'), resolve('test')]
             },
+
+            // 为了统计代码覆盖率，对 js 文件加入 istanbul-instrumenter-loader
             {
-                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                loader: 'url-loader',
-                query: {
-                    limit: 10000,
-                    name: utils.assetsPath('images/[name].[ext]')
-                }
+                test: /\.(js)$/,
+                exclude: /node_modules/,
+                include: /src|packages/,
+                enforce: 'post',
+                use: [{
+                    loader: "istanbul-instrumenter-loader",
+                    options: {
+                        esModules: true
+                    },
+                }]
             },
+
+            // vue loader
             {
-                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                loader: 'url-loader',
-                query: {
-                    limit: 10000,
-                    name: utils.assetsPath('fonts/[name].[ext]')
-                }
-            }
+                test: /\.vue$/,
+                use: [{
+                    loader: 'vue-loader',
+                    options: {
+                        // 为了统计代码覆盖率，对 vue 文件加入 istanbul-instrumenter-loader
+                        preLoaders: {
+                            js: 'istanbul-instrumenter-loader?esModules=true'
+                        }
+                    }
+                }]
+            },
+
+            // css loader
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    use: 'css-loader',
+                    fallback: 'vue-style-loader'
+                })
+            },
+
+            // img loader
+            {
+                test: /\.(png|gif|jpe?g)(\?\S*)?$/,
+                use: [{loader: 'url-loader'}]
+            },
+
+            // font loader
+            {
+                test: /\.(eot|woff|woff2|ttf|svg)(\?\S*)?$/,
+                use: [{loader: 'url-loader'}]
+            },
         ]
-    }
-};
+    },
+
+    resolve: {
+        extensions: ['.js', '.vue', '.json'],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js',
+            '@': resolve('src'), // 调用组件的时候方便点
+        }
+    },
+
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: '"production"'
+            }
+        })
+    ]
+}
+
+module.exports = webpackConfig

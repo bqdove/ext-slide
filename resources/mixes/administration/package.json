@@ -6,7 +6,8 @@
     "private": true,
     "scripts": {
         "build": "node build/build.js",
-        "watch": "node build/watch.js"
+        "watch": "node build/watch.js",
+        "test": "karma start test/unit/karma.config.js --single-run"
     },
     "dependencies": {
         "eslint-config-airbnb-base": "^11.1.3",
