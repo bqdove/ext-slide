@@ -147,6 +147,9 @@
                 self: this,
             };
         },
+        created() {
+            this.page.total = 1;
+        },
         methods: {
             addCategory() {
                 this.addCategoryModal = true;
