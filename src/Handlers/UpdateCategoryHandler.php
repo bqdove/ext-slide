@@ -32,7 +32,7 @@ class UpdateCategoryHandler extends Handler
             'category_name.required' => '分类名为必填字段',
             'category_id' => '分类id不能为空',
         ]);
-        $category = Category::where('alias', $this->request->input('category_id'))->first();
+        $category = Category::query()->where('alias', $this->request->input('category_id'))->first();
         if ($category instanceof Category) {
             $category->name = $this->request->input('category_name');
         } else {

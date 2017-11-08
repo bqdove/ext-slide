@@ -47,7 +47,7 @@ class SetPictureHandler extends Handler
         if (!$this->container->make('files')->exists($completePath)) {
             return $this->withCode('402')->withError('该图片已经不存在，请重新上传');
         }
-        if ($picture = Picture::where('path', $path)->first()) {
+        if ($picture = Picture::query()->where('path', $path)->first()) {
             $picture->link = $link;
             $picture->title = $title;
             $picture->background = $background;

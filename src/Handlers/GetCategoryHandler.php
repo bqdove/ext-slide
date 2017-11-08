@@ -30,7 +30,7 @@ class GetCategoryHandler extends Handler
             'category_id.required' => '请传入分类ID',
         ]);
         $cateId = $this->request->input('category_id');
-        $category = Category::where('alias', $cateId)->first();
+        $category = Category::query()->where('alias', $cateId)->first();
         if ($category instanceof Category) {
             $this->withCode(200)->withData([
                 'category_id'   => object_get($category, 'alias'),

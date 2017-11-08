@@ -31,7 +31,7 @@ class DeleteCategoryHandler extends Handler
             'category_id.required' => '分类id为必填参数',
         ]);
         $cateId = $this->request->input('category_id');
-        $category = Category::where('alias', $cateId)->first();
+        $category = Category::query()->where('alias', $cateId)->first();
         if (!$category) {
             $this->withCode('404')->withError('请重新确认分类Id是否正确');
         }

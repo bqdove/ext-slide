@@ -40,7 +40,7 @@ class SetGroupHandler extends Handler
             'group_show.required' => '图集显示不能为空'
         ]);
         $cateId = $this->request->get('category_id');
-        $category = Category::where('alias', $cateId)->first();
+        $category = Category::query()->where('alias', $cateId)->first();
         $group = new Group();
         //如果分类Id没有填写，需要产生一个不重复的分类id别名。
         //如果分类Id用户自定义了，需要验证是否与数据库里的数据重复。
@@ -81,7 +81,7 @@ class SetGroupHandler extends Handler
      */
     private function verify($alias)
     {
-        $group = Group::where('alias', $alias)->first();
+        $group = Group::query()->where('alias', $alias)->first();
         if ($group instanceof Group) {
             return true;
         } else {

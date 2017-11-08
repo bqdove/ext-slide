@@ -29,7 +29,7 @@ class ShowGroupHandler extends Handler
         ], [
             'group_id.required' => '图集id为必传参数',
         ]);
-        $group = Group::where('alias', $this->request->input('group_id'))->first();
+        $group = Group::query()->where('alias', $this->request->input('group_id'))->first();
         if (!$group) {
             return $this->withCode(404)->withError('此图集不存在，请重试');
         }

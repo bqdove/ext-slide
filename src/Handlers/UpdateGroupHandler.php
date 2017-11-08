@@ -37,7 +37,7 @@ class UpdateGroupHandler extends Handler
         ]);
         //更新图集信息,传入group_id,
         if ($groupId = $this->request->input('id')) {
-            $group = Group::where('alias', $groupId)->first();
+            $group = Group::query()->where('alias', $groupId)->first();
             if ($alias = $this->request->input('group_id')) {
                 if ($this->verify($alias)) {
                     $this->withCode('403')->withError('图集id在数据库中已存在,请重新定义');
@@ -64,7 +64,7 @@ class UpdateGroupHandler extends Handler
      */
     private function verify($alias)
     {
-        $group = Group::where('alias', $alias)->first();
+        $group = Group::query()->where('alias', $alias)->first();
         if ($group) {
             return true;
         } else {

@@ -30,7 +30,7 @@ class GetPictureHandler extends Handler
             'path.required' => '图片路径为必填字段',
         ]);
         $picturePath = $this->request->input('path');
-        $picture = Picture::where('path', $picturePath)->first();
+        $picture = Picture::query()->where('path', $picturePath)->first();
         if ($picture instanceof Picture) {
             $picture = $picture->toArray();
 

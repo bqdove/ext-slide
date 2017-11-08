@@ -39,9 +39,9 @@ class DeletePictureHandler extends Handler
 
         $completePath = base_path('/public'. $subPath);
 
-        $picture = Picture::where('path', $path)->first();
+        $picture = Picture::query()->where('path', $path)->first();
 
-        if (Picture::where('path', $path)->first() || $this->container->make('files')->exists($completePath)) {
+        if (Picture::query()->where('path', $path)->first() || $this->container->make('files')->exists($completePath)) {
             $this->withCode('500')->withError('删除失败，请稍候再试');
         }
 
