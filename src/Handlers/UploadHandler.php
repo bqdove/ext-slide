@@ -77,7 +77,7 @@ class UploadHandler extends Handler
         $hash = hash_file('md5', $img->getPathname(), false);
         $groupPath = $catePath. '/' .$groupPath;
 
-        $dictionary = base_path('statics/uploads/' . $groupPath);
+        $dictionary = base_path('public/uploads/' . $groupPath);
         $random = random_int(0, 9999999);
         $file = Str::substr($hash, 0, 32) . $random . '.' . $img->getClientOriginalExtension();
         if (!$this->files->exists($dictionary . DIRECTORY_SEPARATOR . $file)) {

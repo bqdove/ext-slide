@@ -39,8 +39,8 @@ class DeleteGroupHandler extends Handler
                 $picture->delete();
             });
         }
-        if (is_dir(base_path('/statics/upload/' . $groupPath))) {
-            $this->container->make('files')->deleteDirectory(base_path('/statics/upload/' . $groupPath));
+        if (is_dir(base_path('public/upload/' . $groupPath))) {
+            $this->container->make('files')->deleteDirectory(base_path('public/upload/' . $groupPath));
         }
         if ($group->delete()) {
             $this->commitTransaction();

@@ -48,7 +48,7 @@ class SetCategoryHandler extends Handler
         $category->user_id = 1;//默认上传用户Id为1,管理员用户
         $category->path = $category->alias;
         $createResult = Storage::makeDirectory($category->alias);
-        $this->container->make('files')->move(base_path('storage/app/' . $category->alias), base_path('statics/uploads/' . $category->alias));
+        $this->container->make('files')->move(base_path('storage/app/' . $category->alias), base_path('public/uploads/' . $category->alias));
 //        $createResult = Storage::move(app_path('/storage/app/' .$category->alias), base_path('/public/upload/'.$category->alias));
         if ($category->save() && $createResult) {
             return $this->withCode(200)->withMessage('分类信息保存成功');
